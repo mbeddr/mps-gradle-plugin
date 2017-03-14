@@ -1,0 +1,15 @@
+apply plugin: "groovy"
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+sourceSets {
+    main {
+        groovy {
+            // Use the plugin code in the build of the plugin itself (GitBasedVersioning)
+            srcDirs = ['../src/main/groovy']
+        }
+    }
+}
