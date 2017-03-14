@@ -1,0 +1,44 @@
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+}
+
+group 'de.itemis.mps'
+version '1.0-SNAPSHOT'
+
+task wrapper(type: Wrapper) {
+  gradleVersion '3.4.1'
+  distributionType 'all'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+ext.repository = version.toString().endsWith('SNAPSHOT') ?
+        'https://projects.itemis.de/nexus/content/repositories/mbeddr_snapshots' :
+        'https://projects.itemis.de/nexus/content/repositories/mbeddr'
+
+publishing {
+    publications {
+        plugin(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url project.repository
+            if (project.hasProperty('nexusUsername')) {
+                credentials {
+                    username project.nexusUsername
+                    password project.nexusPassword
+                }
+            }
+        }
+    }
+}
