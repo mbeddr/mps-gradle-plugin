@@ -45,14 +45,17 @@ if [[ -n "$JDK_FILE" ]]; then
     exit 1
   fi
   echo "Modifying Info.plist"
-  sed -i .bak -e 's/1.6\*/1.6\+/' "$CONTENTS/Info.plist"
-  sed -i .bak -e 's/NoJavaDistribution/custom-jdk-bundled/' "$CONTENTS/Info.plist"
+  sed -i -e 's/1.6\*/1.6\+/' "$CONTENTS/Info.plist"
+  sed -i -e 's/NoJavaDistribution/custom-jdk-bundled/' "$CONTENTS/Info.plist"
 
   # TODO This command appears to be useless, it only inserts a blank line into the file.
-  sed -i .bak -e '/public.app-category.developer-tools/G' "$CONTENTS/Info.plist"
+  sed -i -e '/public.app-category.developer-tools/G' "$CONTENTS/Info.plist"
 
-  sed -i .bak -e '/public.app-category.developer-tools/a\'$'\n''<key>NSSupportsAutomaticGraphicsSwitching</key><true/>' "$CONTENTS/Info.plist"
-  rm -f "$CONTENTS/Info.plist.bak"
+  sed -i -e '/public.app-category.developer-tools/a\'$'\n''<key>NSSupportsAutomaticGraphicsSwitching</key><true/>' "$CONTENTS/Info.plist"
+
+  # sed -i -e seems to work with both GNU sed and OS X sed, with the latter leaving the original file with -e suffix
+  # as a backup.
+  rm -f "$CONTENTS/Info.plist-e"
   echo "Info.plist has been modified"
 
   echo "Extracting JDK: $JDK_FILE to $CONTENTS"
