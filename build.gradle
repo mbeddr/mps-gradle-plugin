@@ -5,7 +5,15 @@ plugins {
 }
 
 group 'de.itemis.mps'
-version de.itemis.mps.gradle.GitBasedVersioning.getVersion(1, 0)
+
+ext.versionMajor = 1
+ext.versionMinor = 0
+
+if (project.hasProperty('forceCI') || project.hasProperty('teamcity')) {
+    version de.itemis.mps.gradle.GitBasedVersioning.getVersion(versionMajor, versionMinor)
+} else {
+    version "${versionMajor}.${versionMinor}-SNAPSHOT"
+}
 
 task wrapper(type: Wrapper) {
   gradleVersion '3.4.1'
