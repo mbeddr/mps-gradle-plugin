@@ -46,22 +46,26 @@ class CreateDmg extends DefaultTask {
     @TaskAction
     def build() {
         String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl']
-        File temporaryDir = File.createTempDir()
-        extractScriptsToDir(temporaryDir, scripts)
-        File signedArchive = new File(temporaryDir, 'archive.sit')
+        File scriptsDir = File.createTempDir()
+        File dmgDir = File.createTempDir()
         try {
+            extractScriptsToDir(scriptsDir, scripts)
             project.exec {
-                executable new File(temporaryDir, 'mpssign.sh')
-                args rcpArtifact, signedArchive, jdk
-                workingDir temporaryDir
+                executable new File(scriptsDir, 'mpssign.sh')
+                args rcpArtifact, dmgDir, jdk
+                workingDir scriptsDir
             }
             project.exec {
-                executable new File(temporaryDir, 'mpsdmg.sh')
-                args signedArchive, dmgFile, backgroundImage
-                workingDir temporaryDir
+                executable new File(scriptsDir, 'mpsdmg.sh')
+                args dmgDir, dmgFile, backgroundImage
+                workingDir scriptsDir
             }
         } finally {
-            temporaryDir.deleteDir()
+            // Do not use File.deleteDir() because it follows symlinks!
+            // (e.g. the symlink to /Applications inside dmgDir)
+            project.exec {
+                commandLine 'rm', '-rf', scriptsDir, dmgDir
+            }
         }
     }
 

@@ -3,14 +3,13 @@ if [[ $# -ne 3 && $# -ne 2 ]]; then
   cat <<EOF
 Usage:
 
-  $0 RCP_FILE OUTPUT_FILE [JDK_FILE]
+  $0 RCP_FILE OUTPUT_DIR [JDK_FILE]
 
-1. Extracts RCP_FILE into a temporary directory
+1. Extracts RCP_FILE into OUTPUT_DIR
 2. Creates symlinks Contents/bin/*.dylib -> *.jnilib
 3. If JDK_FILE is given, extracts JDK_FILE under Contents/
 4. Builds help indices using hiutil if help is present under Contents/Resources/
 5. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
-6. Zips the result into OUTPUT_FILE
 
 IMPORTANT: All arguments must use absolute paths because the script changes the current directory several times!
 EOF
@@ -21,15 +20,13 @@ set -o errexit # Exit immediately on any error
 
 # Arguments
 RCP_FILE="$1"
-OUTPUT_FILE="$2"
+OUTPUT_DIR="$2"
 JDK_FILE="$3"
 
-EXPLODED=$(mktemp -d) || exit 1
-
-echo "Unzipping $RCP_FILE to $EXPLODED..."
-unzip -q -o "$RCP_FILE" -d "$EXPLODED"
-BUILD_NAME=$(ls "$EXPLODED")
-CONTENTS="$EXPLODED/$BUILD_NAME/Contents"
+echo "Unzipping $RCP_FILE to $OUTPUT_DIR..."
+unzip -q -o "$RCP_FILE" -d "$OUTPUT_DIR"
+BUILD_NAME=$(ls "$OUTPUT_DIR")
+CONTENTS="$OUTPUT_DIR/$BUILD_NAME/Contents"
 
 echo 'Creating symlinks from *.jnilib to *.dylib:'
 for f in "$CONTENTS/bin"/*.jnilib; do
@@ -75,19 +72,13 @@ fi
 
 # Make sure JetBrainsMacApplication.p12 is imported into local KeyChain
 #security unlock-keychain -p <password> /Users/builduser/Library/Keychains/login.keychain
-#codesign -v --deep -s "Developer ID Application: JetBrains" "$EXPLODED/$BUILD_NAME"
+#codesign -v --deep -s "Developer ID Application: JetBrains" "$OUTPUT_DIR/$BUILD_NAME"
 #echo "signing is done"
 #echo "check sign"
-#codesign -v "$EXPLODED/$BUILD_NAME" -vvvvv
+#codesign -v "$OUTPUT_DIR/$BUILD_NAME" -vvvvv
 #echo "check sign done"
 
 chmod a+x "$CONTENTS"/MacOS/*
 chmod a+x "$CONTENTS"/bin/*.py
 chmod a+x "$CONTENTS"/bin/fs*
 chmod a+x "$CONTENTS"/bin/restarter
-
-echo "Zipping $BUILD_NAME to $OUTPUT_FILE"
-pushd "$EXPLODED"
-ditto -c -k --sequesterRsrc --keepParent "$BUILD_NAME" "$OUTPUT_FILE"
-popd
-rm -rf "$EXPLODED"
