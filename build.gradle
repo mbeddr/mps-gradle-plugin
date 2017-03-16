@@ -25,11 +25,6 @@ ext.repository = version.toString().endsWith('SNAPSHOT') ?
         'https://projects.itemis.de/nexus/content/repositories/mbeddr'
 
 publishing {
-    publications {
-        plugin(MavenPublication) {
-            from components.java
-        }
-    }
     repositories {
         maven {
             url project.repository
