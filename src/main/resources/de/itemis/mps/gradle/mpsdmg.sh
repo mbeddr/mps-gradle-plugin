@@ -1,54 +1,70 @@
 #!/bin/bash
+if [[ $# -ne 3 ]]; then
+  cat <<EOF
+Usage:
+
+  $0 SIT_FILE OUTPUT_FILE BG_PIC
+
+Creates a .dmg image named OUTPUT_FILE using SIT_FILE as content and BG_PIC as the background picture.
+
+1. Extracts SIT_FILE into a temporary directory.
+2. Sets up BG_PIC as the background picture of the image.
+3. Creates a .dmg image in OUTPUT_FILE
+EOF
+  exit 1
+fi
+
+set -o errexit # Exit immediately on any error
+
+# Arguments
+SIT_FILE="$1"
+OUTPUT_FILE="$2"
+BG_PIC="$3"
+
+EXPLODED=$(mktemp -d) || exit 1
+
 # make sure only one dmg is built at a given moment
-EXPLODED=$2.exploded
-test -d ${EXPLODED} && chmod -R u+wx ./${EXPLODED}/*
-rm -rf ./${EXPLODED}
-rm -f ./$2.dmg
-rm -f ./pack.temp.dmg
-
-mkdir ./${EXPLODED}
-echo "Unzipping $2.sit to ${EXPLODED}..."
-ditto -x -k $2.sit ./${EXPLODED}/
-#rm $2.sit
-BUILD_NAME=$(ls ./${EXPLODED}/)
+echo "Unzipping $SIT_FILE to $EXPLODED..."
+ditto -x -k "$SIT_FILE" "$EXPLODED"
+BUILD_NAME=$(ls "$EXPLODED")
 echo "Build Name: $BUILD_NAME"
-VOLNAME=`echo $BUILD_NAME | sed 's/\.app$//'`
+VOLNAME=$(echo "$BUILD_NAME" | sed 's/\.app$//')
 echo "Vol Name: $VOLNAME"
-BG_PIC="$2.png"
 
-echo "copying cbmc-mac to ${EXPLODED}..."
-cp -R ./cbmc-mac ./${EXPLODED}
+# Commented out since cbmc-mac is mbeddr-specific.
+#TODO Implement a generic way to add things to the image, including icons and layout (see mpsdmg.pl)
+#echo "copying cbmc-mac to ${EXPLODED}..."
+#cp -R ./cbmc-mac ./${EXPLODED}
 
-chmod a+x ./${EXPLODED}/"$BUILD_NAME"/Contents/MacOS/*
-chmod a+x ./${EXPLODED}/"$BUILD_NAME"/Contents/bin/*.py
-chmod a+x ./${EXPLODED}/"$BUILD_NAME"/Contents/bin/fs*
-chmod a+x ./${EXPLODED}/"$BUILD_NAME"/Contents/bin/restarter
+mkdir "$EXPLODED/.background"
+cp "$BG_PIC" "$EXPLODED/.background"
+ln -s /Applications "$EXPLODED/ " # Single space as the file name is on purpose
 
-mkdir ./${EXPLODED}/.background
-mv ./${BG_PIC} ./${EXPLODED}/.background
-ln -s /Applications ./${EXPLODED}/" "
-# allocate space for .DS_Store
-dd if=/dev/zero of=./${EXPLODED}/DSStorePlaceHolder bs=1024 count=512
+# Allocate space for .DS_Store
+dd if=/dev/zero of="$EXPLODED/DSStorePlaceHolder" bs=1024 count=512
 
-echo "Creating unpacked r/w disk image ${VOLNAME}..."
-hdiutil create -srcfolder ./${EXPLODED} -volname "$VOLNAME" -anyowners -nospotlight -quiet -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW ./$2.temp.dmg
+# Add .dmg suffix so that hdiutil isn't tempted to append one itself.
+temp_dmg=$(mktemp -u).dmg
+echo "Creating unpacked r/w disk image $VOLNAME in $temp_dmg..."
+hdiutil create -srcfolder "$EXPLODED" -volname "$VOLNAME" -anyowners -nospotlight -quiet -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW "$temp_dmg"
 
 # mount this image
 echo "Mounting unpacked r/w disk image..."
-device=$(hdiutil attach -readwrite -noverify -noautoopen ./$2.temp.dmg | egrep '^/dev/' | sed 1q | awk '{print $1}')
-echo "Mounted as ${device}."
+device=$(hdiutil attach -readwrite -noverify -noautoopen "$temp_dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
+echo "Mounted as $device."
 sleep 10
 
 # set properties
 echo "Updating disk image styles..."
-rm /Volumes/"$VOLNAME"/DSStorePlaceHolder
-arch -32 perl5.18 mpsdmg.pl "$VOLNAME" ${BG_PIC}
+rm "/Volumes/$VOLNAME/DSStorePlaceHolder"
+arch -32 perl5.18 mpsdmg.pl "$VOLNAME" $(basename "$BG_PIC")
 sync;sync;sync
-hdiutil detach ${device}
+hdiutil detach "$device"
 
-echo "Compressing r/w disk image to ./$2.dmg..."
-hdiutil convert ./$2.temp.dmg -quiet -format UDZO -imagekey zlib-level=9 -o ./$2.dmg
-rm -f ./$2.temp.dmg
+echo "Compressing r/w disk image to $OUTPUT_FILE..."
+rm -f "$OUTPUT_FILE"
+hdiutil convert "$temp_dmg" -quiet -format UDZO -imagekey zlib-level=9 -o "$OUTPUT_FILE"
+rm -f "$temp_dmg"
 
-hdiutil internet-enable -no ./$2.dmg
-rm -rf ./${EXPLODED}
+hdiutil internet-enable -no "$OUTPUT_FILE"
+rm -rf "$EXPLODED"
