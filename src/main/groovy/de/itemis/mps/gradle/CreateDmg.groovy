@@ -2,8 +2,11 @@ package de.itemis.mps.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.artifacts.Dependency
+import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
@@ -36,10 +39,24 @@ class CreateDmg extends DefaultTask {
         this.jdk = project.file(file)
     }
 
+    /**
+     * Sets the {@link #jdk} property from a dependency, given as either a {@link Dependency} object or in dependency
+     * notation.
+     */
+    def setJdkDependency(Object jdkDependency) {
+        Dependency dep = project.dependencies.create(jdkDependency)
+        def files = project.configurations.detachedConfiguration(dep).resolve()
+        if (files.size() != 1) {
+            throw new GradleException(
+                    "Expected a single file for jdkDependency '$jdkDependency', got ${files.size()} files")
+        }
+        this.jdk = files.first()
+    }
+
     def setDmgFile(Object file) {
         this.dmgFile = project.file(file)
         if (dmgFile != null && !dmgFile.name.endsWith(".dmg")) {
-            throw new GradleException("Value of dmgFile must end with .dmg but was " + dmgFile)
+            throw new GradleException("Value of dmgFile must end with .dmg but was $dmgFile")
         }
     }
 
