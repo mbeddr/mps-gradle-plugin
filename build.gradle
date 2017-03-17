@@ -28,14 +28,10 @@ dependencies {
     compile localGroovy()
 }
 
-ext.repository = version.toString().endsWith('SNAPSHOT') ?
-        'https://projects.itemis.de/nexus/content/repositories/mbeddr_snapshots' :
-        'https://projects.itemis.de/nexus/content/repositories/mbeddr'
-
 publishing {
     repositories {
         maven {
-            url project.repository
+            url 'https://projects.itemis.de/nexus/content/repositories/mbeddr'
             if (project.hasProperty('nexusUsername')) {
                 credentials {
                     username project.nexusUsername
