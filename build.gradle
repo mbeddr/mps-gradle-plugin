@@ -20,6 +20,12 @@ task wrapper(type: Wrapper) {
   distributionType 'all'
 }
 
+task setTeamCityBuildNumber {
+    doLast {
+        println "##teamcity[buildNumber '${version}']"
+    }
+}
+
 repositories {
     mavenCentral()
 }
