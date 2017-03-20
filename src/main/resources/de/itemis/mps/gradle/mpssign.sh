@@ -7,7 +7,7 @@ Usage:
 
 1. Extracts RCP_FILE into OUTPUT_DIR
 2. Creates symlinks Contents/bin/*.dylib -> *.jnilib
-3. If JDK_FILE is given, extracts JDK_FILE under Contents/
+3. If JDK_FILE is given, extracts JDK_FILE under Contents/jre/
 4. Builds help indices using hiutil if help is present under Contents/Resources/
 5. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
 
@@ -55,8 +55,9 @@ if [[ -n "$JDK_FILE" ]]; then
   rm -f "$CONTENTS/Info.plist-e"
   echo "Info.plist has been modified"
 
-  echo "Extracting JDK: $JDK_FILE to $CONTENTS"
-  pushd "$CONTENTS"
+  echo "Extracting JDK: $JDK_FILE to $CONTENTS/jre"
+  mkdir -p "$CONTENTS/jre"
+  pushd "$CONTENTS/jre"
   COPY_EXTENDED_ATTRIBUTES_DISABLE=true COPYFILE_DISABLE=true tar xvf "$JDK_FILE" --exclude='._jdk' || exit 1
   echo "JDK has been extracted"
   popd
