@@ -62,7 +62,8 @@ class CreateDmg extends DefaultTask {
 
     @TaskAction
     def build() {
-        String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl']
+        String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl',
+                            'Mac/Finder/DSStore/BuddyAllocator.pm', 'Mac/Finder/DSStore.pm']
         File scriptsDir = File.createTempDir()
         File dmgDir = File.createTempDir()
         try {
@@ -91,6 +92,9 @@ class CreateDmg extends DefaultTask {
 
         for (name in scriptNames) {
             File file = new File(dir, name)
+            if (!file.parentFile.isDirectory() && ! file.parentFile.mkdirs()) {
+                throw new GradleException("Could not create directory " + file.parentFile)
+            }
             InputStream resourceStream = getClass().getResourceAsStream(name)
             if (resourceStream == null) {
                 throw new IllegalArgumentException("Resource ${name} was not found")
