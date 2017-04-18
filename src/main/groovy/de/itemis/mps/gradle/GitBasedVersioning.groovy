@@ -51,7 +51,7 @@ class GitBasedVersioning {
     static String getVersion(branch, major, minor, count) {
         def hash = getGitShortCommitHash()
         def baseVersion = "$major.$minor.$count.$hash"
-        if (branch == 'master') {
+        if (branch == 'master' || branch == 'HEAD' /*this happens in detached head situations*/) {
             return baseVersion
         }
 
