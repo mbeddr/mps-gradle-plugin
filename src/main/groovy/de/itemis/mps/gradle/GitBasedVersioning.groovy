@@ -24,7 +24,17 @@ class GitBasedVersioning {
      * @throws org.gradle.api.GradleException if the branch name cannot be determined
      */
     static String getGitBranch() throws GradleException {
-        String gitBranch = getCommandOutput('git rev-parse --abbrev-ref HEAD').replace("/", "-")
+        String gitBranch
+        String gitBranchTC=System.getenv('teamcity_build_branch')
+        
+        if(gitBranchTC!=null && !gitBranchTC.isEmpty()){
+            gitBranch=gitBranchTC.replace("/", "-")
+            println "Branch From TeamCity: "+gitBranch
+        }
+        else{
+            gitBranch = getCommandOutput('git rev-parse --abbrev-ref HEAD').replace("/", "-")
+            println "Branch From Git Commandline: "+gitBranch
+        }
 
         if (gitBranch == null || gitBranch.empty) {
             throw new GradleException('Could not determine Git branch name')
