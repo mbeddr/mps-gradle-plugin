@@ -17,7 +17,7 @@ class GitBasedVersioning {
     }
 
     /**
-     * Gets the current Git branch either from TC(for CI builds) or from git rev-parse command(for commandline builds)
+     * Gets the current Git branch either from TC env parameter (for CI builds) or from git rev-parse command (for commandline builds)
      * with slashes ('/') replaced by dashes ('-'). If the branch name cannot be determined, throws GradleException.
      * Never empty, never null.
      *
