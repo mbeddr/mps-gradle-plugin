@@ -1,6 +1,6 @@
 # mps-gradle-plugin
 
-Miscellaneous task that were found useful when building MPS-based
+Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
 # Using the Plugin
@@ -14,10 +14,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'de.itemis.mps:mps-gradle-plugin:1.0+'
+        classpath 'de.itemis.mps:mps-gradle-plugin:1.0.+'
     }
 }
 ```
+
+Use a fully specified version such as `1.0.123` for better build reproducibility.
 
 # Tasks
 
