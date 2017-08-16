@@ -27,7 +27,7 @@ class GitBasedVersioning {
     static String getGitBranch() throws GradleException {
         String gitBranch
         String gitBranchTC = System.getenv('teamcity_build_branch')
-        if(gitBranchTC != null && !gitBranchTC.empty) {
+        if (gitBranchTC != null && !gitBranchTC.empty) {
             gitBranch = gitBranchTC
             println "Branch From TeamCity: "+gitBranch
         }
