@@ -29,11 +29,10 @@ class GitBasedVersioning {
         String gitBranchTC = System.getenv('teamcity_build_branch')
         if (gitBranchTC != null && !gitBranchTC.empty) {
             gitBranch = gitBranchTC
-            println "Branch From TeamCity: "+gitBranch
-        }
-        else {
+            println "Branch From TeamCity: " + gitBranch
+        } else {
             gitBranch = getCommandOutput('git rev-parse --abbrev-ref HEAD')
-            println "Branch From Git Commandline: "+gitBranch
+            println "Branch From Git Commandline: " + gitBranch
         }
 
         if (gitBranch == null || gitBranch.empty) {
