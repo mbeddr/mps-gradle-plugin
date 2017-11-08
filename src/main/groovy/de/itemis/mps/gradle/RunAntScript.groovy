@@ -50,8 +50,11 @@ class RunAntScript extends DefaultTask {
                     f.delete();
                 }
             }
-            def tempFile=File.createTempFile("temp_input", ".tmp", project.file(System.getProperty("user.dir")+File.separator+".gradle"))
-            IOFilesToReturn = IOFilesToReturn.plus(getProject().fileTree(tempFile));
+			def gradleFolder = project.file(System.getProperty("user.dir")+File.separator+".gradle");
+			if(gradleFolder.exists()) {
+	            def tempFile=File.createTempFile("temp_input", ".tmp", gradleFolder)
+	            IOFilesToReturn = IOFilesToReturn.plus(getProject().fileTree(tempFile));
+			}
             return IOFilesToReturn
         }
     }
@@ -79,8 +82,11 @@ class RunAntScript extends DefaultTask {
         } else {
             if(!project.hasProperty('incremental'))logger.debug("Incremental mode is disabled.")
             if(!ioFile.exists())logger.debug("Input-Output xml file is missing.")
-            def tempFile=File.createTempFile("temp_output", ".tmp",project.file(System.getProperty("user.dir")+File.separator+".gradle") )
-            IOFilesToReturn = IOFilesToReturn.plus(getProject().fileTree(tempFile));
+			def gradleFolder = project.file(System.getProperty("user.dir")+File.separator+".gradle");
+			if(gradleFolder.exists()) {
+				def tempFile=File.createTempFile("temp_output", ".tmp", gradleFolder )
+				IOFilesToReturn = IOFilesToReturn.plus(getProject().fileTree(tempFile));
+			}
             return IOFilesToReturn
         }
     }
