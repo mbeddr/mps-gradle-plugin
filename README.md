@@ -87,4 +87,4 @@ present). `destination` is then generated based on the properties.
 
 Each property represents an entry in `destination` (a project library),
 where the property name is the library name and the property value is
-the path to the property.
+the path to the library.
