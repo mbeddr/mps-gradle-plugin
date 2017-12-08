@@ -48,19 +48,23 @@ class GitBasedVersioning {
         return command.execute().in.text.trim()
     }
 
-    static String getVersion(major, minor) {
-        getVersion(getGitBranch(), major, minor)
+    static String getVersion(String major, String minor) {
+        getVersion(getGitBranch(), major, minor, getGitCommitCount())
     }
 
-    static String getVersion(String branch, major, minor) {
+    static String getVersion(int major, int minor) {
+        getVersion(getGitBranch(), major.toString(), minor.toString(), getGitCommitCount())
+    }
+
+    static String getVersion(String branch, String major, String minor) {
         getVersion(branch, major, minor, getGitCommitCount())
     }
 
-    static String getVersion(major, minor, int count) {
+    static String getVersion(String major, String minor, int count) {
         getVersion(getGitBranch(), major, minor, count)
     }
 
-    static String getVersion(branch, major, minor, int count) {
+    static String getVersion(String branch, String major, String minor, int count) {
         def hash = getGitShortCommitHash()
         def baseVersion = "$major.$minor.$count.$hash"
         if (branch == 'master' || branch == 'HEAD' /*this happens in detached head situations*/) {
