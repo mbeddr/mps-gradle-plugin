@@ -1,3 +1,8 @@
+package de.itemis.mps.gradle
+
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.publish.maven.MavenPom
+
 class Pom {
 
     /**
@@ -5,7 +10,7 @@ class Pom {
      * @param pom the POM node where to add the dependencies
      * @param config the configuration where to get the dependencies from
      */
-    def withDep(pom, config) {
+    def withDep(MavenPom pom, Configuration config) {
         pom.withXml {
             def dependenciesNode = asNode().appendNode('dependencies')
             config.resolvedConfiguration.firstLevelModuleDependencies.each {
@@ -22,7 +27,7 @@ class Pom {
      * @param pom the POM node where to add the dependencies
      * @param config the configuration where to get the dependencies from
      */
-    def withProvidedDep(pom, config) {
+    def withProvidedDep(MavenPom pom, Configuration config) {
         pom.withXml {
             def dependenciesNode = asNode().appendNode('dependencies')
             config.resolvedConfiguration.firstLevelModuleDependencies.each {
