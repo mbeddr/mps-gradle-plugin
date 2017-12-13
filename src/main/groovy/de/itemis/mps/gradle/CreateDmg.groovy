@@ -101,7 +101,14 @@ class CreateDmg extends DefaultTask {
             }
 
             resourceStream.withStream { is -> file.newOutputStream().withStream { os -> os << is } }
-            Files.setPosixFilePermissions(file.toPath(), rwxPermissions)
+            try {
+                Files.setPosixFilePermissions(file.toPath(), rwxPermissions)
+            } catch (UnsupportedOperationException ex) {
+                // workaround in case the script is executed on Win platform
+                file.setReadable(true)
+                file.setWritable(true)
+                file.setExecutable(true)
+            }
         }
     }
 }
