@@ -7,25 +7,18 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
-class CreateDmg extends DefaultTask {
+class BundleMacosJdk extends DefaultTask {
     @InputFile
     File rcpArtifact
-
-    @InputFile
-    File backgroundImage
 
     @InputFile
     File jdk
 
     @OutputFile
-    File dmgFile
+    File outputFile
 
     def setRcpArtifact(Object file) {
         this.rcpArtifact = project.file(file)
-    }
-
-    def setBackgroundImage(Object file) {
-        this.backgroundImage = project.file(file)
     }
 
     def setJdk(Object file) {
@@ -46,38 +39,28 @@ class CreateDmg extends DefaultTask {
         this.jdk = files.first()
     }
 
-    def setDmgFile(Object file) {
-        this.dmgFile = project.file(file)
-        if (dmgFile != null && !dmgFile.name.endsWith(".dmg")) {
-            throw new GradleException("Value of dmgFile must end with .dmg but was $dmgFile")
-        }
+    def setOutputFile(Object file) {
+        this.outputFile = project.file(file)
     }
 
     @TaskAction
     def build() {
-        String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl',
-                            'Mac/Finder/DSStore/BuddyAllocator.pm', 'Mac/Finder/DSStore.pm']
         File scriptsDir = File.createTempDir()
-        File dmgDir = File.createTempDir()
+        File tmpDir = File.createTempDir()
         try {
-            BundledScripts.extractScriptsToDir(scriptsDir, scripts)
+            String scriptName = 'bundle_macos_jdk.sh'
+            BundledScripts.extractScriptsToDir(scriptsDir, scriptName)
             project.exec {
-                executable new File(scriptsDir, 'mpssign.sh')
-                args rcpArtifact, dmgDir, jdk
-                workingDir scriptsDir
-            }
-            project.exec {
-                executable new File(scriptsDir, 'mpsdmg.sh')
-                args dmgDir, dmgFile, backgroundImage
+                executable new File(scriptsDir, scriptName)
+                args rcpArtifact, tmpDir, jdk, outputFile
                 workingDir scriptsDir
             }
         } finally {
             // Do not use File.deleteDir() because it follows symlinks!
-            // (e.g. the symlink to /Applications inside dmgDir)
+            // (e.g. the symlink to /Applications inside tmpDir)
             project.exec {
-                commandLine 'rm', '-rf', scriptsDir, dmgDir
+                commandLine 'rm', '-rf', scriptsDir, tmpDir
             }
         }
     }
-
 }
