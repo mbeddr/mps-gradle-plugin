@@ -60,7 +60,7 @@ class GitBasedVersioning {
         getVersion(branch, major, minor, getGitCommitCount())
     }
 
-    static String getVersion(String major, String minor, int count) {
+    static String getVersionWithCount(String major, String minor, int count) {
         getVersion(getGitBranch(), major, minor, count)
     }
 
