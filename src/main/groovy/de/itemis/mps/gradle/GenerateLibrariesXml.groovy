@@ -21,7 +21,7 @@ class GenerateLibrariesXml extends DefaultTask {
 
     void setOverrides(Object overrides) {
         this.overrides = project.file(overrides)
-        if (overrides != null) {
+        if (this.overrides != null && this.overrides.exists()) {
             inputs.file(overrides)
         }
     }
