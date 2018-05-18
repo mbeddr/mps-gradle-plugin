@@ -6,7 +6,8 @@ Usage:
   $0 RCP_FILE TMP_DIR JDK_FILE OUT_FILE
 
 1. Extracts RCP_FILE into TMP_DIR
-2. Creates symlinks Contents/bin/*.dylib -> *.jnilib
+2. Creates symlinks Contents/bin/*.dylib -> *.jnilib if any .jnilib files are present
+   (this used to be the case for earlier versions of MPS)
 3. If JDK_FILE is given, extracts JDK_FILE under Contents/jre/
 4. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
 5. Compresses the result into OUT_FILE (tar/gzip)
@@ -29,13 +30,15 @@ unzip -q -o "$RCP_FILE" -d "$TMP_DIR"
 BUILD_NAME=$(ls "$TMP_DIR")
 CONTENTS="$TMP_DIR/$BUILD_NAME/Contents"
 
-echo 'Creating symlinks from *.jnilib to *.dylib:'
-for f in "$CONTENTS/bin"/*.jnilib; do
-  b="$(basename "$f" .jnilib)"
-  echo "  $f -> $b.dylib"
-  ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
-done
-echo 'Done creating symlinks'
+if ls "$CONTENTS/bin"/*.jnilib >& /dev/null; then
+  echo 'Creating symlinks from *.jnilib to *.dylib:'
+  for f in "$CONTENTS/bin"/*.jnilib; do
+    b="$(basename "$f" .jnilib)"
+    echo "  $f -> $b.dylib"
+    ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
+  done
+  echo 'Done creating symlinks'
+fi
 
 if [[ -n "$JDK_FILE" ]]; then
   if [[ ! -f "$JDK_FILE" ]]; then
