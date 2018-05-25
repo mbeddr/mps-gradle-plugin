@@ -22,7 +22,7 @@ class RunAntScript extends DefaultTask {
 
             classpath scriptClasspath
 
-            args('-verbose',  *scriptArgs, '-buildfile', project.file(script), *targets)
+            args(*scriptArgs, '-buildfile', project.file(script), *targets)
         }
     }
 }
