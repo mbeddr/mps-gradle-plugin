@@ -19,13 +19,21 @@ repositories {
 val nexusUsername: String? by project
 val nexusPassword: String? by project
 
+
 //define directories
 val artifactsDir = File(buildDir, "artifacts")
 val mpsDir = File(artifactsDir, "mps")
 val kotlin_argparser_version = "2.0.7"
+val pluginVersion = "1"
 val mpsVersion = "2017.3.5"
 
-version = "$mpsVersion.0"
+
+version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
+    de.itemis.mps.gradle.GitBasedVersioning.getVersion(mpsVersion, pluginVersion)
+} else {
+    "$mpsVersion.$pluginVersion-SNAPSHOT"
+}
+
 
 val mpsConfiguration = configurations.create("mps")
 
