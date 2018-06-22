@@ -10,10 +10,15 @@ import jetbrains.mps.tool.environment.IdeaEnvironment
 import org.apache.log4j.Logger
 import java.io.File
 
-private val logger = Logger.getLogger("de.itemis.mps.build.generate")
+private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
 const val PROPERTY_PLUGINS_PATH = "idea.plugins.path"
 
 fun basicEnvironmentConfig(): EnvironmentConfig {
+
+    // This is a somewhat "save" set of default plugins. It should work with most of the projects we have encountered
+    // mbeddr projects won't build build with this set of plugins for unknown reasons, most probably the runtime
+    // dependencies in the mbeddr plugins are so messed up that they simply broken beyond repair.
+
     val config = EnvironmentConfig
             .emptyConfig()
             .withDefaultPlugins()
@@ -85,6 +90,7 @@ fun main(args: Array<String>) = mainBody {
 
         generateProject(parsed, project)
 
+        env.flushAllEvents()
     } catch (ex: java.lang.Exception) {
         logger.fatal("error generating", ex)
     } catch (t: Throwable) {
