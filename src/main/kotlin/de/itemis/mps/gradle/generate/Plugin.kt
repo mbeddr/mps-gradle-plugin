@@ -12,15 +12,15 @@ import org.gradle.kotlin.dsl.*
 import java.io.File
 
 
-class Plugin {
-    lateinit var id: String
-    lateinit var path: String
-}
+data class Plugin(
+        var id: String,
+        var path: String
+)
 
-class Macro {
-    lateinit var name: String
-    lateinit var value: String
-}
+data class Macro(
+        var name: String,
+        var value: String
+)
 
 
 open class GeneratePluginExtensions {
@@ -31,6 +31,7 @@ open class GeneratePluginExtensions {
     var models: List<String> = emptyList()
     var macros: List<Macro> = emptyList()
     var projectLocation: File? = File("./mps-prj")
+    var debug = false
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
@@ -69,9 +70,9 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                         extension.plugins.map { "--plugin=${it.id}:${it.path}" }.asSequence(),
                         extension.models.map { "--model=$it" }.asSequence(),
                         extension.macros.map { "--macro=${it.name}:${it.value}" }.asSequence(),
-                        prj).flatten().joinToString(" ")
+                        prj).flatten().toList()
 
-                val resolveMps = tasks.create("resolveMps", Copy::class.java) {
+                val resolveMps = tasks.create("resolveMpsForGeneration", Copy::class.java) {
                     from(extension.mpsConfig.resolve().map { zipTree(it) })
                     into(mpsLocation)
                 }
@@ -88,6 +89,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     classpath(fileTree(File(mpsLocation, "/plugins")).include("**/lib/**/*.jar"))
                     classpath(file(File(mpsLocation, "/plugins/modelchecker.jar")))
                     classpath(genConfig)
+                    debug = extension.debug
                     main = "de.itemis.mps.gradle.generate.ProjectKt"
                 }
             }
