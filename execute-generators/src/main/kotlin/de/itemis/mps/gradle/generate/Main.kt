@@ -42,7 +42,6 @@ private fun splitAtColumn(s: String): Pair<String, String> {
 
 class Args(parser: ArgParser) {
 
-
     val models by parser.adding("--model",
             help = "list of models to generate")
     val plugins by parser.adding("--plugin",
@@ -57,9 +56,7 @@ class Args(parser: ArgParser) {
 
     val project by parser.positional("PROJECT",
             help = "project to generate from")
-
 }
-
 
 
 fun main(args: Array<String>) = mainBody {

@@ -3,12 +3,9 @@ package de.itemis.mps.gradle.generate
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
-
-import org.gradle.kotlin.dsl.*
 import java.io.File
 
 
@@ -21,7 +18,6 @@ data class Macro(
         var name: String,
         var value: String
 )
-
 
 open class GeneratePluginExtensions {
     lateinit var mpsConfig: Configuration
@@ -37,7 +33,6 @@ open class GeneratePluginExtensions {
 open class GenerateMpsProjectPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-
         project.run {
 
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
@@ -65,7 +60,6 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
                 val prj = sequenceOf(projectLocation.absolutePath)
 
-
                 val args = sequenceOf(pluginLocation,
                         extension.plugins.map { "--plugin=${it.id}:${it.path}" }.asSequence(),
                         extension.models.map { "--model=$it" }.asSequence(),
@@ -90,11 +84,9 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     classpath(file(File(mpsLocation, "/plugins/modelchecker.jar")))
                     classpath(genConfig)
                     debug = extension.debug
-                    main = "de.itemis.mps.gradle.generate.ProjectKt"
+                    main = "de.itemis.mps.gradle.generate.MainKt"
                 }
             }
-
-
         }
     }
 }
