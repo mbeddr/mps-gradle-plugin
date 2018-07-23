@@ -11,6 +11,7 @@ import jetbrains.mps.messages.IMessage
 import jetbrains.mps.messages.IMessageHandler
 import jetbrains.mps.messages.MessageKind
 import jetbrains.mps.project.Project
+import jetbrains.mps.smodel.SLanguageHierarchy
 import jetbrains.mps.smodel.language.LanguageRegistry
 import jetbrains.mps.smodel.resources.ModelsToResources
 import jetbrains.mps.smodel.runtime.MakeAspectDescriptor
@@ -40,15 +41,16 @@ private class MsgHandler : IMessageHandler {
 
 private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>): IScript {
 
-    val allUsedLanguagesAR: AsyncResult<List<SLanguage>> = AsyncResult()
+    val allUsedLanguagesAR: AsyncResult<Set<SLanguage>> = AsyncResult()
+    val registry = LanguageRegistry.getInstance(proj.repository)
 
     proj.modelAccess.runReadAction {
-        allUsedLanguagesAR.setDone(models.map { it.module }.distinct().flatMap { it.usedLanguages }.distinct())
+        val allDirectlyUsedLanguages = models.map { it.module }.distinct().flatMap { it.usedLanguages }.distinct()
+        allUsedLanguagesAR.setDone(SLanguageHierarchy(registry, allDirectlyUsedLanguages).extended)
     }
 
     val allUsedLanguages = allUsedLanguagesAR.resultSync
 
-    val registry = LanguageRegistry.getInstance(proj.repository)
     val scb = ScriptBuilder()
 
     scb.withFacetNames(allUsedLanguages
