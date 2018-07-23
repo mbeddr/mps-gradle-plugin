@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Optional
 
 class CreateDmg extends DefaultTask {
     @InputFile
@@ -19,6 +20,19 @@ class CreateDmg extends DefaultTask {
 
     @OutputFile
     File dmgFile
+
+    @Optional
+    String signPw
+
+    @Optional
+    String signAppID
+
+    @InputFile @Optional
+    File signKeyChain
+
+    def setSignKeyChain(Object file) {
+        this.signKeyChain = project.file(file)
+    }
 
     def setRcpArtifact(Object file) {
         this.rcpArtifact = project.file(file)
@@ -63,7 +77,7 @@ class CreateDmg extends DefaultTask {
             BundledScripts.extractScriptsToDir(scriptsDir, scripts)
             project.exec {
                 executable new File(scriptsDir, 'mpssign.sh')
-                args rcpArtifact, dmgDir, jdk
+                args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk, '-p', signPw, '-k', signKeyChain, '-a', signAppID
                 workingDir scriptsDir
             }
             project.exec {
