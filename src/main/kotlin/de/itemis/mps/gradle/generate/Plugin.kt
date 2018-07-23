@@ -26,7 +26,7 @@ open class GeneratePluginExtensions {
     var pluginLocation: File? = null
     var models: List<String> = emptyList()
     var macros: List<Macro> = emptyList()
-    var projectLocation: File? = File("./mps-prj")
+    var projectLocation: File? = null
     var debug = false
 }
 
@@ -38,9 +38,6 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
             val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
-            val genConfig = configurations.maybeCreate("genRuntime")
-            genConfig.isVisible = false
-
             afterEvaluate {
                 val mpsVersion = extension
                         .mpsConfig
@@ -48,7 +45,9 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                         .firstLevelModuleDependencies.find { it.moduleGroup == "com.jetbrains" && it.moduleName == "mps" }
                         ?.moduleVersion ?: throw GradleException("MPS configuration doesn't contain MPS")
 
-                dependencies.add("genRuntime", "de.itemis.mps:execute-generators:$mpsVersion+")
+                val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")
+                val genConfig = configurations.detachedConfiguration(dep)
+
 
                 val pluginLocation = if (extension.pluginLocation != null) {
                     sequenceOf("--plugin-location=${extension.pluginLocation!!.absolutePath}")
@@ -71,6 +70,18 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     into(mpsLocation)
                 }
 
+                /*
+                * The problem her is is that for some reason the ApplicationInfo isn't initialised properly.
+                * That causes PluginManagerCore.BUILD_NUMBER to be null.
+                * In this case the PluginManagerCore resorts to BuildNumber.currentVersion() which finally
+                * calls into BuildNumber.fromFile().
+                *
+                * This behaviour allows us to place a build.txt in the root of the home path (see PathManager.getHomePath()).
+                * The file is then used to load the build number.
+                *
+                * TODO: Since MPS 2018.2 a newer version of the platform allows to get a similar behaviour via setting idea.plugins.compatible.build property.
+                *
+                */
                 val fake = tasks.create("fakeBuildNumber", FakeBuildNumberTask::class.java) {
                     mpsDir = mpsLocation
                     dependsOn(resolveMps)
@@ -79,6 +90,8 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val generate = tasks.create("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
+                    group = "build"
+                    description = "Generates models in the project"
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     classpath(fileTree(File(mpsLocation, "/plugins")).include("**/lib/**/*.jar"))
                     classpath(file(File(mpsLocation, "/plugins/modelchecker.jar")))
