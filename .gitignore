@@ -5,3 +5,9 @@
 /buildSrc/build
 /out/
 *.iml
+.gradletasknamecache
+.classpath
+.settings/
+bin/
+.project
+build/

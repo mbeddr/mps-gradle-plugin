@@ -122,3 +122,50 @@ present). `destination` is then generated based on the properties.
 Each property represents an entry in `destination` (a project library),
 where the property name is the library name and the property value is
 the path to the library.
+
+## Generate
+
+Generate a specific or all models in a project without the need for a MPS model.
+
+While technically possible generating languages with this task makes little sense as there is no way of packaging the
+generated artifacts into JAR files. We only recommend using this for simple tasks where user defined models should be
+generated in the CI build or from the commandline.
+
+### Usage
+
+A minimal build script to generate a MPS project with no external plugins would look like this:
+
+```
+apply plugin: 'generate-models'
+
+configurations {
+    mps
+}
+
+ext.mpsVersion = '2017.3.5'
+
+generate {
+    projectLocation = new File("./mps-prj")
+    mpsConfig = configurations.mps
+}
+
+dependencies {
+    mps "com.jetbrains:mps:$mpsVersion"
+}
+```
+
+Parameters:
+* `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
+  Custom plugins are supported via the `pluginLocation` parameter.
+* `mpsLocation` - optional location where to place the MPS files.
+* `plugins` - optional list of plugins to load before generation is attempted.
+  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
+* `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
+  `plugins` directory inside of the MPS installation.
+* `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
+  matched are supported and no RegEx or partial name matching.
+* `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
+* `projectLocation` - location of the MPS project to generate.
+* `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
+  the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
+  the build.
