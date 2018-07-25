@@ -156,7 +156,7 @@ dependencies {
 
 Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
-  Custom plugins are supported via the `pluginLocation` plugin.
+  Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
 * `plugins` - optional list of plugins to load before generation is attempted.
   The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
