@@ -67,22 +67,21 @@ class CreateDmg extends DefaultTask {
         }
     }
 
-    def getSigningInfo = [signKeyChainPassword, signKeyChain, signIdentity]
-
     @TaskAction
     def build() {
         String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl',
                             'Mac/Finder/DSStore/BuddyAllocator.pm', 'Mac/Finder/DSStore.pm']
         File scriptsDir = File.createTempDir()
         File dmgDir = File.createTempDir()
+        def getSigningInfo = [signKeyChainPassword, signKeyChain, signIdentity]
         try {
             BundledScripts.extractScriptsToDir(scriptsDir, scripts)
             project.exec {
                 executable new File(scriptsDir, 'mpssign.sh')
 
-                if(getSigningInfo.every {el != null}) {
+                if(getSigningInfo.every {el -> el != null}) {
                     args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk, '-p', signKeyChainPassword, '-k', signKeyChain, '-i', signIdentity
-                }else if (getSigningInfo.every {el == null}){
+                }else if (getSigningInfo.every {el -> el == null}){
                     args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk
                 }else{
                     throw new IllegalArgumentException("Not all signing paramters set:  signKeyChainPassword: ${getSigningInfo[0]}, signKeyChain: ${getSigningInfo[1]}, signIdentity: ${getSigningInfo[2]} ")

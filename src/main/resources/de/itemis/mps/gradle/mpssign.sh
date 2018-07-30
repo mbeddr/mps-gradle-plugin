@@ -14,7 +14,7 @@ IMPORTANT: All arguments must use absolute paths because the script changes the 
 set -o errexit # Exit immediately on any error
 
 # Parse arguments
-while getopts ":r:o:j:p:k:a:h" option; 
+while getopts ":r:o:j:p:k:i:h" option; 
 do
   case "${option}" in
     r) RCP_FILE="$OPTARG";;
@@ -90,7 +90,7 @@ fi
 if [[ -n "$SIGN_PW" && -n "$SIGN_KEY_CHAIN" && -n "$SIGN_IDENTITY" ]]; then
     echo "Signing application $BUILD_NAME"
     echo "key chain: $SIGN_KEY_CHAIN"
-    echo "app id: $SIGN_IDENTITY"
+    echo "sign identity: $SIGN_IDENTITY"
     security unlock-keychain -p $SIGN_PW $SIGN_KEY_CHAIN
     codesign -v --deep -s "$SIGN_IDENTITY" "$OUTPUT_DIR/$BUILD_NAME"
     echo "signing is done"
