@@ -41,6 +41,12 @@ task buildDmg(type: de.itemis.mps.gradle.CreateDmg) {
 
     backgroundImage file('path/to/background.png')
     dmgFile file('output.dmg')
+
+    signKeyChain file("/path/to/my.keychain-db")
+
+    signKeyChainPassword "my.keychain-db-password"
+
+    signIdentity "my Application ID Name"
 }
 ```
 
@@ -52,13 +58,17 @@ Parameters:
 * `backgroundImage` - the path to the background image.
 * `dmgFile` - the path and file name of the output DMG image. Must end
   with `.dmg`.
+* `signKeyChain (optional)` - the path and file name of the keychain which contains a code signing certificate.
+* `signKeyChainPassword (optional)` - the password which should be use to unlock the keychain.
+* `signIdentity (optional)` - the application ID of the code signing certificate.
 
 ### Operation
 
 The task unpacks `rcpArtifact` into a temporary directory, unpacks
 the JDK given by `jdkDependency`/`jdk` under the `jre` subdirectory of
 the unpacked RCP artifact, fixes file permissions and creates missing
-symlinks, then creates a DMG image and configures its layout, using the
+symlinks. If the additional properties for code singing (`signKeyChain`, `signKeyChainPassword`, `signIdentity`) are defined,
+the application will be signed with the given certificate. Afterwards a DMG image is created and its layout is configured using the
 background image. Finally, the DMG is copied to `dmgFile`.
 
 ## BundleMacosJdk
@@ -78,12 +88,6 @@ task bundleMacosJdk(type: de.itemis.mps.gradle.BundleMacosJdk) {
     jdk file('path/to/jdk.tgz')
 
     outputFile file('output.tar.gz')
-
-    signKeyChain file("/path/to/my.keychain-db")
-
-    signKeyChainPassword "my.keychain-db-password"
-
-    signIdentity "my Application ID Name"
 }
 ```
 
@@ -93,17 +97,13 @@ Parameters:
   a repository and can be resolved as a Gradle dependency.
 * `jdk` - the path to a JDK .tgz file.
 * `outputFile` - the path and file name of the output gzipped tar archive.
-* `signKeyChain (optional)` - the path and file name of the keychain which contains a code signing certificate.
-* `signKeyChainPassword (optional)` - the password which should be use to unlock the keychain.
-* `signIdentity (optional)` - the application ID of the code signing certificate.
 
 ### Operation
 
 The task unpacks `rcpArtifact` into a temporary directory, unpacks
 the JDK given by `jdkDependency`/`jdk` under the `jre` subdirectory of
 the unpacked RCP artifact, fixes file permissions and creates missing
-symlinks. If the additional properties for code singing (`signKeyChain`, `signKeyChainPassword`, `signIdentity`) are defined, the application will
-be signed with the given certificate. Finally, the file is repackaged again as tar/gzip.
+symlinks. Finally, the file is repackaged again as tar/gzip.
 
 ## GenerateLibrariesXml
 
