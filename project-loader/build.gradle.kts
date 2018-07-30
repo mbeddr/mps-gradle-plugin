@@ -1,7 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
-
-group = "de.itemis.mps"
 
 plugins {
     kotlin("jvm")
@@ -9,20 +6,12 @@ plugins {
     `java-gradle-plugin`
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-    }
-}
+group = "de.itemis.mps"
 
-val nexusUsername: String? by project
-val nexusPassword: String? by project
-
-val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
+val kotlinArgParserVersion: String by project
 
-val pluginVersion = "2"
+val pluginVersion = "1"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
     de.itemis.mps.gradle.GitBasedVersioning.getVersion(mpsVersion, pluginVersion)
@@ -30,15 +19,20 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
     "$mpsVersion.$pluginVersion-SNAPSHOT"
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+    }
+}
 
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
     compile(kotlin("stdlib-jdk8"))
-    compile("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
+    compile("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
-    compile(project(":project-loader"))
 }
 
 tasks.withType<KotlinCompile> {

@@ -92,7 +92,7 @@ private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.mod
 }
 
 
-fun generateProject(parsed: Args, project: Project) {
+fun generateProject(parsed: GenerateArgs, project: Project) {
     val ftr = AsyncResult<List<SModel>>()
 
     project.modelAccess.runReadAction {

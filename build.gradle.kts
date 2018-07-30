@@ -1,7 +1,7 @@
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "1.2.50"
+    kotlin("jvm") version "1.2.51"
     `maven-publish`
     groovy
     `java-gradle-plugin`
@@ -19,6 +19,9 @@ version = "1.0.0"
 
 val nexusUsername: String? by project
 val nexusPassword: String? by project
+
+val kotlinArgParserVersion by extra {"2.0.7"}
+val mpsVersion by extra {"2018.1.5"}
 
 
 
