@@ -12,8 +12,8 @@ private fun <T> splitAndCreate(str: String, creator: (String, String) -> T): T {
     return creator(split[0], split[1])
 }
 
-private fun toMacro(str: String) = splitAndCreate(str) { a, b -> Macro(a, b) }
-private fun toPlugin(str: String) = splitAndCreate(str) { a, b -> Plugin(a, b) }
+private fun toMacro(str: String) = splitAndCreate(str, ::Macro)
+private fun toPlugin(str: String) = splitAndCreate(str, ::Plugin)
 
 /**
  * Default set of arguments required to start a "headless" MPS. This class should be used by other users of the
