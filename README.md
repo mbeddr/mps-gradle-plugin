@@ -11,6 +11,7 @@ Add the following `buildscript` block to your build script:
 buildscript {
     repositories {
         maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+        mavenCentral()
     }
 
     dependencies {
