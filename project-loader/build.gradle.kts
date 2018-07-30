@@ -29,9 +29,9 @@ repositories {
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-jdk8"))
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-    compile("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
+    implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
 }
 

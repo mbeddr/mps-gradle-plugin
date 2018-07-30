@@ -34,11 +34,11 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
-    compile("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
     compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
-    compile(project(":project-loader"))
+    implementation(project(":project-loader"))
 }
 
 tasks.withType<KotlinCompile> {
