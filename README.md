@@ -81,9 +81,9 @@ task bundleMacosJdk(type: de.itemis.mps.gradle.BundleMacosJdk) {
 
     signKeyChain file("/path/to/my.keychain-db")
 
-    signPw "my.keychain-db-password"
+    signKeyChainPassword "my.keychain-db-password"
 
-    signAppID "my Application ID Name"
+    signIdentity "my Application ID Name"
 }
 ```
 
@@ -94,15 +94,15 @@ Parameters:
 * `jdk` - the path to a JDK .tgz file.
 * `outputFile` - the path and file name of the output gzipped tar archive.
 * `signKeyChain (optional)` - the path and file name of the keychain which contains a code signing certificate.
-* `signPw (optional)` - the password which should be use to unlock the keychain.
-* `signAppID (optional)` - the application ID of the code signing certificate.
+* `signKeyChainPassword (optional)` - the password which should be use to unlock the keychain.
+* `signIdentity (optional)` - the application ID of the code signing certificate.
 
 ### Operation
 
 The task unpacks `rcpArtifact` into a temporary directory, unpacks
 the JDK given by `jdkDependency`/`jdk` under the `jre` subdirectory of
 the unpacked RCP artifact, fixes file permissions and creates missing
-symlinks. If the additional properties for code singing (`signKeyChain`, `signPw`, `signAppID`) are defined, the application will
+symlinks. If the additional properties for code singing (`signKeyChain`, `signKeyChainPassword`, `signIdentity`) are defined, the application will
 be signed with the given certificate. Finally, the file is repackaged again as tar/gzip.
 
 ## GenerateLibrariesXml

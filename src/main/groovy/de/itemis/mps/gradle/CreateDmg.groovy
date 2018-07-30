@@ -22,10 +22,10 @@ class CreateDmg extends DefaultTask {
     File dmgFile
 
     @Optional
-    String signPw
+    String signKeyChainPassword
 
     @Optional
-    String signAppID
+    String signIdentity
 
     @InputFile @Optional
     File signKeyChain
@@ -67,6 +67,8 @@ class CreateDmg extends DefaultTask {
         }
     }
 
+    def getSigningInfo = [signKeyChainPassword, signKeyChain, signIdentity]
+
     @TaskAction
     def build() {
         String[] scripts = ['mpssign.sh', 'mpsdmg.sh', 'mpsdmg.pl',
@@ -77,7 +79,14 @@ class CreateDmg extends DefaultTask {
             BundledScripts.extractScriptsToDir(scriptsDir, scripts)
             project.exec {
                 executable new File(scriptsDir, 'mpssign.sh')
-                args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk, '-p', signPw, '-k', signKeyChain, '-a', signAppID
+
+                if(getSigningInfo.every {el != null}) {
+                    args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk, '-p', signKeyChainPassword, '-k', signKeyChain, '-i', signIdentity
+                }else if (getSigningInfo.every {el == null}){
+                    args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk
+                }else{
+                    throw new IllegalArgumentException("Not all signing paramters set:  signKeyChainPassword: ${getSigningInfo[0]}, signKeyChain: ${getSigningInfo[1]}, signIdentity: ${getSigningInfo[2]} ")
+                }
                 workingDir scriptsDir
             }
             project.exec {

@@ -1,15 +1,14 @@
 #!/bin/bash
 USAGE="Usage:
 
-/.mpssign.sh -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -a <application id>]
+$0 -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]
 
-  $0 RCP_FILE OUTPUT_DIR [JDK_FILE] [SIGN_PW] SIGN_KEY_CHAIN SIGN_APP_ID]
 1. Extracts RCP_FILE into OUTPUT_DIR
 2. Creates symlinks Contents/bin/*.dylib -> *.jnilib
-3. Extracts JDK_FILE under Contents/jre/
+3. If JDK_FILE is given extracts JDK_FILE under Contents/jre/
 4. Builds help indices using hiutil if help is present under Contents/Resources/
 5. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
-6. If given, signs the application with the passed SIGN_PW, SIGN_KEY_CHAIN and SIGN_APP_ID
+6. If given, signs the application with the passed SIGN_PW, SIGN_KEY_CHAIN and SIGN_IDENTITY
 IMPORTANT: All arguments must use absolute paths because the script changes the current directory several times!
 "
 set -o errexit # Exit immediately on any error
@@ -23,10 +22,10 @@ do
     j) JDK_FILE="$OPTARG";;
     p) SIGN_PW="$OPTARG";;
     k) SIGN_KEY_CHAIN="$OPTARG";;
-    a) SIGN_APP_ID="$OPTARG";;
+    i) SIGN_IDENTITY="$OPTARG";;
     h) echo "$USAGE" 
        exit 0;;
-    \?) echo "illegal option: -$OPTARG usage: /.mpssing.sh -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain>] [-k <keychain>] [-a <application id>]" >&2
+    \?) echo "illegal option: -$OPTARG usage: /.mpssing.sh -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]" >&2
         exit 1;;
     :) echo "option: -$OPTARG requires an argument" >&2
        exit 1;;
@@ -88,17 +87,18 @@ if [[ -d "$HELP_DIR" ]]; then
 fi
 
 # Make sure your certificate is imported into local KeyChain
-if [[ -n "$SIGN_PW" && -n "$SIGN_KEY_CHAIN" && -n "$SIGN_APP_ID" ]]; then
+if [[ -n "$SIGN_PW" && -n "$SIGN_KEY_CHAIN" && -n "$SIGN_IDENTITY" ]]; then
     echo "Signing application $BUILD_NAME"
-    echo "pw: $JDK_FILE"
     echo "key chain: $SIGN_KEY_CHAIN"
-    echo "app id: $SIGN_APP_ID"
+    echo "app id: $SIGN_IDENTITY"
     security unlock-keychain -p $SIGN_PW $SIGN_KEY_CHAIN
-    codesign -v --deep -s "$SIGN_APP_ID" "$OUTPUT_DIR/$BUILD_NAME"
+    codesign -v --deep -s "$SIGN_IDENTITY" "$OUTPUT_DIR/$BUILD_NAME"
     echo "signing is done"
     echo "check sign"
     codesign -v "$OUTPUT_DIR/$BUILD_NAME" -vvvvv
     echo "check sign done"
+else
+    echo "for signing the application $BUILD_NAME: SIGN_PW, SIGN_KEY_CHAIN and SIGN_IDENTITY needs to be provided"
 fi
 
 chmod a+x "$CONTENTS"/MacOS/*
