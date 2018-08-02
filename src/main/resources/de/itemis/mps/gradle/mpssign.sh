@@ -25,7 +25,7 @@ do
     i) SIGN_IDENTITY="$OPTARG";;
     h) echo "$USAGE" 
        exit 0;;
-    \?) echo "illegal option: -$OPTARG usage: /.mpssing.sh -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]" >&2
+    \?) echo "illegal option: -$OPTARG usage: $0 -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]" >&2
         exit 1;;
     :) echo "option: -$OPTARG requires an argument" >&2
        exit 1;;

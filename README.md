@@ -67,7 +67,7 @@ Parameters:
 The task unpacks `rcpArtifact` into a temporary directory, unpacks
 the JDK given by `jdkDependency`/`jdk` under the `jre` subdirectory of
 the unpacked RCP artifact, fixes file permissions and creates missing
-symlinks. If the additional properties for code singing (`signKeyChain`, `signKeyChainPassword`, `signIdentity`) are defined,
+symlinks. If the additional properties for code signing (`signKeyChain`, `signKeyChainPassword`, `signIdentity`) are defined,
 the application will be signed with the given certificate. Afterwards a DMG image is created and its layout is configured using the
 background image. Finally, the DMG is copied to `dmgFile`.
 
