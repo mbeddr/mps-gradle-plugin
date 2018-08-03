@@ -43,13 +43,15 @@ unzip -q -o "$RCP_FILE" -d "$OUTPUT_DIR"
 BUILD_NAME=$(ls "$OUTPUT_DIR")
 CONTENTS="$OUTPUT_DIR/$BUILD_NAME/Contents"
 
-echo 'Creating symlinks from *.jnilib to *.dylib:'
-for f in "$CONTENTS/bin"/*.jnilib; do
-  b="$(basename "$f" .jnilib)"
-  echo "  $f -> $b.dylib"
-  ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
-done
-echo 'Done creating symlinks'
+if ls "$CONTENTS/bin"/*.jnilib >& /dev/null; then
+  echo 'Creating symlinks from *.jnilib to *.dylib:'
+  for f in "$CONTENTS/bin"/*.jnilib; do
+    b="$(basename "$f" .jnilib)"
+    echo "  $f -> $b.dylib"
+    ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
+  done
+  echo 'Done creating symlinks'
+fi
 
 if [[ -n "$JDK_FILE" ]]; then
   if [[ ! -f "$JDK_FILE" ]]; then
