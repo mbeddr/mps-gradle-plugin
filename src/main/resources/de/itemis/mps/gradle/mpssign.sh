@@ -1,40 +1,57 @@
 #!/bin/bash
-if [[ $# -ne 3 && $# -ne 2 ]]; then
-  cat <<EOF
-Usage:
+USAGE="Usage:
 
-  $0 RCP_FILE OUTPUT_DIR [JDK_FILE]
+$0 -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]
 
 1. Extracts RCP_FILE into OUTPUT_DIR
 2. Creates symlinks Contents/bin/*.dylib -> *.jnilib
-3. If JDK_FILE is given, extracts JDK_FILE under Contents/jre/
+3. If JDK_FILE is given extracts JDK_FILE under Contents/jre/
 4. Builds help indices using hiutil if help is present under Contents/Resources/
 5. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
-
+6. If given, signs the application with the passed SIGN_PW, SIGN_KEY_CHAIN and SIGN_IDENTITY
 IMPORTANT: All arguments must use absolute paths because the script changes the current directory several times!
-EOF
-  exit 1
-fi
-
+"
 set -o errexit # Exit immediately on any error
 
-# Arguments
-RCP_FILE="$1"
-OUTPUT_DIR="$2"
-JDK_FILE="$3"
+# Parse arguments
+while getopts ":r:o:j:p:k:i:h" option; 
+do
+  case "${option}" in
+    r) RCP_FILE="$OPTARG";;
+    o) OUTPUT_DIR="$OPTARG";;
+    j) JDK_FILE="$OPTARG";;
+    p) SIGN_PW="$OPTARG";;
+    k) SIGN_KEY_CHAIN="$OPTARG";;
+    i) SIGN_IDENTITY="$OPTARG";;
+    h) echo "$USAGE" 
+       exit 0;;
+    \?) echo "illegal option: -$OPTARG usage: $0 -r <rcp_file> -o <output_dir> [-j <jdk_file>] [-p <password keychain> -k <keychain> -i <sign identity>]" >&2
+        exit 1;;
+    :) echo "option: -$OPTARG requires an argument" >&2
+       exit 1;;
+  esac
+done
+shift $((OPTIND -1)) #remove options that have already been handled from $@
+
+if [[ -z "$RCP_FILE" || -z "$OUTPUT_DIR" ]]; then
+  echo "$USAGE"
+  exit 1
+fi
 
 echo "Unzipping $RCP_FILE to $OUTPUT_DIR..."
 unzip -q -o "$RCP_FILE" -d "$OUTPUT_DIR"
 BUILD_NAME=$(ls "$OUTPUT_DIR")
 CONTENTS="$OUTPUT_DIR/$BUILD_NAME/Contents"
 
-echo 'Creating symlinks from *.jnilib to *.dylib:'
-for f in "$CONTENTS/bin"/*.jnilib; do
-  b="$(basename "$f" .jnilib)"
-  echo "  $f -> $b.dylib"
-  ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
-done
-echo 'Done creating symlinks'
+if ls "$CONTENTS/bin"/*.jnilib >& /dev/null; then
+  echo 'Creating symlinks from *.jnilib to *.dylib:'
+  for f in "$CONTENTS/bin"/*.jnilib; do
+    b="$(basename "$f" .jnilib)"
+    echo "  $f -> $b.dylib"
+    ln -sf "$b.jnilib" "$(dirname "$f")/$b.dylib"
+  done
+  echo 'Done creating symlinks'
+fi
 
 if [[ -n "$JDK_FILE" ]]; then
   if [[ ! -f "$JDK_FILE" ]]; then
@@ -71,13 +88,20 @@ if [[ -d "$HELP_DIR" ]]; then
     hiutil -Cagvf "$HELP_DIR/search.helpindex" "$HELP_DIR"
 fi
 
-# Make sure JetBrainsMacApplication.p12 is imported into local KeyChain
-#security unlock-keychain -p <password> /Users/builduser/Library/Keychains/login.keychain
-#codesign -v --deep -s "Developer ID Application: JetBrains" "$OUTPUT_DIR/$BUILD_NAME"
-#echo "signing is done"
-#echo "check sign"
-#codesign -v "$OUTPUT_DIR/$BUILD_NAME" -vvvvv
-#echo "check sign done"
+# Make sure your certificate is imported into local KeyChain
+if [[ -n "$SIGN_PW" && -n "$SIGN_KEY_CHAIN" && -n "$SIGN_IDENTITY" ]]; then
+    echo "Signing application $BUILD_NAME"
+    echo "key chain: $SIGN_KEY_CHAIN"
+    echo "sign identity: $SIGN_IDENTITY"
+    security unlock-keychain -p $SIGN_PW $SIGN_KEY_CHAIN
+    codesign -v --deep -s "$SIGN_IDENTITY" "$OUTPUT_DIR/$BUILD_NAME"
+    echo "signing is done"
+    echo "check sign"
+    codesign -v "$OUTPUT_DIR/$BUILD_NAME" -vvvvv
+    echo "check sign done"
+else
+    echo "for signing the application $BUILD_NAME: SIGN_PW, SIGN_KEY_CHAIN and SIGN_IDENTITY needs to be provided"
+fi
 
 chmod a+x "$CONTENTS"/MacOS/*
 chmod a+x "$CONTENTS"/bin/*.py

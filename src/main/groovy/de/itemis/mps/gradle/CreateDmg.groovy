@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Optional
 
 class CreateDmg extends DefaultTask {
     @InputFile
@@ -19,6 +20,19 @@ class CreateDmg extends DefaultTask {
 
     @OutputFile
     File dmgFile
+
+    @Optional
+    String signKeyChainPassword
+
+    @Optional
+    String signIdentity
+
+    @InputFile @Optional
+    File signKeyChain
+
+    def setSignKeyChain(Object file) {
+        this.signKeyChain = project.file(file)
+    }
 
     def setRcpArtifact(Object file) {
         this.rcpArtifact = project.file(file)
@@ -59,11 +73,19 @@ class CreateDmg extends DefaultTask {
                             'Mac/Finder/DSStore/BuddyAllocator.pm', 'Mac/Finder/DSStore.pm']
         File scriptsDir = File.createTempDir()
         File dmgDir = File.createTempDir()
+        def signingInfo = [signKeyChainPassword, signKeyChain, signIdentity]
         try {
             BundledScripts.extractScriptsToDir(scriptsDir, scripts)
             project.exec {
                 executable new File(scriptsDir, 'mpssign.sh')
-                args rcpArtifact, dmgDir, jdk
+
+                if(signingInfo.every {it != null}) {
+                    args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk, '-p', signKeyChainPassword, '-k', signKeyChain, '-i', signIdentity
+                }else if (signingInfo.every {it == null}){
+                    args '-r', rcpArtifact, '-o', dmgDir, '-j', jdk
+                }else{
+                    throw new IllegalArgumentException("Not all signing paramters set.  signKeyChain: ${getSigningInfo[1]}, signIdentity: ${getSigningInfo[2]} and signKeyChainPassword needs to be set. ")
+                }
                 workingDir scriptsDir
             }
             project.exec {
