@@ -44,16 +44,18 @@ hdiutil create -srcfolder "$INPUT_DIR" -volname "$VOLNAME" -anyowners -nospotlig
 
 # mount this image
 echo "Mounting unpacked r/w disk image..."
-device=$(hdiutil attach -readwrite -noverify -noautoopen "$temp_dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
-echo "Mounted as $device."
+DEVICE_DETAILS=$(hdiutil attach -readwrite -noverify -noautoopen "$temp_dmg")
+DEVICE_NAME=$(echo $DEVICE_DETAILS | egrep '^/dev/' | sed 1q | awk '{print $1}')
+TMP_VOL_PATH=$(echo $DEVICE_DETAILS | egrep -o '/Volumes/.*$')
+echo "Mounted as $DEVICE_NAME under $TMP_VOL_PATH."
 sleep 10
 
 # set properties
 echo "Updating disk image styles..."
-rm "/Volumes/$VOLNAME/DSStorePlaceHolder"
-arch -32 perl5.18 mpsdmg.pl "$VOLNAME" $(basename "$BG_PIC")
+rm "$TMP_VOL_PATH/DSStorePlaceHolder"
+arch -32 perl5.18 mpsdmg.pl "$(basename "$TMP_VOL_PATH")" "$VOLNAME" $(basename "$BG_PIC")
 sync;sync;sync
-hdiutil detach "$device"
+hdiutil detach "$DEVICE_NAME"
 
 echo "Compressing r/w disk image to $OUTPUT_FILE..."
 rm -f "$OUTPUT_FILE"
