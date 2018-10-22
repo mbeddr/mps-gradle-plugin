@@ -26,7 +26,7 @@ open class Args(parser: ArgParser) {
             help = "plugin to to load. The format is --plugin=<path>:<id>")
     { toPlugin(this) }
 
-    val macros by parser.adding("--macros",
+    val macros by parser.adding("--macro",
             help = "macro to define. The format is --macro=<name>:<value>")
     { toMacro(this) }
 

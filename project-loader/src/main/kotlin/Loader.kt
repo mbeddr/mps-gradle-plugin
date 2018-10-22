@@ -74,13 +74,17 @@ fun <T> executeWithProject(project: File,
                            buildNumber: String? = null,
                            action: (Project) -> T): T {
 
+    val propertyOverrides = mutableListOf<Pair<String,String>>()
+
     if (pluginLocation != null) {
         logger.info("overriding plugin location with: ${pluginLocation.absolutePath}")
+        propertyOverrides.add(Pair(PROPERTY_PLUGINS_PATH, System.getProperty(PROPERTY_PLUGINS_PATH)))
         System.setProperty(PROPERTY_PLUGINS_PATH, pluginLocation.absolutePath)
     }
 
     if (buildNumber != null) {
         logger.info("setting build number to \"$buildNumber\"")
+        propertyOverrides.add(Pair(PROPERTY_PLUGINS_COMPATIBLE_BUILD, System.getProperty(PROPERTY_PLUGINS_COMPATIBLE_BUILD)))
         System.setProperty(PROPERTY_PLUGINS_COMPATIBLE_BUILD, buildNumber)
     }
 
@@ -115,6 +119,11 @@ fun <T> executeWithProject(project: File,
         logger.info("disposing environment")
         ideaEnvironment.dispose()
         logger.info("project and environment disposed")
+    }
+    
+    // cleanup overridden property values to the state that they were before.
+    propertyOverrides.forEach {
+        System.setProperty(it.first, it.second)
     }
 
     return res
