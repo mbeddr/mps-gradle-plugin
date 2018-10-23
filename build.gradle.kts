@@ -11,7 +11,6 @@ val versionMajor = 1
 val versionMinor = 0
 
 group = "de.itemis.mps"
-version = "1.0.0"
 
 
 val nexusUsername: String? by project
@@ -21,11 +20,11 @@ val kotlinArgParserVersion by extra { "2.0.7" }
 val mpsVersion by extra { "2018.2.4" }
 
 
-
-if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
-    version = de.itemis.mps.gradle.GitBasedVersioning.getVersion(versionMajor, versionMinor)
+version = if (!project.hasProperty("useSnapshot") &&
+        (project.hasProperty("forceCI") || project.hasProperty("teamcity"))) {
+    de.itemis.mps.gradle.GitBasedVersioning.getVersion(versionMajor, versionMinor)
 } else {
-    version = "$versionMajor.$versionMinor-SNAPSHOT"
+    "$versionMajor.$versionMinor-SNAPSHOT"
 }
 
 
