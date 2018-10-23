@@ -51,6 +51,10 @@ gradlePlugin {
             id = "generate-models"
             implementationClass = "de.itemis.mps.gradle.generate.GenerateMpsProjectPlugin"
         }
+        register("modelcheck") {
+            id = "modelcheck"
+            implementationClass = "de.itemis.mps.gradle.modelcheck.ModelcheckMpsProjectPlugin"
+        }
     }
 }
 

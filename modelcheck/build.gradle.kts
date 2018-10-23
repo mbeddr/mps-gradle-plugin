@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 import java.net.URI
 
 group = "de.itemis.mps"
@@ -37,7 +38,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it) }.first().matching { include("lib/*.jar") })
+    compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar", "plugins/modelchecker/**/*.jar", "plugins/http-support/**/*.jar")})
     implementation(project(":project-loader"))
 }
 
