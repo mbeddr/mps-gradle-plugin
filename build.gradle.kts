@@ -1,11 +1,10 @@
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "1.2.51"
-    `maven-publish`
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
+    `maven-publish`
 }
 
 val versionMajor = 1
@@ -15,13 +14,11 @@ group = "de.itemis.mps"
 version = "1.0.0"
 
 
-
-
 val nexusUsername: String? by project
 val nexusPassword: String? by project
 
-val kotlinArgParserVersion by extra {"2.0.7"}
-val mpsVersion by extra {"2018.1.5"}
+val kotlinArgParserVersion by extra { "2.0.7" }
+val mpsVersion by extra { "2018.2.4" }
 
 
 
@@ -50,8 +47,8 @@ dependencies {
 }
 
 gradlePlugin {
-    (plugins) {
-        "generate-models" {
+    plugins {
+        register("generate-models") {
             id = "generate-models"
             implementationClass = "de.itemis.mps.gradle.generate.GenerateMpsProjectPlugin"
         }
@@ -59,12 +56,12 @@ gradlePlugin {
 }
 
 tasks {
-    "wrapper"(Wrapper::class) {
-        gradleVersion = "4.8"
+    register ("wrapper", Wrapper::class) {
+        gradleVersion = "4.10.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 
-    "setTeamCityBuildNumber" {
+    register("setTeamCityBuildNumber") {
         doLast {
             println("##teamcity[buildNumber '$version']")
         }
@@ -74,6 +71,7 @@ tasks {
 publishing {
     repositories {
         maven {
+            name = "itemis"
             url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
             credentials {
                 username = nexusUsername
@@ -82,5 +80,6 @@ publishing {
         }
     }
 }
+
 
 
