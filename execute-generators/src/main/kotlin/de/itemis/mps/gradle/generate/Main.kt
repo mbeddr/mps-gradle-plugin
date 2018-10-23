@@ -1,6 +1,7 @@
 package de.itemis.mps.gradle.generate
 
 import com.xenomachina.argparser.ArgParser
+import com.xenomachina.argparser.SystemExitException
 import com.xenomachina.argparser.mainBody
 import de.itemis.mps.gradle.project.loader.Args
 import de.itemis.mps.gradle.project.loader.executeWithProject
@@ -17,15 +18,17 @@ class GenerateArgs(parser: ArgParser) : Args(parser) {
 fun main(args: Array<String>) = mainBody {
 
     val parsed = ArgParser(args).parseInto(::GenerateArgs)
+    var result = false
 
     try {
-        executeWithProject(parsed) { project -> generateProject(parsed, project) }
+        result = executeWithProject(parsed) { project -> generateProject(parsed, project) }
     } catch (ex: java.lang.Exception) {
         logger.fatal("error generating", ex)
     } catch (t: Throwable) {
         logger.fatal("error generating", t)
-    } finally {
-
+    }
+    if(!result) {
+        throw SystemExitException("generation failed", -1)
     }
 
     System.exit(0)
