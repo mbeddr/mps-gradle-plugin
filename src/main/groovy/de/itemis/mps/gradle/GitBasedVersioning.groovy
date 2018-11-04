@@ -12,7 +12,7 @@ class GitBasedVersioning {
     static boolean isGitVersioningAvailable() {
         try {
             String output = getCommandOutput("git --version")
-            return output.contains("2.")
+            return output.startsWith("git version 2")
         } catch (ignored) {
             return false
         }
