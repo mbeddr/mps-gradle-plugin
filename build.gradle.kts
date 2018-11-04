@@ -8,7 +8,7 @@ plugins {
 }
 
 val versionMajor = 1
-val versionMinor = 0
+val versionMinor = 1
 
 group = "de.itemis.mps"
 
