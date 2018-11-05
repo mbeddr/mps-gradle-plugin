@@ -4,6 +4,20 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.GradleException
 
 class GitBasedVersioning {
+
+
+    /**
+     * Checks whenever git based versioning is available.
+     * */
+    static boolean isGitVersioningAvailable() {
+        try {
+            String output = getCommandOutput("git --version")
+            return output.startsWith("git version 2")
+        } catch (ignored) {
+            return false
+        }
+    }
+
     static String getGitShortCommitHash() {
         return getCommandOutput('git rev-parse --short HEAD').substring(0,7)
     }
