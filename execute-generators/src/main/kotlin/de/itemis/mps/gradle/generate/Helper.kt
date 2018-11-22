@@ -72,27 +72,36 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
     return scb.withFacetNames(DEFAULT_FACETS).withFinalTarget(ITarget.Name("jetbrains.mps.make.facets.Make.make")).toScript()
 }
 
-private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>) {
+private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>) : Boolean {
     val session = MakeSession(proj, MsgHandler(), true)
     val res = ModelsToResources(models).resources().toList()
     val makeService = BuildMakeService()
 
     if (res.isEmpty()) {
         logger.warn("nothing to generate")
-        return
+        return false
     }
     logger.info("starting generation")
     val future = makeService.make(session, res, createScript(proj, models))
     try {
-        future.get()
+        val result= future.get()
         logger.info("generation finished")
+        return if (result.isSucessful) {
+            logger.info("generation result: successful")
+            true
+        } else {
+            logger.error("generation result: failed")
+            logger.error(result)
+            false
+        }
     } catch (ex: Exception) {
         logger.error("failed to generate", ex)
     }
+    return false
 }
 
 
-fun generateProject(parsed: Args, project: Project) {
+fun generateProject(parsed: GenerateArgs, project: Project): Boolean {
     val ftr = AsyncResult<List<SModel>>()
 
     project.modelAccess.runReadAction {
@@ -105,7 +114,7 @@ fun generateProject(parsed: Args, project: Project) {
 
     val modelsToGenerate = ftr.resultSync
 
-    makeModels(project, modelsToGenerate)
+    return makeModels(project, modelsToGenerate)
 }
 
 

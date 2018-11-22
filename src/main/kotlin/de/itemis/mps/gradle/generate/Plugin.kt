@@ -57,7 +57,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
 
 
                 val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
-                val prj = sequenceOf(projectLocation.absolutePath)
+                val prj = sequenceOf("--project=${projectLocation.absolutePath}")
 
                 val args = sequenceOf(pluginLocation,
                         extension.plugins.map { "--plugin=${it.id}:${it.path}" }.asSequence(),
