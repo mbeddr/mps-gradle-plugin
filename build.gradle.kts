@@ -55,8 +55,8 @@ gradlePlugin {
 }
 
 tasks {
-    register ("wrapper", Wrapper::class) {
-        gradleVersion = "4.10.2"
+    wrapper {
+        gradleVersion = "5.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 
