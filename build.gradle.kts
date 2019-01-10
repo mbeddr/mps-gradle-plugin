@@ -89,5 +89,6 @@ publishing {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.allWarningsAsErrors = true
 }
 
