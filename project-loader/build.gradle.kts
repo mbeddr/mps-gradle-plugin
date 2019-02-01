@@ -10,6 +10,8 @@ group = "de.itemis.mps"
 
 val mpsVersion: String by project
 val kotlinArgParserVersion: String by project
+val kotlinApiVersion: String by project
+val kotlinVersion: String by project
 
 val pluginVersion = "1"
 
@@ -29,7 +31,7 @@ repositories {
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
@@ -37,4 +39,6 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.allWarningsAsErrors = true
 }

@@ -1,14 +1,20 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
+
+val kotlinApiVersion by extra {"1.2"}
+val kotlinVersion by extra {"$kotlinApiVersion.41"}
+
 
 plugins {
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
+    kotlin("jvm") version "1.2.41"
 }
 
 val versionMajor = 1
-val versionMinor = 1
+val versionMinor = 2
 
 group = "de.itemis.mps"
 
@@ -41,9 +47,9 @@ repositories {
 
 dependencies {
     compile(localGroovy())
-    compile(kotlin("stdlib"))
-
+    compile(kotlin("stdlib", version = kotlinVersion))
 }
+
 
 gradlePlugin {
     plugins {
@@ -55,8 +61,8 @@ gradlePlugin {
 }
 
 tasks {
-    register ("wrapper", Wrapper::class) {
-        gradleVersion = "4.10.2"
+    wrapper {
+        gradleVersion = "5.1"
         distributionType = Wrapper.DistributionType.ALL
     }
 
@@ -80,5 +86,9 @@ publishing {
     }
 }
 
-
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.allWarningsAsErrors = true
+}
 
