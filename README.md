@@ -15,7 +15,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'de.itemis.mps:mps-gradle-plugin:1.0.+'
+        classpath 'de.itemis.mps:mps-gradle-plugin:1.2.+'
     }
 }
 ```
@@ -23,6 +23,52 @@ buildscript {
 Use a fully specified version such as `1.0.123` for better build reproducibility.
 
 # Tasks
+
+## RunAntScript
+
+Is the base for a collection of tasks (`BuildLanguages`, `TestLanguages`) that all have the interface. These tasks are 
+used to execute generated ant files from MPS. Especially useful when you can't use the ANT integration of gradle to
+run generated ANT XML files during the build because they are generated during the build. 
+
+### Usage 
+
+Parameters:
+
+- `script`: path to the ANT to execute
+- `scriptClasspath`: classpath used for the JVM that will execute the generated ANT script. Needs to contain ANT to be 
+  able to run the build script. See below section "Providing Global Defaults" for project wide defaults.
+- `scriptArgs`; additional command line arguments provided to the JVM that will execute the generated ANT scripts. This
+  is often used to provide property valued via "-Dprop=value". See below section "Providing Global Defaults" for project wide defaults.
+- `includeDefaultArgs`: controls if the project wide default values for arguments is used or not. 
+  It's set to `true` by default.
+- `includeDefaultClasspath`: controls if the project wide default values for the classpath is used or not. 
+  It's set to `true` by default.
+- `targets()`: the targets to execute of the ANT files.
+
+
+### Providing Global Defaults
+
+All tasks derived from the `RunAntScript` base class allow to specify default values for the classpath and script arguemnts
+via project properties. By default these values are added to the value specified for the parameters `scriptArgs` and 
+`scriptClasspath` if they are present. To opt out from the defaults see above the parameters `includeDefaultArgs` and 
+`includeDefaultClasspath`. 
+
+The property `itemis.mps.gradle.ant.defaultScriptArgs` controls the default arguments provided to the build scripts 
+execution. In belows example the default arguments contain the version and build date. At runtime the default arguments
+are combined with the arguments defined via `scriptArgs`. 
+
+The property `itemis.mps.gradle.ant.defaultScriptClasspath` controls the default classpath provided to the build scripts
+execution. In belows example the classpath contains ANT (via dependency configuration) and the tools jar from the JDK.
+At runtime the default classpath are combined with the classpath defined via `scriptClasspath`.  
+```
+def defaultScriptArgs = ["-Dversion=$version", "-DbuildDate=${new Date().toString()}"]
+def buildScriptClasspath = project.configurations.ant_lib.fileCollection({true}) + project.files("$project.jdk_home/lib/tools.jar")
+
+ext["itemis.mps.gradle.ant.defaultScriptArgs"] = defaultScriptArgs
+ext["itemis.mps.gradle.ant.defaultScriptClasspath"] = buildScriptClasspath
+```
+
+
 
 ## CreateDmg
 
