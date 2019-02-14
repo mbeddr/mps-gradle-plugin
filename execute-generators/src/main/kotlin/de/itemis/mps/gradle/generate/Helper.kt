@@ -56,15 +56,17 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
     val scb = ScriptBuilder()
 
     scb.withFacetNames(allUsedLanguages
-            .mapNotNull { registry.getLanguage(it) }
-            .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
-            .flatMap { it.manifest.facets() }
-            .map { it.name }
+            ?.mapNotNull { registry.getLanguage(it) }
+            ?.mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
+            ?.flatMap { it.manifest.facets() }
+            ?.map { it.name }
     )
 
+    val facetRegistry = proj.getComponent(FacetRegistry::class.java)
+
     scb.withFacetNames(allUsedLanguages
-            .flatMap { FacetRegistry.getInstance().getFacetsForLanguage(it.qualifiedName) }
-            .map { it.name }
+            ?.flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
+            ?.map { it.name }
     )
 
     // For some reason MPS doesn't explicitly stat that there is a dependency on Generate, TextGen and Make, so we have
@@ -116,7 +118,7 @@ fun generateProject(parsed: GenerateArgs, project: Project): Boolean {
 
     val modelsToGenerate = ftr.get()
 
-    return makeModels(project, modelsToGenerate)
+    return if(modelsToGenerate != null) makeModels(project, modelsToGenerate) else true
 }
 
 

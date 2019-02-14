@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
-val kotlinApiVersion by extra {"1.2"}
-val kotlinVersion by extra {"$kotlinApiVersion.41"}
+val kotlinApiVersion by extra {"1.3"}
+val kotlinVersion by extra {"$kotlinApiVersion.11"}
 
 
 plugins {
@@ -10,7 +10,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.2.41"
+    kotlin("jvm") version "1.3.11"
 }
 
 val versionMajor = 1
@@ -23,7 +23,7 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2018.2.4" }
+val mpsVersion by extra { "2018.3.3" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&
