@@ -1,8 +1,8 @@
 group = "test.de.itemis.mps.gradle.generate"
-version = "1.0-SNAPSHOT"
+version = "1.2-SNAPSHOT"
 
 plugins {
-    id("generate-models") version "1.0-SNAPSHOT"
+    id("generate-models") version "1.2-SNAPSHOT"
 }
 
 repositories {
@@ -15,7 +15,7 @@ repositories {
 
 val mps = configurations.create("mps")
 
-val mpsVersion = "2018.2.4"
+val mpsVersion = "2018.3.3"
 
 dependencies {
     mps("com.jetbrains:mps:$mpsVersion")

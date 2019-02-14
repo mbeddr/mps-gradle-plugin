@@ -16,3 +16,5 @@ mps-prj/solutions/my.build/build.xml
 test/generate-build-solution/mps-prj/solutions/my.build/build.xml
 .DS_Store
 workspace.xml
+**/source_gen**
+**/classes_gen/**
