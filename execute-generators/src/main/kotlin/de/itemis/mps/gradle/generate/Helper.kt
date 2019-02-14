@@ -26,7 +26,8 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
 private val DEFAULT_FACETS = listOf(
         IFacet.Name("jetbrains.mps.lang.core.Generate"),
         IFacet.Name("jetbrains.mps.lang.core.TextGen"),
-        IFacet.Name("jetbrains.mps.make.facets.Make"))
+        IFacet.Name("jetbrains.mps.make.facets.Make"),
+        IFacet.Name("jetbrains.mps.lang.makeup.Makeup"))
 
 private class MsgHandler : IMessageHandler {
     val logger = Logger.getLogger("de.itemis.mps.gradle.generate.messages")
