@@ -2,7 +2,7 @@
 <project version="4">
   <component name="MPSProject">
     <projectModules>
-      <modulePath path="$PROJECT_DIR$/$mypath$/my.solution/my.solution.msd" folder="" />
+      <modulePath path="$PROJECT_DIR$/solutions/my.solution/my.solution.msd" folder="" />
     </projectModules>
   </component>
 </project>

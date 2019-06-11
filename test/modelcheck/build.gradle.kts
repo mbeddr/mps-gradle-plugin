@@ -1,5 +1,4 @@
 import java.net.URI
-import de.itemis.mps.gradle.Macro
 
 group = "test.de.itemis.mps.gradle.modelcheck"
 version = "1.2-SNAPSHOT"
@@ -30,6 +29,5 @@ dependencies{
 modelcheck {
     mpsConfig = mps
     projectLocation = File("./mps-prj")
-    macros = listOf(Macro("mypath", "solutions"))
     //debug = true
 }

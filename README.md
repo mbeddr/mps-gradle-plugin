@@ -255,6 +255,7 @@ ext.mpsVersion = '2018.2.5'
 modelcheck {
     projectLocation = new File("./mps-prj")
     mpsConfig = configurations.mps
+    macros = listOf(Macro("mypath", "/your/path"))
 }
 ```
 
