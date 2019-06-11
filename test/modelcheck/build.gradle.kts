@@ -3,6 +3,9 @@ import java.net.URI
 group = "test.de.itemis.mps.gradle.modelcheck"
 version = "1.1-SNAPSHOT"
 
+if(JavaVersion.current() != JavaVersion.VERSION_1_8){
+    throw GradleException("This build script requires java " + JavaVersion.VERSION_1_8 + ", but you are currently using " + JavaVersion.current())
+}
 
 plugins {
     id("modelcheck") version "1.1-SNAPSHOT"
