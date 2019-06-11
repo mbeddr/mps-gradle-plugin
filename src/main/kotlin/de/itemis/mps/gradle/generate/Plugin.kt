@@ -59,7 +59,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     dependsOn(resolveMps)
                 }
 
-                val generate = tasks.create("generate", JavaExec::class.java) {
+                tasks.create("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
                     group = "build"
