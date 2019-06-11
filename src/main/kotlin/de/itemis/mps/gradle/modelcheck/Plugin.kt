@@ -47,7 +47,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     from(extension.mpsConfig.resolve().map { zipTree(it) })
                     into(mpsLocation)
                 }
-                val modelcheck = tasks.create("checkmodels", JavaExec::class.java) {
+                tasks.create("checkmodels", JavaExec::class.java) {
                     dependsOn(resolveMps)
                     args(args)
                     group = "test"
