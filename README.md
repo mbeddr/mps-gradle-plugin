@@ -271,7 +271,7 @@ Parameters:
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
 * `projectLocation` - location of the MPS project to generate.
 * `errorNoFail` - report errors but do not fail the build.
-* `warningsAsError` - handles warnings as errors and will fail the build if any is found when `errorNoFail` is not set. 
+* `warningAsError` - handles warnings as errors and will fail the build if any is found when `errorNoFail` is not set. 
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.

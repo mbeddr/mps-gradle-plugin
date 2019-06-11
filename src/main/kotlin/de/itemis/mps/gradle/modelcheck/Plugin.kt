@@ -11,7 +11,7 @@ import java.io.File
 
 open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var models: List<String> = emptyList()
-    var warningsAsError = false
+    var warningAsError = false
     var errorNoFail = false
 }
 
@@ -35,7 +35,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
-                if(extension.warningsAsError) {
+                if(extension.warningAsError) {
                     args.add("--warning-as-error")
                 }
 
