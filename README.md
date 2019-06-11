@@ -37,7 +37,7 @@ Parameters:
 - `script`: path to the ANT to execute
 - `scriptClasspath`: classpath used for the JVM that will execute the generated ANT script. Needs to contain ANT to be 
   able to run the build script. See below section "Providing Global Defaults" for project wide defaults.
-- `scriptArgs`; additional command line arguments provided to the JVM that will execute the generated ANT scripts. This
+- `scriptArgs`: additional command line arguments provided to the JVM that will execute the generated ANT scripts. This
   is often used to provide property valued via "-Dprop=value". See below section "Providing Global Defaults" for project wide defaults.
 - `includeDefaultArgs`: controls if the project wide default values for arguments is used or not. 
   It's set to `true` by default.
@@ -48,7 +48,7 @@ Parameters:
 
 ### Providing Global Defaults
 
-All tasks derived from the `RunAntScript` base class allow to specify default values for the classpath and script arguemnts
+All tasks derived from the `RunAntScript` base class allow to specify default values for the classpath and script arguments
 via project properties. By default these values are added to the value specified for the parameters `scriptArgs` and 
 `scriptClasspath` if they are present. To opt out from the defaults see above the parameters `includeDefaultArgs` and 
 `includeDefaultClasspath`. 
@@ -199,7 +199,7 @@ configurations {
     mps
 }
 
-ext.mpsVersion = '2017.3.5'
+ext.mpsVersion = '2018.2.5'
 
 generate {
     projectLocation = new File("./mps-prj")
@@ -226,3 +226,74 @@ Parameters:
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
+
+## Model Check
+
+Run the model check on a subset or all models in a project directly from gradle.
+
+This functionality currently runs all model checks (typesystem, structure, constrains, etc.) from gralde. By default if
+any of checks fails the complete build is failed. All messages (Info, Warning or Error) are reported through log4j to
+the command line.
+
+### Usage
+
+A minimal build script to check all models in a MPS project with no external plugins would look like this: 
+
+```
+apply plugin: 'modelcheck'
+
+configurations {
+    mps
+}
+
+dependencies {
+    mps "com.jetbrains:mps:$mpsVersion"
+}
+
+ext.mpsVersion = '2018.2.5'
+
+modelcheck {
+    projectLocation = new File("./mps-prj")
+    mpsConfig = configurations.mps
+}
+```
+
+Parameters:
+* `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
+  Custom plugins are supported via the `pluginLocation` parameter.
+* `mpsLocation` - optional location where to place the MPS files.
+* `plugins` - optional list of plugins to load before generation is attempted.
+  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
+* `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
+  `plugins` directory inside of the MPS installation.
+* `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
+  matched are supported and no RegEx or partial name matching.
+* `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
+* `projectLocation` - location of the MPS project to generate.
+* `errorNoFail` - report errors but do not fail the build.
+* `warningAsError` - handles warnings as errors and will fail the build if any is found when `errorNoFail` is not set. 
+* `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
+  the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
+  the build.
+  
+### Additional Plugins 
+
+By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
+HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location 
+to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list: 
+
+```
+apply plugin: 'modelcheck'
+...
+
+modelcheck {
+    pluginLocation = new File("path/to/my/plugins")
+    plugins = [new Plugin("com.mbeddr.core", "mbeddr.core")]
+    projectLocation = new File("./mps-prj")
+    mpsConfig = configurations.mps
+}
+
+```
+
+Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
+MPS. If they are not found the the build will fail.
