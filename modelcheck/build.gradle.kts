@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 import java.net.URI
 
 group = "de.itemis.mps"
@@ -22,9 +23,6 @@ val nexusPassword: String? by project
 val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
 
-val kotlinApiVersion: String by project
-val kotlinVersion: String by project
-
 val pluginVersion = "2"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
@@ -37,15 +35,13 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
+    implementation(kotlin("stdlib-jdk8"))
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it) }.first().matching { include("lib/*.jar") })
+    compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar", "plugins/modelchecker/**/*.jar", "plugins/http-support/**/*.jar")})
     implementation(project(":project-loader"))
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.apiVersion = kotlinApiVersion
-    kotlinOptions.allWarningsAsErrors = true
 }
