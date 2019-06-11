@@ -1,11 +1,11 @@
 import java.net.URI
 
 group = "test.de.itemis.mps.gradle.modelcheck"
-version = "1.0-SNAPSHOT"
+version = "1.1-SNAPSHOT"
 
 
 plugins {
-    id("modelcheck") version "1.0-SNAPSHOT"
+    id("modelcheck") version "1.1-SNAPSHOT"
 }
 
 repositories {
