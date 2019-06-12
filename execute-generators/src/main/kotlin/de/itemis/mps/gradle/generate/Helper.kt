@@ -54,6 +54,14 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
 
     val allUsedLanguages = allUsedLanguagesAR.get()
 
+    if(allUsedLanguages == null) {
+        logger.error("failed to retrieve used languages")
+    }
+
+    if(allUsedLanguages?.size == 0) {
+        logger.warn("no used language is given")
+    }
+
     val scb = ScriptBuilder()
 
     scb.withFacetNames(allUsedLanguages
