@@ -199,7 +199,7 @@ configurations {
     mps
 }
 
-ext.mpsVersion = '2018.2.5'
+ext.mpsVersion = '2018.3.6'
 
 generate {
     projectLocation = new File("./mps-prj")
@@ -250,7 +250,7 @@ dependencies {
     mps "com.jetbrains:mps:$mpsVersion"
 }
 
-ext.mpsVersion = '2018.2.5'
+ext.mpsVersion = '2018.3.6'
 
 modelcheck {
     projectLocation = new File("./mps-prj")
