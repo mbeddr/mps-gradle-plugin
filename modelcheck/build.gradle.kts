@@ -45,3 +45,16 @@ dependencies {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "itemis"
+            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+            credentials {
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
+}

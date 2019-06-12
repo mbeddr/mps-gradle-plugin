@@ -13,6 +13,9 @@ val kotlinArgParserVersion: String by project
 val kotlinApiVersion: String by project
 val kotlinVersion: String by project
 
+val nexusUsername: String? by project
+val nexusPassword: String? by project
+
 val pluginVersion = "1"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
@@ -41,4 +44,17 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "itemis"
+            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+            credentials {
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
 }
