@@ -58,7 +58,7 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
 
     if(allUsedLanguages == null) {
         logger.error("failed to retrieve used languages")
-    } else if(allUsedLanguages.size == 0) {
+    } else if(allUsedLanguages.isEmpty()) {
         logger.warn("no used language is given")
     } else {
         scb.withFacetNames(allUsedLanguages
