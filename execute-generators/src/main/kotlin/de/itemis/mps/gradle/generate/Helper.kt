@@ -54,29 +54,27 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
 
     val allUsedLanguages = allUsedLanguagesAR.get()
 
-    if(allUsedLanguages == null) {
-        logger.error("failed to retrieve used languages")
-    }
-
-    if(allUsedLanguages?.size == 0) {
-        logger.warn("no used language is given")
-    }
-
     val scb = ScriptBuilder()
 
-    scb.withFacetNames(allUsedLanguages
-            ?.mapNotNull { registry.getLanguage(it) }
-            ?.mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
-            ?.flatMap { it.manifest.facets() }
-            ?.map { it.name }
-    )
+    if(allUsedLanguages == null) {
+        logger.error("failed to retrieve used languages")
+    } else if(allUsedLanguages.size == 0) {
+        logger.warn("no used language is given")
+    } else {
+        scb.withFacetNames(allUsedLanguages
+                .mapNotNull { registry.getLanguage(it) }
+                .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
+                .flatMap { it.manifest.facets() }
+                .map { it.name }
+        )
 
-    val facetRegistry = proj.getComponent(FacetRegistry::class.java)
+        val facetRegistry = proj.getComponent(FacetRegistry::class.java)
 
-    scb.withFacetNames(allUsedLanguages
-            ?.flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
-            ?.map { it.name }
-    )
+        scb.withFacetNames(allUsedLanguages
+                .flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
+                .map { it.name }
+        )
+    }
 
     // For some reason MPS doesn't explicitly stat that there is a dependency on Generate, TextGen and Make, so we have
     // to make sure they are always included in the set of facets even if for MPS there is no dependency on them.
