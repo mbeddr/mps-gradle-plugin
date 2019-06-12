@@ -56,24 +56,24 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
 
     val scb = ScriptBuilder()
 
-    if(allUsedLanguages == null) {
-        logger.error("failed to retrieve used languages")
-    } else if(allUsedLanguages.isEmpty()) {
-        logger.warn("no used language is given")
-    } else {
-        scb.withFacetNames(allUsedLanguages
-                .mapNotNull { registry.getLanguage(it) }
-                .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
-                .flatMap { it.manifest.facets() }
-                .map { it.name }
-        )
+    when {
+        allUsedLanguages == null -> logger.error("failed to retrieve used languages")
+        allUsedLanguages.isEmpty() -> logger.warn("no used language is given")
+        else -> {
+            scb.withFacetNames(allUsedLanguages
+                    .mapNotNull { registry.getLanguage(it) }
+                    .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
+                    .flatMap { it.manifest.facets() }
+                    .map { it.name }
+            )
 
-        val facetRegistry = proj.getComponent(FacetRegistry::class.java)
+            val facetRegistry = proj.getComponent(FacetRegistry::class.java)
 
-        scb.withFacetNames(allUsedLanguages
-                .flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
-                .map { it.name }
-        )
+            scb.withFacetNames(allUsedLanguages
+                    .flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
+                    .map { it.name }
+            )
+        }
     }
 
     // For some reason MPS doesn't explicitly stat that there is a dependency on Generate, TextGen and Make, so we have
@@ -125,12 +125,10 @@ fun generateProject(parsed: GenerateArgs, project: Project): Boolean {
 
     val modelsToGenerate = ftr.get()
 
-    if(modelsToGenerate == null) {
+    if (modelsToGenerate == null) {
         logger.error("failed to fetch modelsToGenerate")
+        return false
     }
 
-    return if(modelsToGenerate != null) makeModels(project, modelsToGenerate) else false
+    return makeModels(project, modelsToGenerate)
 }
-
-
-
