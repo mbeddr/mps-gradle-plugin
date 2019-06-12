@@ -127,7 +127,11 @@ fun generateProject(parsed: GenerateArgs, project: Project): Boolean {
 
     val modelsToGenerate = ftr.get()
 
-    return if(modelsToGenerate != null) makeModels(project, modelsToGenerate) else true
+    if(modelsToGenerate == null) {
+        logger.error("failed to fetch modelsToGenerate")
+    }
+
+    return if(modelsToGenerate != null) makeModels(project, modelsToGenerate) else false
 }
 
 
