@@ -37,7 +37,7 @@ fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String>
     val prj = sequenceOf("--project=${projectLocation.absolutePath}")
 
     return sequenceOf(pluginLocation,
-            extensions.plugins.map { "--plugin=${it.id}:${it.path}" }.asSequence(),
-            extensions.macros.map { "--macro=${it.name}:${it.value}" }.asSequence(),
+            extensions.plugins.map { "--plugin=${it.id}::${it.path}" }.asSequence(),
+            extensions.macros.map { "--macro=${it.name}::${it.value}" }.asSequence(),
             prj).flatten().toMutableList()
 }

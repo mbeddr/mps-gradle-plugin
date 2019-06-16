@@ -19,9 +19,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
-            val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
             afterEvaluate {
+                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+
                 val mpsVersion = extension
                         .mpsConfig
                         .resolvedConfiguration

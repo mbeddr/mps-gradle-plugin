@@ -5,9 +5,9 @@ import com.xenomachina.argparser.default
 import java.io.File
 
 private fun <T> splitAndCreate(str: String, creator: (String, String) -> T): T {
-    val split = str.split(":")
+    val split = str.split("::")
     if (split.size < 2) {
-        throw RuntimeException("string if not of the right format. Expected <key>:<value>")
+        throw RuntimeException("string if not of the right format. Expected <key>::<value>")
     }
     return creator(split[0], split[1])
 }
@@ -23,11 +23,11 @@ private fun toPlugin(str: String) = splitAndCreate(str, ::Plugin)
 open class Args(parser: ArgParser) {
 
     val plugins by parser.adding("--plugin",
-            help = "plugin to to load. The format is --plugin=<path>:<id>")
+            help = "plugin to to load. The format is --plugin=<path>::<id>")
     { toPlugin(this) }
 
     val macros by parser.adding("--macro",
-            help = "macro to define. The format is --macro=<name>:<value>")
+            help = "macro to define. The format is --macro=<name>::<value>")
     { toMacro(this) }
 
     val pluginLocation by parser.storing("--plugin-location",
