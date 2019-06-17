@@ -1,6 +1,6 @@
 package de.itemis.mps.gradle.generate
 
-import com.intellij.openapi.util.AsyncResult
+
 import jetbrains.mps.make.MakeSession
 import jetbrains.mps.make.facet.FacetRegistry
 import jetbrains.mps.make.facet.IFacet
@@ -17,6 +17,7 @@ import jetbrains.mps.smodel.resources.ModelsToResources
 import jetbrains.mps.smodel.runtime.MakeAspectDescriptor
 import jetbrains.mps.tool.builder.make.BuildMakeService
 import org.apache.log4j.Logger
+import org.jetbrains.concurrency.AsyncPromise
 import org.jetbrains.mps.openapi.language.SLanguage
 import org.jetbrains.mps.openapi.model.SModel
 
@@ -25,7 +26,8 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
 private val DEFAULT_FACETS = listOf(
         IFacet.Name("jetbrains.mps.lang.core.Generate"),
         IFacet.Name("jetbrains.mps.lang.core.TextGen"),
-        IFacet.Name("jetbrains.mps.make.facets.Make"))
+        IFacet.Name("jetbrains.mps.make.facets.Make"),
+        IFacet.Name("jetbrains.mps.lang.makeup.Makeup"))
 
 private class MsgHandler : IMessageHandler {
     val logger = Logger.getLogger("de.itemis.mps.gradle.generate.messages")
@@ -34,6 +36,7 @@ private class MsgHandler : IMessageHandler {
             MessageKind.INFORMATION -> logger.info(msg.text, msg.exception)
             MessageKind.WARNING -> logger.warn(msg.text, msg.exception)
             MessageKind.ERROR -> logger.error(msg.text, msg.exception)
+            null -> logger.error(msg.text, msg.exception)
         }
     }
 
@@ -41,29 +44,37 @@ private class MsgHandler : IMessageHandler {
 
 private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>): IScript {
 
-    val allUsedLanguagesAR: AsyncResult<Set<SLanguage>> = AsyncResult()
+    val allUsedLanguagesAR: AsyncPromise<Set<SLanguage>> = AsyncPromise()
     val registry = LanguageRegistry.getInstance(proj.repository)
 
     proj.modelAccess.runReadAction {
         val allDirectlyUsedLanguages = models.map { it.module }.distinct().flatMap { it.usedLanguages }.distinct()
-        allUsedLanguagesAR.setDone(SLanguageHierarchy(registry, allDirectlyUsedLanguages).extended)
+        allUsedLanguagesAR.setResult(SLanguageHierarchy(registry, allDirectlyUsedLanguages).extended)
     }
 
-    val allUsedLanguages = allUsedLanguagesAR.resultSync
+    val allUsedLanguages = allUsedLanguagesAR.get()
 
     val scb = ScriptBuilder()
 
-    scb.withFacetNames(allUsedLanguages
-            .mapNotNull { registry.getLanguage(it) }
-            .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
-            .flatMap { it.manifest.facets() }
-            .map { it.name }
-    )
+    when {
+        allUsedLanguages == null -> logger.error("failed to retrieve used languages")
+        allUsedLanguages.isEmpty() -> logger.warn("no used language is given")
+        else -> {
+            scb.withFacetNames(allUsedLanguages
+                    .mapNotNull { registry.getLanguage(it) }
+                    .mapNotNull { it.getAspect(MakeAspectDescriptor::class.java) }
+                    .flatMap { it.manifest.facets() }
+                    .map { it.name }
+            )
 
-    scb.withFacetNames(allUsedLanguages
-            .flatMap { FacetRegistry.getInstance().getFacetsForLanguage(it.qualifiedName) }
-            .map { it.name }
-    )
+            val facetRegistry = proj.getComponent(FacetRegistry::class.java)
+
+            scb.withFacetNames(allUsedLanguages
+                    .flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
+                    .map { it.name }
+            )
+        }
+    }
 
     // For some reason MPS doesn't explicitly stat that there is a dependency on Generate, TextGen and Make, so we have
     // to make sure they are always included in the set of facets even if for MPS there is no dependency on them.
@@ -72,41 +83,52 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
     return scb.withFacetNames(DEFAULT_FACETS).withFinalTarget(ITarget.Name("jetbrains.mps.make.facets.Make.make")).toScript()
 }
 
-private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>) {
+private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>): Boolean {
     val session = MakeSession(proj, MsgHandler(), true)
     val res = ModelsToResources(models).resources().toList()
     val makeService = BuildMakeService()
 
     if (res.isEmpty()) {
         logger.warn("nothing to generate")
-        return
+        return false
     }
     logger.info("starting generation")
     val future = makeService.make(session, res, createScript(proj, models))
     try {
-        future.get()
+        val result = future.get()
         logger.info("generation finished")
+        return if (result.isSucessful) {
+            logger.info("generation result: successful")
+            true
+        } else {
+            logger.error("generation result: failed")
+            logger.error(result)
+            false
+        }
     } catch (ex: Exception) {
         logger.error("failed to generate", ex)
     }
+    return false
 }
 
 
-fun generateProject(parsed: Args, project: Project) {
-    val ftr = AsyncResult<List<SModel>>()
+fun generateProject(parsed: GenerateArgs, project: Project): Boolean {
+    val ftr = AsyncPromise<List<SModel>>()
 
     project.modelAccess.runReadAction {
         var modelsToGenerate = project.projectModels
         if (parsed.models.isNotEmpty()) {
             modelsToGenerate = modelsToGenerate.filter { parsed.models.contains(it.name.longName) }
         }
-        ftr.setDone(modelsToGenerate.toList())
+        ftr.setResult(modelsToGenerate.toList())
     }
 
-    val modelsToGenerate = ftr.resultSync
+    val modelsToGenerate = ftr.get()
 
-    makeModels(project, modelsToGenerate)
+    if (modelsToGenerate == null) {
+        logger.error("failed to fetch modelsToGenerate")
+        return false
+    }
+
+    return makeModels(project, modelsToGenerate)
 }
-
-
-

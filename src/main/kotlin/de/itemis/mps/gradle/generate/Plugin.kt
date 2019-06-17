@@ -1,5 +1,7 @@
 package de.itemis.mps.gradle.generate
 
+import de.itemis.mps.gradle.BasePluginExtensions
+import de.itemis.mps.gradle.argsFromBaseExtension
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -9,25 +11,8 @@ import org.gradle.api.tasks.JavaExec
 import java.io.File
 
 
-data class Plugin(
-        var id: String,
-        var path: String
-)
-
-data class Macro(
-        var name: String,
-        var value: String
-)
-
-open class GeneratePluginExtensions {
-    lateinit var mpsConfig: Configuration
-    var mpsLocation: File? = null
-    var plugins: List<de.itemis.mps.gradle.generate.Plugin> = emptyList()
-    var pluginLocation: File? = null
+open class GeneratePluginExtensions: BasePluginExtensions() {
     var models: List<String> = emptyList()
-    var macros: List<Macro> = emptyList()
-    var projectLocation: File? = null
-    var debug = false
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
@@ -49,21 +34,8 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val genConfig = configurations.detachedConfiguration(dep)
 
 
-                val pluginLocation = if (extension.pluginLocation != null) {
-                    sequenceOf("--plugin-location=${extension.pluginLocation!!.absolutePath}")
-                } else {
-                    emptySequence()
-                }
-
-
-                val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
-                val prj = sequenceOf(projectLocation.absolutePath)
-
-                val args = sequenceOf(pluginLocation,
-                        extension.plugins.map { "--plugin=${it.id}:${it.path}" }.asSequence(),
-                        extension.models.map { "--model=$it" }.asSequence(),
-                        extension.macros.map { "--macro=${it.name}:${it.value}" }.asSequence(),
-                        prj).flatten().toList()
+                val args = argsFromBaseExtension(extension)
+                args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
                 val resolveMps = tasks.create("resolveMpsForGeneration", Copy::class.java) {
                     from(extension.mpsConfig.resolve().map { zipTree(it) })
@@ -87,7 +59,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     dependsOn(resolveMps)
                 }
 
-                val generate = tasks.create("generate", JavaExec::class.java) {
+                tasks.create("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
                     group = "build"

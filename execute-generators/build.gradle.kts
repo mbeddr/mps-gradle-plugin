@@ -19,14 +19,13 @@ repositories {
 val nexusUsername: String? by project
 val nexusPassword: String? by project
 
+val kotlinArgParserVersion: String by project
+val mpsVersion: String by project
 
-//define directories
-val artifactsDir = File(buildDir, "artifacts")
-val mpsDir = File(artifactsDir, "mps")
-val kotlin_argparser_version = "2.0.7"
-val pluginVersion = "1"
-val mpsVersion = "2017.3.5"
+val kotlinApiVersion: String by project
+val kotlinVersion: String by project
 
+val pluginVersion = "2"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
     de.itemis.mps.gradle.GitBasedVersioning.getVersion(mpsVersion, pluginVersion)
@@ -38,22 +37,28 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 val mpsConfiguration = configurations.create("mps")
 
 dependencies {
-    compile(kotlin("stdlib"))
-    compile("com.xenomachina:kotlin-argparser:$kotlin_argparser_version")
-    compileOnly(fileTree(mpsDir).include("**/*.jar"))
+    implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
+    implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-}
-
-
-tasks {
-    val resolveMps by creating(Copy::class) {
-        from(mpsConfiguration.resolve().map { zipTree(it) })
-        into(mpsDir)
-    }
-
-    getByName("compileKotlin").dependsOn(resolveMps)
+    compileOnly(mpsConfiguration.resolve().map { zipTree(it) }.first().matching { include("lib/*.jar") })
+    implementation(project(":project-loader"))
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.allWarningsAsErrors = true
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "itemis"
+            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+            credentials {
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
 }
