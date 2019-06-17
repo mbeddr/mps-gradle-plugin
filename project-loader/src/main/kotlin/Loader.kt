@@ -8,8 +8,8 @@ import org.apache.log4j.Logger
 import java.io.File
 
 data class Plugin(
-        val path: String,
-        val id: String
+        val id: String,
+        val path: String
 )
 
 data class Macro(
