@@ -263,17 +263,19 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
-* `plugins` - optional list of plugins to load before generation is attempted.
+* `plugins` - optional list of plugins to load before model check is attempted.
   The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
-* `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
-  matched are supported and no RegEx or partial name matching.
+* `models` - optional list of models to check. Only full name matches are supported and no RegEx or partial name matching.
+* `modules` - optional list of modules to check. Ordinary name (w/o virtual folders) should be provided. Only full name matches
+  are supported and no RegEx or partial name matching.
+  If both parameters, `models` and `modules`, are omitted - all models in the project will be checked.
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
-* `projectLocation` - location of the MPS project to generate.
+* `projectLocation` - location of the MPS project to check.
 * `errorNoFail` - report errors but do not fail the build.
 * `warningAsError` - handles warnings as errors and will fail the build if any is found when `errorNoFail` is not set. 
-* `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
+* `debug` - optionally allows to start the JVM that is used to load MPS project with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
   

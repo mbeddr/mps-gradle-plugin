@@ -14,6 +14,7 @@ import jetbrains.mps.ide.modelchecker.platform.actions.UnresolvedReferencesCheck
 import jetbrains.mps.progress.EmptyProgressMonitor
 import jetbrains.mps.project.Project
 import jetbrains.mps.project.validation.StructureChecker
+import jetbrains.mps.smodel.SModelStereotype
 import jetbrains.mps.typesystemEngine.checker.TypesystemChecker
 import jetbrains.mps.util.CollectConsumer
 import org.apache.log4j.Logger
@@ -22,7 +23,9 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
 
 class ModelCheckArgs(parser: ArgParser) : Args(parser) {
     val models by parser.adding("--model",
-            help = "list of models to generate")
+            help = "list of models to check")
+    val modules by parser.adding("--module",
+            help = "list of modules to check")
     val warningAsError by parser.flagging("--warning-as-error", help = "treat model checker warning as errors")
     val dontFailOnError by parser.flagging("--error-no-fail", help = "report errors but don't fail the build")
 }
@@ -100,15 +103,21 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project) : Boolean {
     val itemsToCheck = ModelCheckerBuilder.ItemsToCheck()
 
     project.modelAccess.runReadAction {
-        if(args.models.isNotEmpty()) {
-            itemsToCheck.models.addAll(project.projectModulesWithGenerators.flatMap { it.models }.filter { args.models.contains(it.name.longName) })
-        } else {
-            itemsToCheck.models.addAll(project.projectModulesWithGenerators.flatMap { it.models })
+        if (args.models.isNotEmpty()) {
+            itemsToCheck.models.addAll(project.projectModulesWithGenerators
+                    .flatMap { it.models.filter { !SModelStereotype.isDescriptorModel(it) && !SModelStereotype.isStubModel(it) } }
+                    .filter { args.models.contains(it.name.longName) })
+        }
+        if (args.modules.isNotEmpty()) {
+            itemsToCheck.modules.addAll(project.projectModulesWithGenerators.filter { args.modules.contains(it.moduleName) })
+        }
+        if (args.models.isEmpty() && args.modules.isEmpty()) {
+            itemsToCheck.modules.addAll(project.projectModulesWithGenerators)
         }
         checker.check(itemsToCheck, project.repository, errorCollector, EmptyProgressMonitor())
 
         // We need read access here to resolve the node pointers in the report items
-        errorCollector.result.map{ printResult(it, project, args) }
+        errorCollector.result.map { printResult(it, project, args) }
     }
 
     val hasErrors = if (args.warningAsError) {
