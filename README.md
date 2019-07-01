@@ -267,9 +267,8 @@ Parameters:
   The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
-* `models` - optional list of models to check. Only full name matches are supported and no RegEx or partial name matching.
-* `modules` - optional list of modules to check. Ordinary name (w/o virtual folders) should be provided. Only full name matches
-  are supported and no RegEx or partial name matching.
+* `models` - optional list of models to check. RegEx can be used for matching multiple models.
+* `modules` - optional list of modules to check. Expects ordinary name (w/o virtual folders). RegEx can be used for matching multiple modules.
   If both parameters, `models` and `modules`, are omitted - all models in the project will be checked.
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
 * `projectLocation` - location of the MPS project to check.

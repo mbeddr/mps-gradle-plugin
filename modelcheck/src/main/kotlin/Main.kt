@@ -106,10 +106,11 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project) : Boolean {
         if (args.models.isNotEmpty()) {
             itemsToCheck.models.addAll(project.projectModulesWithGenerators
                     .flatMap { it.models.filter { !SModelStereotype.isDescriptorModel(it) && !SModelStereotype.isStubModel(it) } }
-                    .filter { args.models.contains(it.name.longName) })
+                    .filter { m -> args.models.any { it.toRegex().matches(m.name.longName) } })
         }
         if (args.modules.isNotEmpty()) {
-            itemsToCheck.modules.addAll(project.projectModulesWithGenerators.filter { args.modules.contains(it.moduleName) })
+            itemsToCheck.modules.addAll(project.projectModulesWithGenerators
+                    .filter { m -> args.modules.any { it.toRegex().matches(m.moduleName) } })
         }
         if (args.models.isEmpty() && args.modules.isEmpty()) {
             itemsToCheck.modules.addAll(project.projectModulesWithGenerators)
