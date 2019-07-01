@@ -37,7 +37,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
+    compileOnly(mpsConfiguration.resolve().map { zipTree(it) }.first().matching {
+        include("lib/*.jar")
+        exclude("lib/kotlin*.jar")
+    })
 }
 
 tasks.withType<KotlinCompile> {

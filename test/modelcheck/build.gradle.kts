@@ -23,7 +23,7 @@ var mps = configurations.create("mps")
 
 
 dependencies{
-    mps("com.jetbrains:mps:2018.3.7")
+    mps("com.jetbrains:mps:2018.2.6")
 }
 
 modelcheck {
