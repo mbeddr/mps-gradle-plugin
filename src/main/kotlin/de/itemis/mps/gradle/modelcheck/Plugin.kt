@@ -11,6 +11,7 @@ import java.io.File
 
 open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var models: List<String> = emptyList()
+    var modules: List<String> = emptyList()
     var warningAsError = false
     var errorNoFail = false
 }
@@ -29,12 +30,16 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                         .firstLevelModuleDependencies.find { it.moduleGroup == "com.jetbrains" && it.moduleName == "mps" }
                         ?.moduleVersion ?: throw GradleException("MPS configuration doesn't contain MPS")
 
+                // this dependency will never resolve against SNAPSHOT version, if there is a previously released version for $mpsVersion
+                // hence if testing SNAPSHOT version locally, replace '+' with '.[pluginVersion]-SNAPSHOT', e.g. '.2-SNAPSHOT'
+                // to make sure that your local SNAPSHOT version will be resolved here
                 val dep = project.dependencies.create("de.itemis.mps:modelcheck:$mpsVersion+")
                 val genConfig = configurations.detachedConfiguration(dep)
 
                 val args = argsFromBaseExtension(extension)
 
                 args.addAll(extension.models.map { "--model=$it" }.asSequence())
+                args.addAll(extension.modules.map { "--module=$it" }.asSequence())
 
                 if(extension.warningAsError) {
                     args.add("--warning-as-error")

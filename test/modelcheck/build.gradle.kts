@@ -23,11 +23,12 @@ var mps = configurations.create("mps")
 
 
 dependencies{
-    mps("com.jetbrains:mps:2018.3.6")
+    mps("com.jetbrains:mps:2018.3.7")
 }
 
 modelcheck {
     mpsConfig = mps
     projectLocation = File("./mps-prj")
+    modules = listOf("my.solution")
     //debug = true
 }
