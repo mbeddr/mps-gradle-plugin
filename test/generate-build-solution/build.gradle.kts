@@ -15,14 +15,14 @@ repositories {
 
 val mps = configurations.create("mps")
 
-val mpsVersion = "2018.3.7"
+val mpsVersion = "2019.1.5"
 
 dependencies {
     mps("com.jetbrains:mps:$mpsVersion")
 }
 
 generate {
-    projectLocation = File("./mps-prj")
+    projectLocation = file("$rootDir/mps-prj")
     mpsConfig = mps
     models = listOf("my.build.script")
 }
