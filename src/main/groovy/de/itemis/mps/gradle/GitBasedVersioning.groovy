@@ -85,6 +85,22 @@ class GitBasedVersioning {
             return baseVersion
         }
 
-        return branch + '.' + baseVersion
+        return "$branch.$baseVersion"
+    }
+
+    /**
+     * Convenience method for creating version without maintenance branch prefix (i.e. if branch starts with 'maintenance' or 'mps')
+     *
+     * @param major
+     * @param minor
+     * @return
+     */
+    static String getVersionWithoutMaintenancePrefix(String major, String minor) {
+        def branch = getGitBranch()
+        if (branch.startsWith("maintenance") || branch.startsWith("mps")) {
+            getVersion("HEAD", major, minor)
+        } else {
+            getVersion(major, minor)
+        }
     }
 }
