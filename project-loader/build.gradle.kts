@@ -40,6 +40,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
     mpsConfiguration("com.jetbrains:mps:$mpsVersion")
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.+")
     compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
 }
 

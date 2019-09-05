@@ -14,6 +14,7 @@ open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var modules: List<String> = emptyList()
     var warningAsError = false
     var errorNoFail = false
+    var junitFile: File? = null
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
@@ -47,6 +48,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 if (extension.errorNoFail) {
                     args.add("--error-no-fail")
+                }
+
+                if (extension.junitFile != null) {
+                    args.add("--result-file=${extension.junitFile!!.absolutePath}")
                 }
 
                 val resolveMps = tasks.create("resolveMpsForModelcheck", Copy::class.java) {

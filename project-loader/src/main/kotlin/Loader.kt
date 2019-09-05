@@ -74,7 +74,7 @@ fun <T> executeWithProject(project: File,
                            buildNumber: String? = null,
                            action: (Project) -> T): T {
 
-    val propertyOverrides = mutableListOf<Pair<String,String>>()
+    val propertyOverrides = mutableListOf<Pair<String,String?>>()
 
     if (pluginLocation != null) {
         logger.info("overriding plugin location with: ${pluginLocation.absolutePath}")
@@ -123,7 +123,12 @@ fun <T> executeWithProject(project: File,
     
     // cleanup overridden property values to the state that they were before.
     propertyOverrides.forEach {
-        System.setProperty(it.first, it.second)
+
+        // if a property wasn't set before the value is "null"
+        // setting null as a value for a System property will result in a NPE
+        if(it.second != null) {
+            System.setProperty(it.first, it.second!!)
+        }
     }
 
     return res
