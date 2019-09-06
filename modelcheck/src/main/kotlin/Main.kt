@@ -189,7 +189,7 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         errorCollector.result.map { printResult(it, project, args) }
 
         if (args.xmlFile != null) {
-            writeJuniXml(project.projectModels, errorCollector.result, project, File(args.xmlFile!!))
+            writeJunitXml(project.projectModels, errorCollector.result, project, File(args.xmlFile!!))
         }
     }
 
