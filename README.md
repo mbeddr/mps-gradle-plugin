@@ -277,6 +277,9 @@ Parameters:
 * `debug` - optionally allows to start the JVM that is used to load MPS project with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
+* `junitFile` - allows storing the the results of the model check as a JUnit XML file. The file will  contain one
+  Testcase for each model that was checked. If the model check reported an error for the model the testcase will fail
+  and he message of the model checking error will be reported.
   
 ### Additional Plugins 
 
