@@ -86,7 +86,7 @@ fun printResult(item: IssueKindReportItem, project: Project, args: ModelCheckArg
 }
 
 
-fun writeJuniXml(models: Iterable<SModel>, results: Iterable<IssueKindReportItem>, project: Project, file: File) {
+fun writeJunitXml(models: Iterable<SModel>, results: Iterable<IssueKindReportItem>, project: Project, file: File) {
 
     val allErrors = results.filter {
         it.severity == MessageStatus.ERROR
