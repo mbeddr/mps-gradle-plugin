@@ -86,10 +86,14 @@ fun printResult(item: IssueKindReportItem, project: Project, args: ModelCheckArg
 }
 
 
-fun writeJunitXml(models: Iterable<SModel>, results: Iterable<IssueKindReportItem>, project: Project, file: File) {
+fun writeJunitXml(models: Iterable<SModel>,
+                  results: Iterable<IssueKindReportItem>,
+                  project: Project,
+                  warnAsErrors: Boolean,
+                  file: File) {
 
     val allErrors = results.filter {
-        it.severity == MessageStatus.ERROR
+        it.severity == MessageStatus.ERROR || (warnAsErrors && it.severity == MessageStatus.WARNING)
     }
     val errorsPerModel = allErrors
             .filter {
@@ -189,7 +193,7 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         errorCollector.result.map { printResult(it, project, args) }
 
         if (args.xmlFile != null) {
-            writeJunitXml(project.projectModels, errorCollector.result, project, File(args.xmlFile!!))
+            writeJunitXml(project.projectModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
         }
     }
 
