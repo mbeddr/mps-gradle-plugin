@@ -128,6 +128,8 @@ fun <T> executeWithProject(project: File,
         // setting null as a value for a System property will result in a NPE
         if(it.second != null) {
             System.setProperty(it.first, it.second!!)
+        } else {
+            System.clearProperty(it.first)
         }
     }
 
