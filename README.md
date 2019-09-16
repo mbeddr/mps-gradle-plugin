@@ -39,19 +39,20 @@ Parameters:
   able to run the build script. See below section "Providing Global Defaults" for project wide defaults.
 - `scriptArgs`: additional command line arguments provided to the JVM that will execute the generated ANT scripts. This
   is often used to provide property valued via "-Dprop=value". See below section "Providing Global Defaults" for project wide defaults.
-- `includeDefaultArgs`: controls if the project wide default values for arguments is used or not. 
+- `executable`: the `java` executable to use. Optional. If `itemis.mps.gradle.ant.defaultJavaExecutable` extended
+  property is set, its value is used as the default value for the parameter.
+- `includeDefaultArgs`: controls whether the project-wide default values for arguments are used. 
   It's set to `true` by default.
-- `includeDefaultClasspath`: controls if the project wide default values for the classpath is used or not. 
+- `includeDefaultClasspath`: controls whether the project-wide default values for the classpath are used. 
   It's set to `true` by default.
 - `targets()`: the targets to execute of the ANT files.
 
-
-### Providing Global Defaults
+### Providing Global Defaults For Class Path And Arguments
 
 All tasks derived from the `RunAntScript` base class allow to specify default values for the classpath and script arguments
 via project properties. By default these values are added to the value specified for the parameters `scriptArgs` and 
 `scriptClasspath` if they are present. To opt out from the defaults see above the parameters `includeDefaultArgs` and 
-`includeDefaultClasspath`. 
+`includeDefaultClasspath`.
 
 The property `itemis.mps.gradle.ant.defaultScriptArgs` controls the default arguments provided to the build scripts 
 execution. In belows example the default arguments contain the version and build date. At runtime the default arguments
@@ -68,7 +69,10 @@ ext["itemis.mps.gradle.ant.defaultScriptArgs"] = defaultScriptArgs
 ext["itemis.mps.gradle.ant.defaultScriptClasspath"] = buildScriptClasspath
 ```
 
+### Providing Global Defaults For The Java Executable
 
+The `itemis.mps.gradle.ant.defaultJavaExecutable` property specifies the value to use as the underlying
+`JavaExec.executable`. The `executable` parameter of each individual task takes precedence over the global default.
 
 ## CreateDmg
 
