@@ -65,12 +65,12 @@ open class RunAntScript : DefaultTask() {
 
 open class BuildLanguages : RunAntScript() {
     init {
-        targets = listOf("clean", "assemble")
+        targets = listOf("clean", "generate", "assemble")
     }
 }
 
 open class TestLanguages : RunAntScript() {
     init {
-        targets = listOf("clean", "check")
+        targets = listOf("clean", "generate", "assemble", "check")
     }
 }
