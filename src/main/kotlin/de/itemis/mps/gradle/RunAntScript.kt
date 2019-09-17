@@ -71,6 +71,6 @@ open class BuildLanguages : RunAntScript() {
 
 open class TestLanguages : RunAntScript() {
     init {
-        targets = listOf("clean", "generate", "check")
+        targets = listOf("clean", "generate", "assemble", "check")
     }
 }
