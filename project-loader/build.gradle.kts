@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java-gradle-plugin`
+    `java`
 }
 
 group = "de.itemis.mps"
@@ -58,6 +58,17 @@ publishing {
             credentials {
                 username = nexusUsername
                 password = nexusPassword
+            }
+        }
+    }
+
+    publications {
+        create<MavenPublication>("projectLoader") {
+            from(components["java"])
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
             }
         }
     }
