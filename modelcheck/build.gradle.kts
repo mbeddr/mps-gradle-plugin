@@ -8,7 +8,7 @@ group = "de.itemis.mps"
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java-gradle-plugin`
+    java
 }
 
 repositories {
@@ -58,6 +58,17 @@ publishing {
             credentials {
                 username = nexusUsername
                 password = nexusPassword
+            }
+        }
+    }
+
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
             }
         }
     }

@@ -66,7 +66,7 @@ gradlePlugin {
 
 tasks {
     wrapper {
-        gradleVersion = "5.1"
+        gradleVersion = "5.6.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 
