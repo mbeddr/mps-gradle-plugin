@@ -63,7 +63,7 @@ publishing {
     }
 
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("modelcheck") {
             from(components["java"])
             versionMapping {
                 allVariants {
