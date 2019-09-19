@@ -5,14 +5,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.*
 
 data class Skipped(@JacksonXmlProperty(isAttribute = true)
                    val message: String,
-                   @field:JacksonXmlCData()
                    @field:JacksonXmlText() val content: String)
 
 data class Error(@field:JacksonXmlProperty(isAttribute = true)
                  val message: String,
                  @field:JacksonXmlProperty(isAttribute = true)
                  val type: String? = null,
-                 @field:JacksonXmlCData()
                  @field:JacksonXmlText() val content: String)
 
 
@@ -20,15 +18,12 @@ data class Failure(@field:JacksonXmlProperty(isAttribute = true)
                    val message: String,
                    @field:JacksonXmlProperty(isAttribute = true)
                    val type: String? = null,
-                   @field:JacksonXmlCData()
                    @field:JacksonXmlText() val content: String)
 
 data class SystemOut(@field:JacksonXmlText()
-                     @field:JacksonXmlCData()
                      val content: String)
 
 data class SystemErr(@field:JacksonXmlText()
-                     @field:JacksonXmlCData()
                      val content: String)
 
 
