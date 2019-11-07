@@ -139,14 +139,21 @@ fun writeJunitXml(models: Iterable<SModel>,
                 failures = errors.map(::reportItemToContent))
     }
 
+    val testsuiteElements = listOf(Testsuite(name = "model checking",
+            testcases = testcases,
+            id = 1,
+            tests = models.count(),
+            skipped = 0,
+            disabled = 0,
+            failures = testcases.count { it.errors.isEmpty() && it.failures.isNotEmpty() },
+            errors = testcases.count { it.errors.isNotEmpty() }))
+
     val testsuites = Testsuites(errors = errorsPerModel.size,
             name = "model check",
-            tests = models.count(),
-            testsuites = listOf(Testsuite(name = "model checking",
-                    testcases = testcases,
-                    id = 1,
-                    tests = models.count())))
-
+            tests = testsuiteElements.sumBy { it.tests },
+            failures = testsuiteElements.sumBy { it.failures ?: 0 },
+            disabled = testsuiteElements.sumBy { it.disabled ?: 0 },
+            testsuites = testsuiteElements)
 
     val xmlMapper = XmlMapper()
     xmlMapper.writeValue(file, testsuites)
