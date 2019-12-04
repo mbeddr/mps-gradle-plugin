@@ -284,6 +284,9 @@ Parameters:
 * `junitFile` - allows storing the the results of the model check as a JUnit XML file. The file will  contain one
   Testcase for each model that was checked. If the model check reported an error for the model the testcase will fail
   and he message of the model checking error will be reported.
+* `maxHeap` - maximum heap size setting for the JVM that executes the modelchecker. This is useful to limit the heap usage
+  in scenarios like containerized build agents where the OS reported memory limit is not the maximum
+  to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
   
 ### Additional Plugins 
 

@@ -15,6 +15,7 @@ open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var warningAsError = false
     var errorNoFail = false
     var junitFile: File? = null
+    var maxHeap: String? = null
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
@@ -63,6 +64,9 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     args(args)
                     group = "test"
                     description = "Check models in the project"
+                    if (extension.maxHeap != null) {
+                        maxHeapSize = extension.maxHeap!!
+                    }
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     // http support doesn't follow the MPS convention to with a lib folder and we need it to print the
                     // node url to the console.
