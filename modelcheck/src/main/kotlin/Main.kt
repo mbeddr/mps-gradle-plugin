@@ -157,7 +157,7 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
     // see ModelCheckerSettings.getSpecificCheckers for details
     // we do not call into that class because we don't want to load the settings from the user
     val checkers = listOf(TypesystemChecker(),
-            ConstraintsChecker(),
+            ConstraintsChecker(null),
             RefScopeChecker(),
             TargetConceptChecker(),
             UsedLanguagesChecker(),
@@ -182,7 +182,7 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         }
         if (args.modules.isNotEmpty()) {
             itemsToCheck.modules.addAll(project.projectModulesWithGenerators
-                    .filter { m -> args.modules.any { it.toRegex().matches(m.moduleName) } })
+                    .filter { m -> args.modules.any { it.toRegex().matches(m.moduleName as CharSequence) } })
         }
         if (args.models.isEmpty() && args.modules.isEmpty()) {
             itemsToCheck.modules.addAll(project.projectModulesWithGenerators)

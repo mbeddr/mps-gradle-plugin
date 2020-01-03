@@ -66,7 +66,6 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     description = "Generates models in the project"
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     classpath(fileTree(File(mpsLocation, "/plugins")).include("**/lib/**/*.jar"))
-                    classpath(file(File(mpsLocation, "/plugins/modelchecker.jar")))
                     classpath(genConfig)
                     debug = extension.debug
                     main = "de.itemis.mps.gradle.generate.MainKt"

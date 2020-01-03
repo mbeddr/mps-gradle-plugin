@@ -1,6 +1,6 @@
 package de.itemis.mps.gradle.project.loader
 
-import com.intellij.application.options.PathMacrosImpl
+import com.intellij.openapi.application.PathMacros
 import jetbrains.mps.project.Project
 import jetbrains.mps.tool.environment.EnvironmentConfig
 import jetbrains.mps.tool.environment.IdeaEnvironment
@@ -99,8 +99,8 @@ fun <T> executeWithProject(project: File,
     logger.info("flushing events")
     ideaEnvironment.flushAllEvents()
 
-    val pathMacrosImpl = PathMacrosImpl.getInstanceEx()
-    macros.forEach { pathMacrosImpl.setMacro(it.name, it.value) }
+    val pathMacros = PathMacros.getInstance()
+    macros.forEach { pathMacros.setMacro(it.name, it.value) }
 
     logger.info("opening project: ${project.absolutePath}")
     val ideaProject = ideaEnvironment.openProject(project)

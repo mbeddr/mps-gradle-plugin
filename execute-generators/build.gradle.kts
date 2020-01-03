@@ -37,13 +37,15 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 }
 
 
-val mpsConfiguration = configurations.create("mps")
-
 dependencies {
     implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
-    mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it) }.first().matching { include("lib/*.jar") })
+    compileOnly("com.jetbrains:mps-openapi:$mpsVersion")
+    compileOnly("com.jetbrains:mps-core:$mpsVersion")
+    compileOnly("com.jetbrains:mps-tool:$mpsVersion")
+    compileOnly("com.jetbrains:mps-messaging:$mpsVersion")
+    compileOnly("com.jetbrains:platform-api:$mpsVersion")
+    compileOnly("com.jetbrains:platform-concurrency:$mpsVersion")
     implementation(project(":project-loader"))
 }
 

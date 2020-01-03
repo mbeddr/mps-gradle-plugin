@@ -8,7 +8,7 @@ group = "de.itemis.mps"
 plugins {
     kotlin("jvm")
     `maven-publish`
-    java
+    `java-gradle-plugin`
 }
 
 repositories {
@@ -24,6 +24,9 @@ val nexusPassword: String? by project
 val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
 
+val kotlinApiVersion: String by project
+val kotlinVersion: String by project
+
 val pluginVersion = "3"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
@@ -35,14 +38,16 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 }
 
 
-val mpsConfiguration = configurations.create("mps")
-
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
+    implementation(kotlin("test", version = kotlinVersion))
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.+")
-    mpsConfiguration("com.jetbrains:mps:$mpsVersion")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar", "plugins/modelchecker/**/*.jar", "plugins/http-support/**/*.jar")})
+    compileOnly("com.jetbrains:mps-openapi:$mpsVersion")
+    compileOnly("com.jetbrains:mps-core:$mpsVersion")
+    compileOnly("com.jetbrains:mps-modelchecker:$mpsVersion")
+    compileOnly("com.jetbrains:mps-httpsupport-runtime:$mpsVersion")
+    compileOnly("com.jetbrains:mps-project-check:$mpsVersion")
     implementation(project(":project-loader"))
 }
 
