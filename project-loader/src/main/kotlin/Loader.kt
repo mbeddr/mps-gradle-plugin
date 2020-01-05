@@ -4,6 +4,7 @@ import com.intellij.openapi.application.PathMacros
 import jetbrains.mps.project.Project
 import jetbrains.mps.tool.environment.EnvironmentConfig
 import jetbrains.mps.tool.environment.IdeaEnvironment
+import jetbrains.mps.util.PathManager
 import org.apache.log4j.Logger
 import java.io.File
 
@@ -31,10 +32,19 @@ private const val PROPERTY_PLUGINS_PATH = "idea.plugins.path"
  */
 private const val PROPERTY_PLUGINS_COMPATIBLE_BUILD = "idea.plugins.compatible.build"
 
+/**
+ * Since 2019.2 absolute plugin path has to be provided in addPlugin(), but suitable replacement addDistributedPlugin()
+ * is private, therefore this extension is used as temporary convenient replacement
+ */
+private fun EnvironmentConfig.addPreInstalledPlugin(folder: String, id: String): EnvironmentConfig {
+    this.addPlugin(PathManager.getPreInstalledPluginsPath() + "/" + folder, id)
+    return this
+}
+
 private fun basicEnvironmentConfig(): EnvironmentConfig {
 
-    // This is a somewhat "save" set of default plugins. It should work with most of the projects we have encountered
-    // mbeddr projects won't build build with this set of plugins for unknown reasons, most probably the runtime
+    // This is a somewhat "safe" set of default plugins. It should work with most of the projects we have encountered
+    // mbeddr projects won't build with this set of plugins for unknown reasons, most probably the runtime
     // dependencies in the mbeddr plugins are so messed up that they simply broken beyond repair.
 
     val config = EnvironmentConfig
@@ -43,9 +53,9 @@ private fun basicEnvironmentConfig(): EnvironmentConfig {
             .withBuildPlugin()
             .withBootstrapLibraries()
             .withWorkbenchPath()
-            .withGit4IdeaPlugin()
+            .withVcsPlugin()
             .withJavaPlugin()
-            .addPlugin("http-support", "jetbrains.mps.ide.httpsupport")
+            .addPreInstalledPlugin("mps-httpsupport", "jetbrains.mps.ide.httpsupport")
     return config
 }
 
@@ -90,7 +100,7 @@ fun <T> executeWithProject(project: File,
 
     val cfg = basicEnvironmentConfig()
 
-    plugins.forEach { cfg.addPlugin(it.path, it.id) }
+    plugins.forEach { cfg.addPreInstalledPlugin(it.path, it.id) }
 
     val ideaEnvironment = IdeaEnvironment(cfg)
 
