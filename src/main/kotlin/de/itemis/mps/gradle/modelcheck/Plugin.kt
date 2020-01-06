@@ -7,7 +7,10 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
+import org.gradle.kotlin.dsl.support.zipTo
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.zip.ZipInputStream
 
 open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var models: List<String> = emptyList()
@@ -57,6 +60,32 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val resolveMps = tasks.create("resolveMpsForModelcheck", Copy::class.java) {
                     from(extension.mpsConfig.resolve().map { zipTree(it) })
+                    /*
+                    Some 2019.2 src jars cause MPS startup to fail with an exception during indexing
+                    because of the wrong specification in module.xml -> we remove those broken parts as a workaround.
+                    In MPS 2019.3 those src jars are already removed.
+                     */
+                    val modelsTagRegEx = Regex("<models>.*</models>", RegexOption.DOT_MATCHES_ALL)
+                    val replaceTag = "<models/>"
+                    filesMatching(listOf("**/runtimes/*.feedback.*-src.jar", "**/runtimes/*.messages.api-src.jar")) {
+                        ZipInputStream(open()).use { zis ->
+                            val resultEntries = ArrayList<Pair<String, ByteArray>>()
+                            do {
+                                val nextEntry = zis.nextEntry ?: break
+                                val outputStream = ByteArrayOutputStream()
+                                zis.copyTo(outputStream)
+                                var byteArray : ByteArray
+                                if (nextEntry.name.contains(".msd")) {
+                                    byteArray = outputStream.toString().replace(modelsTagRegEx, replaceTag).toByteArray()
+                                } else {
+                                    byteArray = outputStream.toByteArray()
+                                }
+                                resultEntries.add(Pair(nextEntry.name, byteArray))
+                            } while (true)
+                            zipTo(File(mpsLocation, this.path), resultEntries.asSequence())
+                        }
+                        exclude()
+                    }
                     into(mpsLocation)
                 }
                 tasks.create("checkmodels", JavaExec::class.java) {
