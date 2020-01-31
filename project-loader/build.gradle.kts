@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java`
+    `java-gradle-plugin`
 }
 
 group = "de.itemis.mps"
@@ -34,14 +34,16 @@ repositories {
     }
 }
 
-val mpsConfiguration = configurations.create("mps")
-
 dependencies {
     implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
-    mpsConfiguration("com.jetbrains:mps:$mpsVersion")
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.+")
-    compileOnly(mpsConfiguration.resolve().map { zipTree(it)  }.first().matching { include("lib/*.jar")})
+    compileOnly("com.jetbrains:mps-core:$mpsVersion")
+    compileOnly("com.jetbrains:mps-environment:$mpsVersion")
+    compileOnly("com.jetbrains:mps-platform:$mpsVersion")
+    compileOnly("com.jetbrains:mps-openapi:$mpsVersion")
+    compileOnly("com.jetbrains:platform-api:$mpsVersion")
+    compileOnly("com.jetbrains:util:$mpsVersion")
 }
 
 tasks.withType<KotlinCompile> {

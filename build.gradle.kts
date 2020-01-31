@@ -14,7 +14,7 @@ plugins {
 }
 
 val versionMajor = 1
-val versionMinor = 2
+val versionMinor = 3
 
 group = "de.itemis.mps"
 
@@ -23,7 +23,7 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2019.1.5" }
+val mpsVersion by extra { "2019.2.4" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&

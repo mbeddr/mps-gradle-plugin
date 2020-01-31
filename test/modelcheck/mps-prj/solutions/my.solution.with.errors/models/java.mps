@@ -2,7 +2,7 @@
 <model ref="r:098fce55-4c9a-4d06-84b9-04b5ca0d51c6(my.solution.with.errors.java)">
   <persistence version="9" />
   <languages>
-    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="8" />
+    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="9" />
   </languages>
   <imports />
   <registry>

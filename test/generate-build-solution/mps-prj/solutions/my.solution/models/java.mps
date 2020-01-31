@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model ref="r:AD5A7371-252E-4570-94FA-AAF82EDAB7A2(my.solution.java)">
+<model ref="r:ad5a7371-252e-4570-94fa-aaf82edab7a2(my.solution.java)">
   <persistence version="9" />
   <languages>
     <devkit ref="fbc25dd2-5da4-483a-8b19-70928e1b62d7(jetbrains.mps.devkit.general-purpose)" />
@@ -87,7 +87,7 @@
               <ref role="3cqZAo" to="wyt6:~System.out" resolve="out" />
             </node>
             <node concept="liA8E" id="5akAQT2ovvE" role="2OqNvi">
-              <ref role="37wK5l" to="guwi:~PrintStream.println(java.lang.String):void" resolve="println" />
+              <ref role="37wK5l" to="guwi:~PrintStream.println(java.lang.String)" resolve="println" />
               <node concept="Xl_RD" id="5akAQT2ovxc" role="37wK5m">
                 <property role="Xl_RC" value="it works" />
               </node>
