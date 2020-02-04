@@ -14,8 +14,7 @@ repositories {
 }
 
 val mps = configurations.create("mps")
-
-val mpsVersion = "2019.2.4"
+val mpsVersion = "2019.3.1"
 
 dependencies {
     mps("com.jetbrains:mps:$mpsVersion")
