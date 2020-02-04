@@ -2,15 +2,24 @@ package de.itemis.mps.gradle;
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.TaskAction
 
 open class RunAntScript : DefaultTask() {
+    @Input
     lateinit var script: Any
+    @Input
     var targets: List<String> = emptyList()
+    @InputFiles
     var scriptClasspath: FileCollection? = null
+    @Input
     var scriptArgs: List<String> = emptyList()
+    @Input
     var includeDefaultArgs = true
+    @Input
     var includeDefaultClasspath = true
+    @Input
     var executable: Any? = null
 
     fun targets(vararg targets: String) {

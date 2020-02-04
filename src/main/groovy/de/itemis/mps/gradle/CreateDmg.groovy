@@ -3,6 +3,7 @@ package de.itemis.mps.gradle
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -21,10 +22,10 @@ class CreateDmg extends DefaultTask {
     @OutputFile
     File dmgFile
 
-    @Optional
+    @Optional @Input
     String signKeyChainPassword
 
-    @Optional
+    @Optional @Input
     String signIdentity
 
     @InputFile @Optional
