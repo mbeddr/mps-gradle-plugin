@@ -1,10 +1,10 @@
 import java.net.URI
 
 group = "test.de.itemis.mps.gradle.modelcheck"
-version = "1.2-SNAPSHOT"
+version = "1.3-SNAPSHOT"
 
 plugins {
-    id("modelcheck") version "1.2-SNAPSHOT"
+    id("modelcheck") version "1.3-SNAPSHOT"
 }
 
 repositories {
@@ -25,11 +25,10 @@ dependencies{
 modelcheck {
     mpsConfig = mps
     projectLocation = file("$rootDir/mps-prj")
-    modules = listOf("my.solution")
-    /*
+    //modules = listOf("my.solution")
+
     modules = listOf("my.solution.with.errors")
     junitFile = file("$buildDir/TEST-modelcheck-results.xml")
-    errorNoFail = true
-     */
+    //errorNoFail = true
     //debug = true
 }
