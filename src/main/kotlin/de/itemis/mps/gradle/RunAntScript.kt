@@ -4,6 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 open class RunAntScript : DefaultTask() {
@@ -11,7 +12,7 @@ open class RunAntScript : DefaultTask() {
     lateinit var script: Any
     @Input
     var targets: List<String> = emptyList()
-    @InputFiles
+    @Optional @InputFiles
     var scriptClasspath: FileCollection? = null
     @Input
     var scriptArgs: List<String> = emptyList()
@@ -19,7 +20,7 @@ open class RunAntScript : DefaultTask() {
     var includeDefaultArgs = true
     @Input
     var includeDefaultClasspath = true
-    @Input
+    @Optional @Input
     var executable: Any? = null
 
     fun targets(vararg targets: String) {
