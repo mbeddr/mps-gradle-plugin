@@ -3,6 +3,10 @@ package de.itemis.mps.gradle
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Optional
 import java.io.File
 
 data class Plugin(
@@ -23,6 +27,7 @@ open class BasePluginExtensions {
     var macros: List<Macro> = emptyList()
     var projectLocation: File? = null
     var debug = false
+    var executable: Any? = null
 }
 
 fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String> {

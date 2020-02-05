@@ -91,6 +91,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 tasks.create("checkmodels", JavaExec::class.java) {
                     dependsOn(resolveMps)
                     args(args)
+                    if (extension.executable != null) {
+                        executable(extension.executable!!)
+                    }
+
                     group = "test"
                     description = "Check models in the project"
                     if (extension.maxHeap != null) {
