@@ -2,6 +2,7 @@ package de.itemis.mps.gradle.generate
 
 import de.itemis.mps.gradle.BasePluginExtensions
 import de.itemis.mps.gradle.argsFromBaseExtension
+import de.itemis.mps.gradle.validateDefaultJvm
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -91,6 +92,10 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 tasks.create("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
+                    if (extension.javaExec != null)
+                        executable(extension.javaExec!!)
+                    else
+                        validateDefaultJvm()
                     group = "build"
                     description = "Generates models in the project"
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))

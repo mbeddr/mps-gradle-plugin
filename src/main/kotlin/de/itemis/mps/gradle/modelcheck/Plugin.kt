@@ -2,6 +2,7 @@ package de.itemis.mps.gradle.modelcheck
 
 import de.itemis.mps.gradle.BasePluginExtensions
 import de.itemis.mps.gradle.argsFromBaseExtension
+import de.itemis.mps.gradle.validateDefaultJvm
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -91,9 +92,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 tasks.create("checkmodels", JavaExec::class.java) {
                     dependsOn(resolveMps)
                     args(args)
-                    if (extension.executable != null) {
-                        executable(extension.executable!!)
-                    }
+                    if (extension.javaExec != null)
+                        executable(extension.javaExec!!)
+                    else
+                        validateDefaultJvm()
 
                     group = "test"
                     description = "Check models in the project"

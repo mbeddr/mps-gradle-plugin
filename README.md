@@ -219,6 +219,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
+* `javaExec` - optional `java` executable to use.
 * `plugins` - optional list of plugins to load before generation is attempted.
   The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
@@ -267,6 +268,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
+* `javaExec` - optional `java` executable to use.
 * `plugins` - optional list of plugins to load before model check is attempted.
   The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the

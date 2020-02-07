@@ -1,13 +1,9 @@
 package de.itemis.mps.gradle
 
 import org.gradle.api.GradleException
-import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.file.FileCollection
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Optional
 import java.io.File
+import java.lang.RuntimeException
 
 data class Plugin(
         var id: String,
@@ -27,7 +23,14 @@ open class BasePluginExtensions {
     var macros: List<Macro> = emptyList()
     var projectLocation: File? = null
     var debug = false
-    var executable: Any? = null
+    var javaExec: File? = null
+}
+
+fun validateDefaultJvm(){
+    val minimumRequiredVersion = 11
+    val actualVersion = Integer.parseInt(System.getProperty("java.version"))
+    if (actualVersion < minimumRequiredVersion)
+        throw RuntimeException("Minimum required JVM version not met: Detected version: " + actualVersion + " Minimum required version: " + minimumRequiredVersion)
 }
 
 fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String> {
