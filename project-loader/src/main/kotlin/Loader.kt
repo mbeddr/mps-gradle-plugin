@@ -110,7 +110,9 @@ fun <T> executeWithProject(project: File,
     ideaEnvironment.flushAllEvents()
 
     val pathMacros = PathMacros.getInstance()
-    macros.forEach { pathMacros.setMacro(it.name, it.value) }
+    // macros should not contain any backslashes from Windows-specific paths
+    // otherwise this might lead to exceptions in MPS (e.g. when loading libraries from paths with macros)
+    macros.forEach { pathMacros.setMacro(it.name, it.value.replace(File.separatorChar, '/')) }
 
     logger.info("opening project: ${project.absolutePath}")
     val ideaProject = ideaEnvironment.openProject(project)
