@@ -97,9 +97,11 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                         maxHeapSize = extension.maxHeap!!
                     }
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
-                    // http support runtime is not located in lib folder, as all other plugin jars,
-                    // we need it to print the node url to the console.
-                    classpath(fileTree(File(mpsLocation, "/plugins")).include("**/lib/**/*.jar", "mps-httpsupport/**/jetbrains.mps.ide.httpsupport.runtime.jar"))
+                    // add only minimal number of plugins jars that are required by the modelcheck code
+                    // (to avoid conflicts with plugin classloader if custom configured plugins are loaded)
+                    // mps-httpsupport: we need it to print the node url to the console.
+                    // mps-modelchecker: contains used UnresolvedReferencesChecker
+                    classpath(fileTree(File(mpsLocation, "/plugins")).include("mps-modelchecker/**/*.jar", "mps-httpsupport/**/*.jar"))
                     classpath(genConfig)
                     debug = extension.debug
                     main = "de.itemis.mps.gradle.modelcheck.MainKt"

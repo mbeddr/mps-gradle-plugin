@@ -16,6 +16,7 @@ import jetbrains.mps.progress.EmptyProgressMonitor
 import jetbrains.mps.project.Project
 import jetbrains.mps.project.validation.StructureChecker
 import jetbrains.mps.smodel.SModelStereotype
+import jetbrains.mps.typesystemEngine.checker.NonTypesystemChecker
 import jetbrains.mps.typesystemEngine.checker.TypesystemChecker
 import jetbrains.mps.util.CollectConsumer
 import org.apache.log4j.Logger
@@ -107,7 +108,6 @@ fun writeJunitXml(models: Iterable<SModel>,
                     is IssueKindReportItem.PathObject.NodePathObject -> {
                         val node = path.resolve(project.repository)
                         node.model!!
-
                     }
                     else -> fail("unexpected item type")
                 }
@@ -139,17 +139,15 @@ fun writeJunitXml(models: Iterable<SModel>,
                 failures = errors.map(::reportItemToContent))
     }
 
-    val testsuites = Testsuites(errors = errorsPerModel.size,
-            name = "model check",
-            tests = models.count(),
-            testsuites = listOf(Testsuite(name = "model checking",
-                    testcases = testcases,
-                    id = 1,
-                    tests = models.count())))
+    val testsuite = Testsuite(name = "model checking",
+            failures = allErrors.size,
+            testcases = testcases,
+            id = 1,
+            tests = models.count())
 
 
     val xmlMapper = XmlMapper()
-    xmlMapper.writeValue(file, testsuites)
+    xmlMapper.writeValue(file, testsuite)
 }
 
 fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
@@ -157,11 +155,12 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
     // see ModelCheckerSettings.getSpecificCheckers for details
     // we do not call into that class because we don't want to load the settings from the user
     val checkers = listOf(TypesystemChecker(),
+            NonTypesystemChecker(),
             ConstraintsChecker(null),
             RefScopeChecker(),
             TargetConceptChecker(),
-            UsedLanguagesChecker(),
             StructureChecker(),
+            UsedLanguagesChecker(),
             ModelPropertiesChecker(),
             UnresolvedReferencesChecker(project),
             ModuleChecker())
@@ -193,7 +192,10 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         errorCollector.result.map { printResult(it, project, args) }
 
         if (args.xmlFile != null) {
-            writeJunitXml(project.projectModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
+            val allCheckedModels = itemsToCheck.modules.flatMap {
+                it.models.filter { !SModelStereotype.isDescriptorModel(it) }
+            }.union(itemsToCheck.models)
+            writeJunitXml(allCheckedModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
         }
     }
 
