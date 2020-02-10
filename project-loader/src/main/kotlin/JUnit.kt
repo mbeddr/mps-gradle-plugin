@@ -56,7 +56,7 @@ data class Testcase(
         val systemErrors: List<SystemErr> = emptyList()
         )
 
-
+@JacksonXmlRootElement(localName = "testsuite")
 data class Testsuite(@field:JacksonXmlProperty(isAttribute = true)
                      val name: String,
                      @field:JacksonXmlProperty(isAttribute = true)

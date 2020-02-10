@@ -139,17 +139,15 @@ fun writeJunitXml(models: Iterable<SModel>,
                 failures = errors.map(::reportItemToContent))
     }
 
-    val testsuites = Testsuites(errors = errorsPerModel.size,
-            name = "model check",
-            tests = models.count(),
-            testsuites = listOf(Testsuite(name = "model checking",
-                    testcases = testcases,
-                    id = 1,
-                    tests = models.count())))
+    val testsuite = Testsuite(name = "model checking",
+            failures = allErrors.size,
+            testcases = testcases,
+            id = 1,
+            tests = models.count())
 
 
     val xmlMapper = XmlMapper()
-    xmlMapper.writeValue(file, testsuites)
+    xmlMapper.writeValue(file, testsuite)
 }
 
 fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
@@ -194,7 +192,10 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         errorCollector.result.map { printResult(it, project, args) }
 
         if (args.xmlFile != null) {
-            writeJunitXml(project.projectModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
+            val allCheckedModels = itemsToCheck.modules.flatMap {
+                it.models.filter { !SModelStereotype.isDescriptorModel(it) }
+            }.union(itemsToCheck.models)
+            writeJunitXml(allCheckedModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
         }
     }
 
