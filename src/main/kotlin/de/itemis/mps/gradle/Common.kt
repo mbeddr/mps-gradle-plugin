@@ -1,6 +1,7 @@
 package de.itemis.mps.gradle
 
 import org.gradle.api.GradleException
+import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Configuration
 import java.io.File
 import java.lang.RuntimeException
@@ -27,10 +28,7 @@ open class BasePluginExtensions {
 }
 
 fun validateDefaultJvm(){
-    val minimumRequiredVersion = 11
-    val actualVersion = Integer.parseInt(System.getProperty("java.version"))
-    if (actualVersion < minimumRequiredVersion)
-        throw RuntimeException("Minimum required JVM version not met: Detected version: " + actualVersion + " Minimum required version: " + minimumRequiredVersion)
+    if (JavaVersion.current() != JavaVersion.VERSION_11) logger.error("MPS requires Java 11 but current JVM uses ${JavaVersion.current()}, starting MPS will most probably fail!")
 }
 
 fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String> {
