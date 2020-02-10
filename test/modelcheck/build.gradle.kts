@@ -15,8 +15,8 @@ repositories {
     mavenCentral()
 }
 
-var mps = configurations.create("mps")
-val mpsVersion = "2019.3.1"
+var mps = configurations.reate("mps")
+val mpsVersion = "2019.3.2"
 
 dependencies{
     mps("com.jetbrains:mps:$mpsVersion")
