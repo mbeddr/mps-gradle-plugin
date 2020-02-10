@@ -1,10 +1,12 @@
 package de.itemis.mps.gradle
 
+import org.apache.log4j.Logger
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Configuration
 import java.io.File
-import java.lang.RuntimeException
+
+private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 data class Plugin(
         var id: String,

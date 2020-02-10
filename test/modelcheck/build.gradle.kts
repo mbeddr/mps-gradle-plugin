@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
 }
 
-var mps = configurations.reate("mps")
+var mps = configurations.create("mps")
 val mpsVersion = "2019.3.2"
 
 dependencies{
