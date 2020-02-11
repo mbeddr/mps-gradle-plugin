@@ -135,7 +135,6 @@ fun writeJunitXml(models: Iterable<SModel>,
 
         Testcase(name = it.name.simpleName,
                 classname = it.name.longName,
-                status = if (errors.isEmpty()) "successful" else "failed",
                 failures = errors.map(::reportItemToContent))
     }
 
