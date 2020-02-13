@@ -101,6 +101,7 @@ fun <T> executeWithProject(project: File,
     val cfg = basicEnvironmentConfig()
 
     plugins.forEach { cfg.addPreInstalledPlugin(it.path, it.id) }
+    macros.forEach { cfg.addMacro(it.name, File(it.value)) }
 
     val ideaEnvironment = IdeaEnvironment(cfg)
 
@@ -108,11 +109,6 @@ fun <T> executeWithProject(project: File,
     ideaEnvironment.init()
     logger.info("flushing events")
     ideaEnvironment.flushAllEvents()
-
-    val pathMacros = PathMacros.getInstance()
-    // macros should not contain any backslashes from Windows-specific paths
-    // otherwise this might lead to exceptions in MPS (e.g. when loading libraries from paths with macros)
-    macros.forEach { pathMacros.setMacro(it.name, it.value.replace(File.separatorChar, '/')) }
 
     logger.info("opening project: ${project.absolutePath}")
     val ideaProject = ideaEnvironment.openProject(project)
