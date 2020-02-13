@@ -162,7 +162,8 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
             UsedLanguagesChecker(),
             ModelPropertiesChecker(),
             UnresolvedReferencesChecker(project),
-            ModuleChecker())
+            ModuleChecker(),
+            SuppressErrorsChecker())
 
 
     // We don't use ModelCheckerIssueFinder because it has strange dependency on the ModelCheckerSettings which we
