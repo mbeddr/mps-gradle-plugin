@@ -101,7 +101,8 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     // add only minimal number of plugins jars that are required by the generate code
                     // (to avoid conflicts with plugin classloader if custom configured plugins are loaded)
-                    //classpath(fileTree(File(mpsLocation, "/plugins")).include("<plugin-folder>/**/*.jar"))
+                    // git4idea: has to be on classpath as bundled plugin to be loaded (since 2019.3)
+                    classpath(fileTree(File(mpsLocation, "/plugins")).include("git4idea/**/*.jar"))
                     classpath(genConfig)
                     debug = extension.debug
                     main = "de.itemis.mps.gradle.generate.MainKt"

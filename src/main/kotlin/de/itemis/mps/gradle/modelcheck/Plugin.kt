@@ -107,7 +107,8 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     // (to avoid conflicts with plugin classloader if custom configured plugins are loaded)
                     // mps-httpsupport: we need it to print the node url to the console.
                     // mps-modelchecker: contains used UnresolvedReferencesChecker
-                    classpath(fileTree(File(mpsLocation, "/plugins")).include("mps-modelchecker/**/*.jar", "mps-httpsupport/**/*.jar"))
+                    // git4idea: has to be on classpath as bundled plugin to be loaded (since 2019.3)
+                    classpath(fileTree(File(mpsLocation, "/plugins")).include("mps-modelchecker/**/*.jar", "mps-httpsupport/**/*.jar", "git4idea/**/*.jar"))
                     classpath(genConfig)
                     debug = extension.debug
                     main = "de.itemis.mps.gradle.modelcheck.MainKt"
