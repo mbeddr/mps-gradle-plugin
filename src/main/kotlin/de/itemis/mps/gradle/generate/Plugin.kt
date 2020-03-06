@@ -2,6 +2,7 @@ package de.itemis.mps.gradle.generate
 
 import de.itemis.mps.gradle.BasePluginExtensions
 import de.itemis.mps.gradle.argsFromBaseExtension
+import de.itemis.mps.gradle.validateDefaultJvm
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -91,12 +92,17 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 tasks.create("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
+                    if (extension.javaExec != null)
+                        executable(extension.javaExec!!)
+                    else
+                        validateDefaultJvm()
                     group = "build"
                     description = "Generates models in the project"
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     // add only minimal number of plugins jars that are required by the generate code
                     // (to avoid conflicts with plugin classloader if custom configured plugins are loaded)
-                    //classpath(fileTree(File(mpsLocation, "/plugins")).include("<plugin-folder>/**/*.jar"))
+                    // git4idea: has to be on classpath as bundled plugin to be loaded (since 2019.3)
+                    classpath(fileTree(File(mpsLocation, "/plugins")).include("git4idea/**/*.jar"))
                     classpath(genConfig)
                     debug = extension.debug
                     main = "de.itemis.mps.gradle.generate.MainKt"

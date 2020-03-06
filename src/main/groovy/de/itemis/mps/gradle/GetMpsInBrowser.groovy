@@ -2,6 +2,7 @@ package de.itemis.mps.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -9,6 +10,7 @@ import java.awt.Desktop
 
 class GetMpsInBrowser extends DefaultTask {
 
+    @Input
     String version
 
     def setVersion(String version) {
