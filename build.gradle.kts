@@ -55,8 +55,9 @@ dependencyLocking {
 }
 
 dependencies {
-    compile(localGroovy())
-    compile(kotlin("stdlib", version = kotlinVersion))
+    implementation(localGroovy())
+    implementation(kotlin("stdlib", version = kotlinVersion))
+    testImplementation("junit:junit:4.12")
 }
 
 
@@ -104,6 +105,26 @@ subprojects {
         lockAllConfigurations()
     }
 }
+
+tasks.register("createClasspathManifest") {
+    val outputDir = file("$buildDir/$name")
+
+    inputs.files(sourceSets.main.get().runtimeClasspath)
+            .withPropertyName("runtimeClasspath")
+            .withNormalizer(ClasspathNormalizer::class)
+    outputs.dir(outputDir)
+            .withPropertyName("outputDir")
+
+    doLast {
+        outputDir.mkdirs()
+        file("$outputDir/plugin-classpath.txt").writeText(sourceSets.main.get().runtimeClasspath.joinToString("\n"))
+    }
+}
+
+dependencies {
+    testRuntimeOnly(files(tasks["createClasspathManifest"]))
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
