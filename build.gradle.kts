@@ -1,6 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
+buildscript {
+    configurations.classpath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
 val kotlinApiVersion by extra {"1.3"}
 val kotlinVersion by extra {"$kotlinApiVersion.11"}
 
@@ -44,6 +50,9 @@ repositories {
     }
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
 
 dependencies {
     compile(localGroovy())
@@ -90,6 +99,11 @@ publishing {
     }
 }
 
+subprojects {
+    dependencyLocking {
+        lockAllConfigurations()
+    }
+}
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
