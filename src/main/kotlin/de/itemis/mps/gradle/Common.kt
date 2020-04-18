@@ -1,9 +1,12 @@
 package de.itemis.mps.gradle
 
+import org.apache.log4j.Logger
 import org.gradle.api.GradleException
-import org.gradle.api.Project
+import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Configuration
 import java.io.File
+
+private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 data class Plugin(
         var id: String,
@@ -23,6 +26,11 @@ open class BasePluginExtensions {
     var macros: List<Macro> = emptyList()
     var projectLocation: File? = null
     var debug = false
+    var javaExec: File? = null
+}
+
+fun validateDefaultJvm(){
+    if (JavaVersion.current() != JavaVersion.VERSION_11) logger.error("MPS requires Java 11 but current JVM uses ${JavaVersion.current()}, starting MPS will most probably fail!")
 }
 
 fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String> {
