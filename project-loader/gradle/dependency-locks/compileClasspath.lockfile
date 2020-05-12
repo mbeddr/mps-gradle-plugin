@@ -1,12 +1,12 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.fasterxml.jackson.core:jackson-annotations:2.11.0.rc1
-com.fasterxml.jackson.core:jackson-core:2.11.0.rc1
-com.fasterxml.jackson.core:jackson-databind:2.11.0.rc1
-com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.0.rc1
-com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.0.rc1
-com.fasterxml.woodstox:woodstox-core:6.1.1
+com.fasterxml.jackson.core:jackson-annotations:2.11.0
+com.fasterxml.jackson.core:jackson-core:2.11.0
+com.fasterxml.jackson.core:jackson-databind:2.11.0
+com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.0
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.0
+com.fasterxml.woodstox:woodstox-core:6.2.0
 com.jetbrains:mps-core:2019.3.4
 com.jetbrains:mps-environment:2019.3.4
 com.jetbrains:mps-openapi:2019.3.4

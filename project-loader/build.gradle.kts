@@ -44,6 +44,8 @@ dependencies {
     compileOnly("com.jetbrains:mps-openapi:$mpsVersion")
     compileOnly("com.jetbrains:platform-api:$mpsVersion")
     compileOnly("com.jetbrains:util:$mpsVersion")
+    testImplementation("junit:junit:4.12")
+    testImplementation("org.xmlunit:xmlunit-core:2.6.+")
 }
 
 tasks.withType<KotlinCompile> {

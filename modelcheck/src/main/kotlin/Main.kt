@@ -4,7 +4,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import com.xenomachina.argparser.mainBody
-import de.itemis.mps.gradle.junit.*
+import de.itemis.mps.gradle.junit.Failure
+import de.itemis.mps.gradle.junit.Testcase
+import de.itemis.mps.gradle.junit.Testsuite
+import de.itemis.mps.gradle.junit.Testsuites
 import de.itemis.mps.gradle.project.loader.Args
 import de.itemis.mps.gradle.project.loader.executeWithProject
 import jetbrains.mps.checkers.*
@@ -22,9 +25,16 @@ import jetbrains.mps.util.CollectConsumer
 import org.apache.log4j.Logger
 import org.jetbrains.mps.openapi.model.SModel
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.test.fail
 
 private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
+
+enum class ReportFormat {
+    ONE_TEST_PER_MODEL,
+    ONE_TEST_PER_FAILED_MESSAGE
+}
 
 class ModelCheckArgs(parser: ArgParser) : Args(parser) {
     val models by parser.adding("--model",
@@ -34,6 +44,13 @@ class ModelCheckArgs(parser: ArgParser) : Args(parser) {
     val warningAsError by parser.flagging("--warning-as-error", help = "treat model checker warning as errors")
     val dontFailOnError by parser.flagging("--error-no-fail", help = "report errors but don't fail the build")
     val xmlFile by parser.storing("--result-file", help = "stores the result as an JUnit xml file").default<String?>(null)
+    val xmlReportFormat by parser.storing("--result-format", help = "reporting format for the JUnit file") {
+        when (this) {
+            "model" -> ReportFormat.ONE_TEST_PER_MODEL
+            "message" -> ReportFormat.ONE_TEST_PER_FAILED_MESSAGE
+            else -> fail("unsupported format")
+        }
+    }
 }
 
 fun printInfo(msg: String) {
@@ -46,6 +63,11 @@ fun printWarn(msg: String) {
 
 fun printError(msg: String) {
     logger.error(msg)
+}
+
+fun getCurrentTimeStamp(): String {
+    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+    return df.format(Date())
 }
 
 fun printResult(item: IssueKindReportItem, project: Project, args: ModelCheckArgs) {
@@ -91,6 +113,7 @@ fun writeJunitXml(models: Iterable<SModel>,
                   results: Iterable<IssueKindReportItem>,
                   project: Project,
                   warnAsErrors: Boolean,
+                  format: ReportFormat,
                   file: File) {
 
     val allErrors = results.filter {
@@ -113,40 +136,99 @@ fun writeJunitXml(models: Iterable<SModel>,
                 }
             }
 
-    val testcases = models.map {
-        val errors = errorsPerModel.getOrDefault(it, emptyList())
+    val xmlMapper = XmlMapper()
 
-        fun reportItemToContent(item: IssueKindReportItem): Failure {
+    when (format) {
+        ReportFormat.ONE_TEST_PER_MODEL -> {
+            val testcases = oneTestCasePerModel(models, errorsPerModel, project)
+            val testsuite = Testsuite(name = "model checking",
+                    failures = allErrors.size,
+                    testcases = testcases,
+                    tests = models.count(),
+                    timestamp = getCurrentTimeStamp())
+            xmlMapper.writeValue(file, testsuite)
+        }
+
+        ReportFormat.ONE_TEST_PER_FAILED_MESSAGE -> {
+            val testsuits = models.mapIndexed { i: Int, mdl: SModel ->
+                val errorsInModel = errorsPerModel[mdl] ?: emptyList()
+                Testsuite(name = mdl.name.simpleName,
+                        pkg = mdl.name.namespace,
+                        failures = errorsInModel.size,
+                        id = i,
+                        tests = errorsInModel.size,
+                        timestamp = getCurrentTimeStamp(),
+                        testcases = errorsInModel.map { item -> oneTestCasePerMessage(item, mdl, project) })
+            }
+            xmlMapper.writeValue(file, Testsuites(testsuits))
+        }
+    }
+
+
+}
+
+private fun oneTestCasePerMessage(item: IssueKindReportItem, model: SModel, project: Project): Testcase {
+    return when (val path = IssueKindReportItem.PATH_OBJECT.get(item)) {
+        is IssueKindReportItem.PathObject.ModelPathObject -> {
+            val name = "${model.name.longName}#${item.issueKind.checker.name}"
+            val message = "${item.message} [${model.name.longName}]"
+            Testcase(
+                    name = name,
+                    classname = name,
+                    failure = Failure(message = message, type = item.issueKind.checker.name),
+                    time = 0
+            )
+        }
+        is IssueKindReportItem.PathObject.NodePathObject -> {
+            val node = path.resolve(project.repository)
+            val url = HttpSupportUtil.getURL(node)
+            val message = "${item.message} [$url]"
+            val name = "${node.nodeId}#${item.issueKind.checker.name}"
+            Testcase(
+                    name = name,
+                    classname = name,
+                    failure = Failure(message = message, type = item.issueKind.checker.name),
+                    time = 0
+            )
+        }
+        else -> fail("unexpected issue kind")
+    }
+}
+
+
+private fun oneTestCasePerModel(models: Iterable<SModel>, errorsPerModel: Map<SModel, List<IssueKindReportItem>>, project: Project): List<Testcase> {
+    return models.map {
+        val errors = errorsPerModel.getOrDefault(it, emptyList())
+        fun reportItemToContent(s: Failure, item: IssueKindReportItem): Failure {
             return when (val path = IssueKindReportItem.PATH_OBJECT.get(item)) {
                 is IssueKindReportItem.PathObject.ModelPathObject -> {
                     val model = path.resolve(project.repository)!!
                     val message = "${item.message} [${model.name.longName}]"
-                    Failure(message = message, content = message)
+                    Failure(
+                            message = "${s.message}\n $message",
+                            type = s.type
+                    )
                 }
                 is IssueKindReportItem.PathObject.NodePathObject -> {
                     val node = path.resolve(project.repository)
                     val url = HttpSupportUtil.getURL(node)
                     val message = "${item.message} [$url]"
-                    Failure(message = message, content = message)
+                    Failure(
+                            message = "${s.message}\n $message",
+                            type = s.type
+                    )
                 }
                 else -> fail("unexpected issue kind")
             }
         }
 
-        Testcase(name = it.name.simpleName,
+        Testcase(
+                name = it.name.simpleName,
                 classname = it.name.longName,
-                failures = errors.map(::reportItemToContent))
+                failure = errors.fold(Failure(message = "",  type = "model checking"), ::reportItemToContent),
+                time = 0
+        )
     }
-
-    val testsuite = Testsuite(name = "model checking",
-            failures = allErrors.size,
-            testcases = testcases,
-            id = 1,
-            tests = models.count())
-
-
-    val xmlMapper = XmlMapper()
-    xmlMapper.writeValue(file, testsuite)
 }
 
 fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
@@ -176,7 +258,7 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
     project.modelAccess.runReadAction {
         if (args.models.isNotEmpty()) {
             itemsToCheck.models.addAll(project.projectModulesWithGenerators
-                    .flatMap { it.models.filter { !SModelStereotype.isDescriptorModel(it) && !SModelStereotype.isStubModel(it) } }
+                    .flatMap { module -> module.models.filter { !SModelStereotype.isDescriptorModel(it) && !SModelStereotype.isStubModel(it) } }
                     .filter { m -> args.models.any { it.toRegex().matches(m.name.longName) } })
         }
         if (args.modules.isNotEmpty()) {
@@ -192,20 +274,18 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
         errorCollector.result.map { printResult(it, project, args) }
 
         if (args.xmlFile != null) {
-            val allCheckedModels = itemsToCheck.modules.flatMap {
-                it.models.filter { !SModelStereotype.isDescriptorModel(it) }
+            val allCheckedModels = itemsToCheck.modules.flatMap { module ->
+                module.models.filter { !SModelStereotype.isDescriptorModel(it) }
             }.union(itemsToCheck.models)
-            writeJunitXml(allCheckedModels, errorCollector.result, project, args.warningAsError, File(args.xmlFile!!))
+            writeJunitXml(allCheckedModels, errorCollector.result, project, args.warningAsError, args.xmlReportFormat, File(args.xmlFile!!))
         }
     }
 
-    val hasErrors = if (args.warningAsError) {
+    return if (args.warningAsError) {
         errorCollector.result.any { it.severity == MessageStatus.WARNING }
     } else {
         errorCollector.result.any { it.severity == MessageStatus.ERROR }
     }
-
-    return hasErrors
 }
 
 fun main(args: Array<String>) = mainBody {
@@ -225,4 +305,5 @@ fun main(args: Array<String>) = mainBody {
     }
 
     System.exit(0)
+
 }
