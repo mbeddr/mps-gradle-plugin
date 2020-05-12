@@ -12,7 +12,7 @@ class GenerateLibrariesXml extends DefaultTask {
     @InputFile
     File defaults
 
-    @InputFile @Optional
+    @Optional
     File overrides
 
     @OutputFile

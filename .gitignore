@@ -3,7 +3,7 @@
 /build/
 /buildSrc/.gradle
 /buildSrc/build
-/out/
+**/out/
 *.iml
 .gradletasknamecache
 .classpath
