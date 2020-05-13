@@ -27,6 +27,7 @@ import org.jetbrains.mps.openapi.model.SModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 import kotlin.test.fail
 
 private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
@@ -48,9 +49,9 @@ class ModelCheckArgs(parser: ArgParser) : Args(parser) {
         when (this) {
             "model" -> ReportFormat.ONE_TEST_PER_MODEL
             "message" -> ReportFormat.ONE_TEST_PER_FAILED_MESSAGE
-            else -> fail("unsupported format")
+            else -> fail("unsupported result format")
         }
-    }
+    }.default(ReportFormat.ONE_TEST_PER_MODEL)
 }
 
 fun printInfo(msg: String) {
@@ -168,14 +169,16 @@ fun writeJunitXml(models: Iterable<SModel>,
 }
 
 private fun oneTestCasePerMessage(item: IssueKindReportItem, model: SModel, project: Project): Testcase {
+    // replace also ':', as otherwise the string before could be recognized as class name
+    val testCaseName = item.message.replace(Regex("[:\\s]"), "_").substring(0, min(item.message.length, 120))
     return when (val path = IssueKindReportItem.PATH_OBJECT.get(item)) {
         is IssueKindReportItem.PathObject.ModelPathObject -> {
-            val name = "${model.name.longName}#${item.issueKind.checker.name}"
             val message = "${item.message} [${model.name.longName}]"
+            val className = model.name.longName
             Testcase(
-                    name = name,
-                    classname = name,
-                    failure = Failure(message = message, type = item.issueKind.checker.name),
+                    name = testCaseName,
+                    classname = className,
+                    failure = Failure(message = message, type = item.issueKind.toString()),
                     time = 0
             )
         }
@@ -183,11 +186,11 @@ private fun oneTestCasePerMessage(item: IssueKindReportItem, model: SModel, proj
             val node = path.resolve(project.repository)
             val url = HttpSupportUtil.getURL(node)
             val message = "${item.message} [$url]"
-            val name = "${node.nodeId}#${item.issueKind.checker.name}"
+            val className = node.containingRoot.presentation + "." + node.nodeId
             Testcase(
-                    name = name,
-                    classname = name,
-                    failure = Failure(message = message, type = item.issueKind.checker.name),
+                    name = testCaseName,
+                    classname = className,
+                    failure = Failure(message = message, type = item.issueKind.toString()),
                     time = 0
             )
         }
