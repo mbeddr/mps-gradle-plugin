@@ -19,6 +19,7 @@ open class ModelCheckPluginExtensions: BasePluginExtensions() {
     var warningAsError = false
     var errorNoFail = false
     var junitFile: File? = null
+    var junitFormat: String? = null
     var maxHeap: String? = null
 }
 
@@ -57,6 +58,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 if (extension.junitFile != null) {
                     args.add("--result-file=${extension.junitFile!!.absolutePath}")
+                }
+
+                if (extension.junitFormat != null) {
+                    args.add("--result-format=${extension.junitFormat}")
                 }
 
                 val resolveMps = tasks.create("resolveMpsForModelcheck", Copy::class.java) {
