@@ -153,13 +153,18 @@ fun writeJunitXml(models: Iterable<SModel>,
         ReportFormat.ONE_TEST_PER_FAILED_MESSAGE -> {
             val testsuits = models.mapIndexed { i: Int, mdl: SModel ->
                 val errorsInModel = errorsPerModel[mdl] ?: emptyList()
+                val effectiveErrorsInModel = errorsInModel.map { item -> oneTestCasePerMessage(item, mdl, project) }
+                        // some issues are reported multiple times per node for some reason -> filter out such issues
+                        .distinctBy { "${it.classname}.${it.name}" }
+                        // some build servers doesn't process/group tests per package/class -> provide default sort order
+                        .sortedBy { it.classname }
                 Testsuite(name = mdl.name.simpleName,
                         pkg = mdl.name.namespace,
-                        failures = errorsInModel.size,
+                        failures = effectiveErrorsInModel.size,
                         id = i,
-                        tests = errorsInModel.size,
+                        tests = effectiveErrorsInModel.size,
                         timestamp = getCurrentTimeStamp(),
-                        testcases = errorsInModel.map { item -> oneTestCasePerMessage(item, mdl, project) })
+                        testcases = effectiveErrorsInModel)
             }
             xmlMapper.writeValue(file, Testsuites(testsuits))
         }
