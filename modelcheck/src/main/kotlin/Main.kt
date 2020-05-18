@@ -224,11 +224,13 @@ private fun oneTestCasePerModel(models: Iterable<SModel>, errorsPerModel: Map<SM
                 else -> fail("unexpected issue kind")
             }
         }
+        
+        val accumulatedFailure = errors.fold(Failure(message = "",  type = "model checking"), ::reportItemToContent)
 
         Testcase(
                 name = it.name.simpleName,
                 classname = it.name.longName,
-                failure = errors.fold(Failure(message = "",  type = "model checking"), ::reportItemToContent),
+                failure = if (errors.isEmpty()) null else accumulatedFailure,
                 time = 0
         )
     }
