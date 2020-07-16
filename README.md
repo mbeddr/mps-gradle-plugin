@@ -81,22 +81,48 @@ created by an MPS-generated Ant script), a JDK, and a background image.
 
 ### Usage
 
-```
+Groovy:
+
+```gradle
 task buildDmg(type: de.itemis.mps.gradle.CreateDmg) {
-    rcpArtifact file('path/to/RCP.tgz')
+    rcpArtifact = file('path/to/RCP.tgz')
 
     jdkDependency "com.jetbrains.jdk:jdk:${jdkVersion}:osx_x64@tgz"
     // -or -
-    jdk file('path/to/jdk.tgz')
+    jdk = file('path/to/jdk.zip')
 
-    backgroundImage file('path/to/background.png')
-    dmgFile file('output.dmg')
+    backgroundImage = file('path/to/background.png')
+    dmgFile = file('output.dmg')
 
-    signKeyChain file("/path/to/my.keychain-db")
+    signKeyChain = file("/path/to/my.keychain-db")
 
-    signKeyChainPassword "my.keychain-db-password"
+    signKeyChainPassword = "my.keychain-db-password"
 
-    signIdentity "my Application ID Name"
+    signIdentity = "my Application ID Name"
+}
+```
+
+Kotlin:
+
+```kotlin
+import de.itemis.mps.gradle.CreateDmg
+
+val buildDmg by tasks.registering(CreateDmg::class) {
+    rcpArtifact.set(file("path/to/RCP.tgz"))
+
+    jdkDependency("com.jetbrains.jdk:jdk:${jdkVersion}:osx_x64@tgz")
+    // -or-
+    jdk.set(layout.file(provider { jdkConfiguration.singleFile }))
+    // -or-
+    jdk.set(file("path/to/jdk.zip"))
+
+    backgroundImage.set(file("path/to/background.png"))
+    dmgFile.set(file("output.dmg"))
+
+    // Below properties must be all present or they all must be absent
+    signKeyChain.set(file("/path/to/my.keychain-db"))
+    signKeyChainPassword.set("my.keychain-db-password")
+    signIdentity.set("my Application ID Name")
 }
 ```
 
@@ -104,7 +130,7 @@ Parameters:
 * `rcpArtifact` - the path to the RCP artifact produced by a build script.
 * `jdkDependency` - the coordinates of a JDK in case it's available in
   a repository and can be resolved as a Gradle dependency.
-* `jdk` - the path to a JDK .tgz file.
+* `jdk` - the path to a JDK .zip file.
 * `backgroundImage` - the path to the background image.
 * `dmgFile` - the path and file name of the output DMG image. Must end
   with `.dmg`.
@@ -129,15 +155,35 @@ task.
 
 ### Usage
 
-```
+Groovy:
+
+```gradle
 task bundleMacosJdk(type: de.itemis.mps.gradle.BundleMacosJdk) {
-    rcpArtifact file('path/to/RCP.tgz')
+    rcpArtifact = file('path/to/RCP.tgz')
 
     jdkDependency "com.jetbrains.jdk:jdk:${jdkVersion}:osx_x64@tgz"
     // -or -
-    jdk file('path/to/jdk.tgz')
+    jdk = file('path/to/jdk.tgz')
 
-    outputFile file('output.tar.gz')
+    outputFile = file('output.tar.gz')
+}
+```
+
+Kotlin:
+
+```kotlin
+import de.itemis.mps.gradle.BundleMacosJdk
+
+val buildDmg by tasks.registering(BundleMacosJdk::class) {
+    rcpArtifact.set(file("path/to/RCP.tgz"))
+
+    jdkDependency("com.jetbrains.jdk:jdk:${jdkVersion}:osx_x64@tgz")
+    // -or-
+    jdk.set(layout.file(provider { jdkConfiguration.singleFile }))
+    // -or-
+    jdk.set(file("path/to/jdk.tgz"))
+
+    outputFile.set(file("output.dmg"))
 }
 ```
 
@@ -145,7 +191,7 @@ Parameters:
 * `rcpArtifact` - the path to the RCP artifact produced by a build script.
 * `jdkDependency` - the coordinates of a JDK in case it's available in
   a repository and can be resolved as a Gradle dependency.
-* `jdk` - the path to a JDK .tgz file.
+* `jdk` - the path to a JDK .zip file.
 * `outputFile` - the path and file name of the output gzipped tar archive.
 
 ### Operation
