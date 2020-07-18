@@ -63,13 +63,12 @@ class BuildLogicFunctionalTest {
             
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.absolutePath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
                 defaults = file("projectlibraries.properties")
-                setOverrides(file("projectlibraries.overrides.properties"))
                 destination = file(".mps/libraries.xml")
             }
         """.trimIndent())
@@ -107,13 +106,13 @@ class BuildLogicFunctionalTest {
             
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.absolutePath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
                 defaults = file("projectlibraries.properties")
-                setOverrides(file("projectlibraries.overrides.properties"))
+                overrides = file("projectlibraries.overrides.properties")
                 destination = file(".mps/libraries.xml")
             }
         """.trimIndent())

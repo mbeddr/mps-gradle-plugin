@@ -12,7 +12,7 @@ class GenerateLibrariesXml extends DefaultTask {
     @InputFile
     File defaults
 
-    @Optional
+    @Optional @InputFile
     File overrides
 
     @OutputFile
@@ -22,18 +22,11 @@ class GenerateLibrariesXml extends DefaultTask {
         description = 'Generates libraries.xml for MPS'
     }
 
-    void setOverrides(Object overrides) {
-        this.overrides = project.file(overrides)
-        if (this.overrides != null && this.overrides.exists()) {
-            inputs.file(overrides)
-        }
-    }
-
     @TaskAction
     def generate() {
         Properties properties = new Properties()
         defaults.withInputStream { properties.load(it) }
-        if (overrides.exists()) {
+        if (overrides != null && overrides.exists()) {
             overrides.withInputStream { properties.load(it) }
         }
         destination.withWriter { writer ->
