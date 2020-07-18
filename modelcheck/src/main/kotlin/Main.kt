@@ -1,6 +1,7 @@
 package de.itemis.mps.gradle.modelcheck
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.intellij.openapi.application.ApplicationManager
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import com.xenomachina.argparser.mainBody
@@ -13,6 +14,7 @@ import de.itemis.mps.gradle.project.loader.executeWithProject
 import jetbrains.mps.checkers.*
 import jetbrains.mps.errors.MessageStatus
 import jetbrains.mps.errors.item.IssueKindReportItem
+import jetbrains.mps.ide.MPSCoreComponents
 import jetbrains.mps.ide.httpsupport.runtime.base.HttpSupportUtil
 import jetbrains.mps.ide.modelchecker.platform.actions.UnresolvedReferencesChecker
 import jetbrains.mps.progress.EmptyProgressMonitor
@@ -243,16 +245,18 @@ private fun oneTestCasePerModel(models: Iterable<SModel>, errorsPerModel: Map<SM
 
 fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
 
+    val componentHost = ApplicationManager.getApplication().getComponent(MPSCoreComponents::class.java).platform
+
     // see ModelCheckerSettings.getSpecificCheckers for details
     // we do not call into that class because we don't want to load the settings from the user
     val checkers = listOf(TypesystemChecker(),
             NonTypesystemChecker(),
-            ConstraintsChecker(null),
+            ConstraintsChecker(componentHost),
             RefScopeChecker(),
-            TargetConceptChecker(),
+            TargetConceptChecker2(componentHost),
             StructureChecker(),
             UsedLanguagesChecker(),
-            ModelPropertiesChecker(),
+            ModelPropertiesChecker(componentHost),
             UnresolvedReferencesChecker(project),
             ModuleChecker(),
             SuppressErrorsChecker())
