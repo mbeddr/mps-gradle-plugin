@@ -2,9 +2,11 @@
 <model ref="r:098fce55-4c9a-4d06-84b9-04b5ca0d51c6(my.solution.with.errors.java)">
   <persistence version="9" />
   <languages>
-    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="9" />
+    <use id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage" version="11" />
   </languages>
-  <imports />
+  <imports>
+    <import index="ggvx" ref="r:a73d36b1-a672-4ac9-b2ff-9846b544fa43(my.solution.java)" />
+  </imports>
   <registry>
     <language id="f3061a53-9226-4cc5-a443-f952ceaf5816" name="jetbrains.mps.baseLanguage">
       <concept id="1070462154015" name="jetbrains.mps.baseLanguage.structure.StaticFieldDeclaration" flags="ig" index="Wx3nA" />
