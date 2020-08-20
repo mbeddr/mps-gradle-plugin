@@ -29,7 +29,7 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2019.3.4" }
+val mpsVersion by extra { "2019.3.7" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&
