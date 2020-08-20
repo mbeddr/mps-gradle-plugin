@@ -1,12 +1,12 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.jetbrains:mps-core:2019.3.4
-com.jetbrains:mps-messaging:2019.3.4
-com.jetbrains:mps-openapi:2019.3.4
-com.jetbrains:mps-tool:2019.3.4
-com.jetbrains:platform-api:2019.3.4
-com.jetbrains:platform-concurrency:2019.3.4
+com.jetbrains:mps-core:2019.3.7
+com.jetbrains:mps-messaging:2019.3.7
+com.jetbrains:mps-openapi:2019.3.7
+com.jetbrains:mps-tool:2019.3.7
+com.jetbrains:platform-api:2019.3.7
+com.jetbrains:platform-concurrency:2019.3.7
 com.xenomachina:kotlin-argparser:2.0.7
 com.xenomachina:xenocom:0.0.7
 org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11
