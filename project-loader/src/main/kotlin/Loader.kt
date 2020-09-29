@@ -10,7 +10,8 @@ import java.io.File
 
 data class Plugin(
         val id: String,
-        val path: String
+        val path: String,
+        val isPreInstalled: Boolean?=null
 )
 
 data class Macro(
@@ -69,7 +70,7 @@ private fun basicEnvironmentConfig(): EnvironmentConfig {
  * @param project the location of the project to open.
  * @param action the action to execute with the project.
  * @param pluginLocation optional location where plugins lo load are located. This is for additional plugins, the plugins
- * located in the pre-installed pluging location (usual the "plugins" folder of MPS) are still considered.
+ * located in the pre-installed plugin location (usual the "plugins" folder of MPS) are still considered.
  * @param plugins optional list of plugins to load. Path is the what MPS calls the `short (folder) name` in it's build
  * language. The id is the plugin id defined in the plugin descriptor. Both are required because MPS supports multiple
  * plugins the same location.
@@ -84,7 +85,7 @@ fun <T> executeWithProject(project: File,
                            buildNumber: String? = null,
                            action: (Project) -> T): T {
 
-    val propertyOverrides = mutableListOf<Pair<String,String?>>()
+    val propertyOverrides = mutableListOf<Pair<String, String?>>()
 
     if (pluginLocation != null) {
         logger.info("overriding plugin location with: ${pluginLocation.absolutePath}")
@@ -99,8 +100,14 @@ fun <T> executeWithProject(project: File,
     }
 
     val cfg = basicEnvironmentConfig()
+    plugins.forEach {
+        if (it.isPreInstalled != null && it.isPreInstalled) {
+            cfg.addPreInstalledPlugin(it.path, it.id)
+        } else {
+            cfg.addPlugin(it.path, it.id)
+        }
+    }
 
-    plugins.forEach { cfg.addPlugin(it.path, it.id) }
     macros.forEach { cfg.addMacro(it.name, File(it.value)) }
 
     val ideaEnvironment = IdeaEnvironment(cfg)
@@ -128,13 +135,13 @@ fun <T> executeWithProject(project: File,
         ideaEnvironment.dispose()
         logger.info("project and environment disposed")
     }
-    
+
     // cleanup overridden property values to the state that they were before.
     propertyOverrides.forEach {
 
         // if a property wasn't set before the value is "null"
         // setting null as a value for a System property will result in a NPE
-        if(it.second != null) {
+        if (it.second != null) {
             System.setProperty(it.first, it.second!!)
         } else {
             System.clearProperty(it.first)
