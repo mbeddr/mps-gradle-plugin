@@ -20,7 +20,7 @@ private fun <T> splitAndCreatePlugin(str: String, creator: (String, String, Bool
     if (split.size == 3){
         return creator(split[0], split[1], split[2].toBoolean() ?: true)
     }
-    return creator(split[0], split[1], false)
+    return creator(split[0], split[1], true)
 }
 
 private fun toMacro(str: String) = splitAndCreate(str, ::Macro)
