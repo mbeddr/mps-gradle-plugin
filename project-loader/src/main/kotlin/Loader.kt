@@ -101,7 +101,7 @@ fun <T> executeWithProject(project: File,
 
     val cfg = basicEnvironmentConfig()
     plugins.forEach {
-        if (it.isPreInstalled != null && it.isPreInstalled) {
+        if (it.isPreInstalled) {
             cfg.addPreInstalledPlugin(it.path, it.id)
         } else {
             cfg.addPlugin(it.path, it.id)
