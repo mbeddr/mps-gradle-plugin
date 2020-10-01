@@ -18,7 +18,7 @@ private fun <T> splitAndCreatePlugin(str: String, creator: (String, String, Bool
         throw RuntimeException("string is not of the right format. Expected <key>::<value>[::<pre installed>]")
     }
     if (split.size == 3){
-        return creator(split[0], split[1], split[2].toBoolean())
+        return creator(split[0], split[1], split[2].toBoolean() ?: true)
     }
     return creator(split[0], split[1], false)
 }
