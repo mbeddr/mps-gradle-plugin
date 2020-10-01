@@ -220,7 +220,7 @@ Parameters:
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
 * `javaExec` - optional `java` executable to use.
-* `plugins` - optional list of plugins to load before model check is attempted.
+* `plugins` - optional list of plugins to load before generation is attempted.
     * The notation is `new Plugin("someID", "somePath", {true|false})`. First parameter is the `plugin id`, second is 
     `short (folder) name` and the third an optional `pre installed` flag, indicating if the plugins is placed under mps/plugins or not.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
