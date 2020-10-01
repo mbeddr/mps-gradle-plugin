@@ -220,8 +220,9 @@ Parameters:
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
 * `javaExec` - optional `java` executable to use.
-* `plugins` - optional list of plugins to load before generation is attempted.
-  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
+* `plugins` - optional list of plugins to load before model check is attempted.
+    * The notation is `new Plugin("someID", "somePath", {true|false})`. First parameter is the `plugin id`, second is 
+    `short (folder) name` and the third an optional `pre installed` flag, indicating if the plugins is placed under mps/plugins or not.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
 * `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
@@ -270,7 +271,8 @@ Parameters:
 * `mpsLocation` - optional location where to place the MPS files.
 * `javaExec` - optional `java` executable to use.
 * `plugins` - optional list of plugins to load before model check is attempted.
-  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
+    * The notation is `new Plugin("someID", "somePath", {true|false})`. First parameter is the `plugin id`, second is 
+    `short (folder) name` and the third an optional `pre installed` flag, indicating if the plugins is placed under mps/plugins or not.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
 * `models` - optional list of models to check. RegEx can be used for matching multiple models.
@@ -307,12 +309,12 @@ apply plugin: 'modelcheck'
 
 modelcheck {
     pluginLocation = new File("path/to/my/plugins")
-    plugins = [new Plugin("com.mbeddr.core", "mbeddr.core")]
+    plugins = [new Plugin("com.mbeddr.core", "mbeddr.core", false)]
     projectLocation = new File("./mps-prj")
     mpsConfig = configurations.mps
 }
 
 ```
 
-Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
-MPS. If they are not found the the build will fail.
+Dependencies of the specified plugins are automatically loaded from the `pluginlocation` by default and the plugins directory of 
+MPS. If the plugin is not located there, the `pre installed` flag needs to be specified. If they are not found the the build will fail.

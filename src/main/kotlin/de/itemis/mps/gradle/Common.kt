@@ -10,7 +10,8 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 data class Plugin(
         var id: String,
-        var path: String
+        var path: String,
+        var isPreInstalled:Boolean? = null
 )
 
 data class Macro(
@@ -45,7 +46,10 @@ fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String>
     val prj = sequenceOf("--project=${projectLocation.absolutePath}")
 
     return sequenceOf(pluginLocation,
-            extensions.plugins.map { "--plugin=${it.id}::${it.path}" }.asSequence(),
+            extensions.plugins.map {
+               val preInstalled = if ( it.isPreInstalled != null) "::${it.isPreInstalled}" else ""
+                "--plugin=${it.id}::${it.path}" + preInstalled
+            }.asSequence(),
             extensions.macros.map { "--macro=${it.name}::${it.value}" }.asSequence(),
             prj).flatten().toMutableList()
 }

@@ -11,7 +11,7 @@ import java.io.File
 data class Plugin(
         val id: String,
         val path: String,
-        val isPreInstalled: Boolean?=null
+        val isPreInstalled: Boolean
 )
 
 data class Macro(
