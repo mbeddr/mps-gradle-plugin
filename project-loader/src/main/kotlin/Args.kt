@@ -18,9 +18,10 @@ private fun <T> splitAndCreatePlugin(str: String, creator: (String, String, Bool
         throw RuntimeException("string is not of the right format. Expected <key>::<value>[::<pre installed>]")
     }
     if (split.size == 3){
+        // in case we can't parse true, toBoolean() will always return false
         return creator(split[0], split[1], split[2].toBoolean())
     }
-    return creator(split[0], split[1], true)
+    return creator(split[0], split[1], false)
 }
 
 private fun toMacro(str: String) = splitAndCreate(str, ::Macro)

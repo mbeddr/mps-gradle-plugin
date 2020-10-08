@@ -1,6 +1,5 @@
 package de.itemis.mps.gradle.project.loader
 
-import com.intellij.openapi.application.PathMacros
 import jetbrains.mps.project.Project
 import jetbrains.mps.tool.environment.EnvironmentConfig
 import jetbrains.mps.tool.environment.IdeaEnvironment
@@ -11,7 +10,7 @@ import java.io.File
 data class Plugin(
         val id: String,
         val path: String,
-        val isPreInstalled: Boolean
+        val isCustom: Boolean
 )
 
 data class Macro(
@@ -101,10 +100,10 @@ fun <T> executeWithProject(project: File,
 
     val cfg = basicEnvironmentConfig()
     plugins.forEach {
-        if (it.isPreInstalled) {
-            cfg.addPreInstalledPlugin(it.path, it.id)
-        } else {
+        if (it.isCustom) {
             cfg.addPlugin(it.path, it.id)
+        } else {
+            cfg.addPreInstalledPlugin(it.path, it.id)
         }
     }
 
