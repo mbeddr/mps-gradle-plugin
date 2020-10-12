@@ -30,6 +30,9 @@ val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
 val mpsVersion by extra { "2019.3.7" }
+//this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
+//surface because mismatching jars on the classpath.
+val fastXmlJacksonVersion by extra { "2.10.+" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&
