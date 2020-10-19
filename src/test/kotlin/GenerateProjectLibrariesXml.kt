@@ -69,6 +69,7 @@ class BuildLogicFunctionalTest {
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
                 defaults = file("projectlibraries.properties")
+                setOverrides(file("projectlibraries.overrides.properties"))
                 destination = file(".mps/libraries.xml")
             }
         """.trimIndent())
@@ -112,7 +113,7 @@ class BuildLogicFunctionalTest {
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
                 defaults = file("projectlibraries.properties")
-                overrides = file("projectlibraries.overrides.properties")
+                setOverrides(file("projectlibraries.overrides.properties"))
                 destination = file(".mps/libraries.xml")
             }
         """.trimIndent())

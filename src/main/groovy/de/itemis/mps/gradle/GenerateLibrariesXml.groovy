@@ -12,7 +12,10 @@ class GenerateLibrariesXml extends DefaultTask {
     @InputFile
     File defaults
 
-    @Optional @InputFile
+    @Optional
+    // currently using @InputFile is not possible due to a failure on non-existing files
+    // TODO: consider using a workaournd with @InputFiles (https://github.com/gradle/gradle/issues/2016)
+    @Input
     File overrides
 
     @OutputFile
@@ -22,11 +25,18 @@ class GenerateLibrariesXml extends DefaultTask {
         description = 'Generates libraries.xml for MPS'
     }
 
+    void setOverrides(Object overrides) {
+        this.overrides = project.file(overrides)
+        if (this.overrides != null && this.overrides.exists()) {
+            inputs.file(overrides)
+        }
+    }
+
     @TaskAction
     def generate() {
         Properties properties = new Properties()
         defaults.withInputStream { properties.load(it) }
-        if (overrides != null && overrides.exists()) {
+        if (overrides.exists()) {
             overrides.withInputStream { properties.load(it) }
         }
         destination.withWriter { writer ->
