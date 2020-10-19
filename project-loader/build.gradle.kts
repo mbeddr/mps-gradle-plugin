@@ -16,6 +16,7 @@ val kotlinVersion: String by project
 
 val nexusUsername: String? by project
 val nexusPassword: String? by project
+val fastXmlJacksonVersion: String by project
 
 val pluginVersion = "1"
 
@@ -37,7 +38,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
     implementation("com.xenomachina:kotlin-argparser:$kotlinArgParserVersion")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.+")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$fastXmlJacksonVersion")
     compileOnly("com.jetbrains:mps-core:$mpsVersion")
     compileOnly("com.jetbrains:mps-environment:$mpsVersion")
     compileOnly("com.jetbrains:mps-platform:$mpsVersion")
