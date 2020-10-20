@@ -13,6 +13,9 @@ class GenerateLibrariesXml extends DefaultTask {
     File defaults
 
     @Optional
+    // currently using @InputFile is not possible due to a failure on non-existing files
+    // TODO: consider using a workaournd with @InputFiles (https://github.com/gradle/gradle/issues/2016)
+    @Input
     File overrides
 
     @OutputFile

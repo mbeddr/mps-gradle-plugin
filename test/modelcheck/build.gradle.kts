@@ -4,7 +4,7 @@ group = "test.de.itemis.mps.gradle.modelcheck"
 version = "1.3-SNAPSHOT"
 
 plugins {
-    id("modelcheck") version "1.3-SNAPSHOT"
+    id("modelcheck") version "1.4-SNAPSHOT"
 }
 
 repositories {
@@ -16,7 +16,7 @@ repositories {
 }
 
 var mps = configurations.create("mps")
-val mpsVersion = "2019.3.2"
+val mpsVersion = "2020.1.6"
 
 dependencies{
     mps("com.jetbrains:mps:$mpsVersion")

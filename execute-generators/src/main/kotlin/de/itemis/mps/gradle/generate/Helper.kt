@@ -42,7 +42,7 @@ private class MsgHandler : IMessageHandler {
 
 }
 
-private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>): IScript {
+private fun createScript(proj: Project, models: List<SModel>): IScript {
 
     val allUsedLanguagesAR: AsyncPromise<Set<SLanguage>> = AsyncPromise()
     val registry = LanguageRegistry.getInstance(proj.repository)
@@ -54,7 +54,8 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
 
     val allUsedLanguages = allUsedLanguagesAR.get()
 
-    val scb = ScriptBuilder()
+    val facetRegistry = proj.getComponent(FacetRegistry::class.java)
+    val scb = ScriptBuilder (facetRegistry)
 
     when {
         allUsedLanguages == null -> logger.error("failed to retrieve used languages")
@@ -67,7 +68,6 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
                     .map { it.name }
             )
 
-            val facetRegistry = proj.getComponent(FacetRegistry::class.java)
 
             scb.withFacetNames(allUsedLanguages
                     .flatMap { facetRegistry.getFacetsForLanguage(it.qualifiedName) }
@@ -83,7 +83,7 @@ private fun createScript(proj: Project, models: List<org.jetbrains.mps.openapi.m
     return scb.withFacetNames(DEFAULT_FACETS).withFinalTarget(ITarget.Name("jetbrains.mps.make.facets.Make.make")).toScript()
 }
 
-private fun makeModels(proj: Project, models: List<org.jetbrains.mps.openapi.model.SModel>): Boolean {
+private fun makeModels(proj: Project, models: List<SModel>): Boolean {
     val session = MakeSession(proj, MsgHandler(), true)
     val res = ModelsToResources(models).resources().toList()
     val makeService = BuildMakeService()

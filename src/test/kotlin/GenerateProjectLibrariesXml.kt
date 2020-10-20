@@ -63,7 +63,7 @@ class BuildLogicFunctionalTest {
             
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.absolutePath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
             
@@ -107,7 +107,7 @@ class BuildLogicFunctionalTest {
             
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.absolutePath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
             
