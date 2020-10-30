@@ -74,6 +74,10 @@ gradlePlugin {
             id = "modelcheck"
             implementationClass = "de.itemis.mps.gradle.modelcheck.ModelcheckMpsProjectPlugin"
         }
+        register("JbrDownload") {
+            id = "JbrDownload"
+            implementationClass = "de.itemis.mps.gradle.downloadJBR.DownloadJbrProjectPlugin"
+        }
     }
 }
 
@@ -133,4 +137,6 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
 }
+
+
 
