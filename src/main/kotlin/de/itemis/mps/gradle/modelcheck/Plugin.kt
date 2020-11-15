@@ -1,8 +1,6 @@
 package de.itemis.mps.gradle.modelcheck
 
-import de.itemis.mps.gradle.BasePluginExtensions
-import de.itemis.mps.gradle.argsFromBaseExtension
-import de.itemis.mps.gradle.validateDefaultJvm
+import de.itemis.mps.gradle.*
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,6 +28,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+                initializeMpsPluginDependencies(extension)
 
                 val mpsVersion = extension
                         .mpsConfig
@@ -94,8 +93,11 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     }
                     into(mpsLocation)
                 }
+
+                val copyPlugins = addCopyMpsPluginDepsTask(extension, resolveMps, "Generation")
+
                 tasks.create("checkmodels", JavaExec::class.java) {
-                    dependsOn(resolveMps)
+                    dependsOn(copyPlugins)
                     args(args)
                     if (extension.javaExec != null)
                         executable(extension.javaExec!!)

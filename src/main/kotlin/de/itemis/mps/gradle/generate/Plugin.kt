@@ -1,12 +1,13 @@
 package de.itemis.mps.gradle.generate
 
 import de.itemis.mps.gradle.BasePluginExtensions
+import de.itemis.mps.gradle.addCopyMpsPluginDepsTask
 import de.itemis.mps.gradle.argsFromBaseExtension
+import de.itemis.mps.gradle.initializeMpsPluginDependencies
 import de.itemis.mps.gradle.validateDefaultJvm
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.support.zipTo
@@ -28,6 +29,8 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
             val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
             afterEvaluate {
+                initializeMpsPluginDependencies(extension)
+
                 val mpsVersion = extension
                         .mpsConfig
                         .resolvedConfiguration
@@ -89,8 +92,10 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     dependsOn(resolveMps)
                 }
 
+                val copyPlugins = addCopyMpsPluginDepsTask(extension, fake, "Generation")
+
                 tasks.create("generate", JavaExec::class.java) {
-                    dependsOn(fake)
+                    dependsOn(copyPlugins)
                     args(args)
                     if (extension.javaExec != null)
                         executable(extension.javaExec!!)
