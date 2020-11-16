@@ -58,6 +58,8 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
                 tasks.create("downloadJbr", DownloadJbrForPlatform::class.java) {
                     dependsOn(extractJbr)
+                    group = "Build"
+                    description = "Downloads the JetBrains Runtime for the current platform and extracts it."
                     jbrDir = jbrSubdir
                     javaExecutable = File(jbrSubdir, "bin/java")
                 }
