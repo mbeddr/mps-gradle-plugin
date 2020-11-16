@@ -4,6 +4,7 @@ import groovy.xml.MarkupBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -12,10 +13,8 @@ class GenerateLibrariesXml extends DefaultTask {
     @InputFile
     File defaults
 
-    @Optional
+    @Internal
     // currently using @InputFile is not possible due to a failure on non-existing files
-    // TODO: consider using a workaournd with @InputFiles (https://github.com/gradle/gradle/issues/2016)
-    @Input
     File overrides
 
     @OutputFile
