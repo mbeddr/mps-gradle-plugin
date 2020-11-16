@@ -7,7 +7,7 @@ import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
 import java.io.File
 
-open class DownloadJBRConfiguration {
+open class DownloadJbrConfiguration {
     lateinit var jbrVersion: String
     var downloadDir: File? = null
 }
@@ -16,7 +16,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.run {
 
-            val extension = extensions.create("JbrDownload", DownloadJBRConfiguration::class.java)
+            val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
 
             afterEvaluate {
                 val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
@@ -56,7 +56,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     }
                 }
 
-                tasks.create("downloadJbr", DownloadJBRForPlatform::class.java) {
+                tasks.create("downloadJbr", DownloadJbrForPlatform::class.java) {
                     dependsOn(extractJbr)
                     jbrDir = jbrSubdir
                     javaExecutable = File(jbrSubdir, "bin/java")

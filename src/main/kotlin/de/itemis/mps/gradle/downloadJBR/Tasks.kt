@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.*
 import java.io.File
 
-open class DownloadJBRForPlatform : DefaultTask() {
+open class DownloadJbrForPlatform : DefaultTask() {
 
     @OutputDirectory
     lateinit var jbrDir : File

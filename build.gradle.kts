@@ -74,8 +74,8 @@ gradlePlugin {
             id = "modelcheck"
             implementationClass = "de.itemis.mps.gradle.modelcheck.ModelcheckMpsProjectPlugin"
         }
-        register("JbrDownload") {
-            id = "JbrDownload"
+        register("DownloadJbr") {
+            id = "download-jbr"
             implementationClass = "de.itemis.mps.gradle.downloadJBR.DownloadJbrProjectPlugin"
         }
     }

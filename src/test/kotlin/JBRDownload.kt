@@ -39,7 +39,7 @@ class JBRDownloadTest {
             }
             
             plugins {
-                id("JbrDownload")
+                id("download-jbr")
             }
             
             repositories {
@@ -49,7 +49,7 @@ class JBRDownloadTest {
                 }
             }
             
-            JbrDownload {
+            downloadJbr {
                 jbrVersion = "11_0_6-b520.66"
                 downloadDir = file("jbrdl")
             }
@@ -78,7 +78,7 @@ class JBRDownloadTest {
             }
             
             plugins {
-                id("JbrDownload")
+                id("download-jbr")
             }
             
             repositories {
@@ -88,7 +88,7 @@ class JBRDownloadTest {
                 }
             }
             
-            JbrDownload {
+            downloadJbr {
                 jbrVersion = "11_0_6-b520.66"
             }
         """.trimIndent())
@@ -117,7 +117,7 @@ class JBRDownloadTest {
             }
             
             plugins {
-                id("JbrDownload")
+                id("download-jbr")
             }
             
             repositories {
@@ -127,12 +127,12 @@ class JBRDownloadTest {
                 }
             }
             
-            JbrDownload {
+            downloadJbr {
                 jbrVersion = "11_0_6-b520.66"
             }
             tasks.register<Exec>("exec") {
-                dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJBRForPlatform::class))
-                executable = tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJBRForPlatform::class).javaExecutable.absolutePath
+                dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class))
+                executable = tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class).javaExecutable.absolutePath
                 args("--version")
             }
         """.trimIndent())
