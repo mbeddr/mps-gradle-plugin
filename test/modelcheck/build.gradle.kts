@@ -22,6 +22,8 @@ dependencies{
     mps("com.jetbrains:mps:$mpsVersion")
 }
 
+
+
 modelcheck {
     mpsConfig = mps
     projectLocation = file("$rootDir/mps-prj")
