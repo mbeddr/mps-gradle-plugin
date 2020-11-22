@@ -324,7 +324,7 @@ required to download the correct version of the runtime. Since the runtime is pl
 download a platform dependent binary. While it's possible to add the logic to your own build script we provide a convenient
 way of doing this with a gradle plugin. 
 
-The download Jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
+The download-jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
 to your build, you need to make sure that it is available in your dependency repositories. The itemis maven repository at 
 `https://projects.itemis.de/nexus/content/repositories/mbeddr` provides this dependency, but you can create your own with
 the scripts located in mbeddr/build.publish.jdk 
