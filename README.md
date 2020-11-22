@@ -321,7 +321,7 @@ MPS. If they are not found the the build will fail.
 
 When building MPS projects with the JatBrains Runtime, the JDK/JRE used by MPS and other intellij based IDEs, it's
 required to download the correct version of the runtime. Since the runtime is platform dependent it's required to 
-download a platform dependent binary. While it's possible to add the logic to your own build script we prove a confinient
+download a platform dependent binary. While it's possible to add the logic to your own build script we provide a convenient
 way of doing this with a gradle plugin. 
 
 The download Jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
