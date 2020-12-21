@@ -25,13 +25,3 @@ generate {
     mpsConfig = mps
     models = listOf("my.build.script")
 }
-
-
-tasks {
-    register("wrapper", Wrapper::class) {
-        //make sure this version matches the version in parent build script otherwise this build will fail
-        gradleVersion = "4.10.2"
-        distributionType = Wrapper.DistributionType.ALL
-    }
-}
-
