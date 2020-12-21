@@ -220,10 +220,14 @@ Parameters:
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
 * `javaExec` - optional `java` executable to use.
-* `plugins` - optional list of plugins to load before generation is attempted.
-  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
+* `plugins` - optional list of plugins to load before generation is attempted.
+  The notation is `new Plugin("pluginID", "somePath")`. The first parameter is the plugin id.
+  For the second parameter `"somePath"` there are several options:
+  * if it's an absolute path, the plugin is loaded from that path
+  * if it's a folder located under `pluginLocation` the plugin is loaded from  that folder
+  * otherwise it should be a plugin folder located under the default `mps/plugins` 
 * `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
   matched are supported and no RegEx or partial name matching.
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
@@ -269,10 +273,14 @@ Parameters:
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
 * `javaExec` - optional `java` executable to use.
-* `plugins` - optional list of plugins to load before model check is attempted.
-  The notation is `new Plugin("someID", "somePath")`. Where the first parameter is the plugin id and the second the `short (folder) name`.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
+* `plugins` - optional list of plugins to load before generation is attempted.
+  The notation is `new Plugin("pluginID", "somePath")`. The first parameter is the plugin id.
+  For the second parameter `"somePath"` there are several options:
+  * if it's an absolute path, the plugin is loaded from that path
+  * if it's a folder located under `pluginLocation` the plugin is loaded from that folder
+  * otherwise it should be a plugin folder located under the default `mps/plugins` 
 * `models` - optional list of models to check. RegEx can be used for matching multiple models.
 * `modules` - optional list of modules to check. Expects ordinary name (w/o virtual folders). RegEx can be used for matching multiple modules.
   If both parameters, `models` and `modules`, are omitted - all models in the project will be checked.

@@ -100,7 +100,23 @@ fun <T> executeWithProject(project: File,
 
     val cfg = basicEnvironmentConfig()
 
-    plugins.forEach { cfg.addPreInstalledPlugin(it.path, it.id) }
+    plugins.forEach {
+            if (File(it.path).isAbsolute) {
+                cfg.addPlugin(it.path, it.id)
+            }
+            /**
+             *  MPS implementation accepts only absolute paths as plugin path:
+             *  https://github.com/JetBrains/MPS/blob/2019.3/core/tool/environment/source_gen/jetbrains/mps/tool/environment/EnvironmentConfig.java#L68
+             *  therefore we additionally check if the specified path is a subfolder of the optional
+             *  pluginLocation
+             */
+            else if (pluginLocation != null && File(pluginLocation, it.path).exists()) {
+                cfg.addPlugin(File(pluginLocation, it.path).absolutePath, it.id)
+            }
+            else {
+                cfg.addPreInstalledPlugin(it.path, it.id)
+            }
+        }
     macros.forEach { cfg.addMacro(it.name, File(it.value)) }
 
     val ideaEnvironment = IdeaEnvironment(cfg)
