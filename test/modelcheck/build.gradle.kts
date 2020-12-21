@@ -16,7 +16,7 @@ repositories {
 }
 
 var mps = configurations.create("mps")
-val mpsVersion = "2020.1.6"
+val mpsVersion = "2020.2.3"
 
 dependencies{
     mps("com.jetbrains:mps:$mpsVersion")
@@ -32,5 +32,6 @@ modelcheck {
     modules = listOf("my.solution.with.errors")
     junitFile = file("$buildDir/TEST-modelcheck-results.xml")
     //errorNoFail = true
+    //junitFormat = "message"
     //debug = true
 }

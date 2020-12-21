@@ -14,7 +14,7 @@ repositories {
 }
 
 val mps = configurations.create("mps")
-val mpsVersion = "2020.1.6"
+val mpsVersion = "2020.2.3"
 
 dependencies {
     mps("com.jetbrains:mps:$mpsVersion")
@@ -24,13 +24,3 @@ generate {
     projectLocation = file("$rootDir/mps-prj")
     mpsConfig = mps
 }
-
-
-tasks {
-    register("wrapper", Wrapper::class) {
-        //make sure this version matches the version in parent build script otherwise this build will fail
-        gradleVersion = "4.10.2"
-        distributionType = Wrapper.DistributionType.ALL
-    }
-}
-
