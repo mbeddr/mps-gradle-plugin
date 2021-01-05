@@ -32,7 +32,7 @@ import java.util.*
 import kotlin.math.min
 import kotlin.test.fail
 
-private val logger = Logger.getLogger("de.itemis.mps.gradle.generate")
+private val logger = Logger.getLogger("de.itemis.mps.gradle.modelcheck")
 
 enum class ReportFormat {
     ONE_TEST_PER_MODEL,
