@@ -2,6 +2,7 @@ package de.itemis.mps.gradle;
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
@@ -39,6 +40,10 @@ open class RunAntScript : DefaultTask() {
             if (defaultArgs != null) {
                 allArgs = allArgs + defaultArgs.map { it as String }
             }
+        }
+
+        if(logging.level != LogLevel.LIFECYCLE && !allArgs.any { it.contains("mps\\.ant\\.log") }) {
+            allArgs = allArgs + "-Dmps.ant.log=${logging.level.toString().toLowerCase()}"
         }
 
         project.javaexec {
