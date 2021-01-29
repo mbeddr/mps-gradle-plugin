@@ -7,6 +7,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import java.util.*
 
 open class RunAntScript : DefaultTask() {
     @Input
@@ -43,7 +44,7 @@ open class RunAntScript : DefaultTask() {
         }
 
         if(logging.level != LogLevel.LIFECYCLE && !allArgs.any { it.contains("mps\\.ant\\.log") }) {
-            allArgs = allArgs + "-Dmps.ant.log=${logging.level.toString().toLowerCase()}"
+            allArgs = allArgs + "-Dmps.ant.log=${logging.level.toString().toLowerCase(Locale.ENGLISH)}"
         }
 
         project.javaexec {
