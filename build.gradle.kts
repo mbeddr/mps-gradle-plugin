@@ -29,10 +29,10 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2020.2.3" }
+val mpsVersion by extra { "2020.3" }
 //this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
 //surface because mismatching jars on the classpath.
-val fastXmlJacksonVersion by extra { "2.10.+" }
+val fastXmlJacksonVersion by extra { "2.11.+" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&
@@ -136,6 +136,23 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
+}
+
+
+
+tasks.register("resolveAndLockAll") {
+    doFirst {
+        require(gradle.startParameter.isWriteDependencyLocks)
+    }
+    doLast {
+        configurations.filter {
+            // Add any custom filtering on the configurations to be resolved
+            it.isCanBeResolved
+        }.forEach { it.resolve() }
+        subprojects.forEach { project ->
+            project.configurations.filter { it.isCanBeResolved }.forEach { it.resolve() }
+        }
+    }
 }
 
 
