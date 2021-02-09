@@ -145,10 +145,7 @@ tasks.register("resolveAndLockAll") {
         require(gradle.startParameter.isWriteDependencyLocks)
     }
     doLast {
-        configurations.filter {
-            // Add any custom filtering on the configurations to be resolved
-            it.isCanBeResolved
-        }.forEach { it.resolve() }
+        configurations.filter { it.isCanBeResolved }.forEach { it.resolve() }
         subprojects.forEach { project ->
             project.configurations.filter { it.isCanBeResolved }.forEach { it.resolve() }
         }
