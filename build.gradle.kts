@@ -7,8 +7,8 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra {"1.3"}
-val kotlinVersion by extra {"$kotlinApiVersion.11"}
+val kotlinApiVersion by extra { "1.3" }
+val kotlinVersion by extra { "$kotlinApiVersion.11" }
 
 
 plugins {
@@ -29,14 +29,15 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2020.3" }
+val mpsVersion by extra { "2020.3.1" }
 //this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
 //surface because mismatching jars on the classpath.
 val fastXmlJacksonVersion by extra { "2.11.+" }
 
 
 version = if (!project.hasProperty("useSnapshot") &&
-        (project.hasProperty("forceCI") || project.hasProperty("teamcity"))) {
+    (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
+) {
     de.itemis.mps.gradle.GitBasedVersioning.getVersion(versionMajor, versionMinor)
 } else {
     "$versionMajor.$versionMinor-SNAPSHOT"
@@ -117,10 +118,10 @@ tasks.register("createClasspathManifest") {
     val outputDir = file("$buildDir/$name")
 
     inputs.files(sourceSets.main.get().runtimeClasspath)
-            .withPropertyName("runtimeClasspath")
-            .withNormalizer(ClasspathNormalizer::class)
+        .withPropertyName("runtimeClasspath")
+        .withNormalizer(ClasspathNormalizer::class)
     outputs.dir(outputDir)
-            .withPropertyName("outputDir")
+        .withPropertyName("outputDir")
 
     doLast {
         outputDir.mkdirs()
