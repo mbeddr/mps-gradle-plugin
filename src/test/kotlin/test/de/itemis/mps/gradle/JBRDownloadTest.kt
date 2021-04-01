@@ -1,3 +1,5 @@
+package test.de.itemis.mps.gradle
+
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Assert

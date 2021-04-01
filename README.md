@@ -22,7 +22,7 @@ buildscript {
 
 Use a fully specified version such as `1.0.123` for better build reproducibility.
 
-# Tasks
+# Features
 
 ## RunAntScript
 
@@ -219,6 +219,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
+* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -272,6 +273,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
+* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -338,7 +340,7 @@ to your build, you need to make sure that it is available in your dependency rep
 the scripts located in mbeddr/build.publish.jdk 
 
 For easy consumption and incremental build support the plugin creates a task `downloadJbr` which exposes the location of 
-the java executable via the `javaExecutable` property. See the tests in src/test/kotlin/JBRDownload.kt for an example
+the java executable via the `javaExecutable` property. See the tests in src/test/kotlin/JBRDownloadTest.kt for an example
 how to use it. 
 
 ### Usage
@@ -382,3 +384,43 @@ downloadJbr {
   using wildcards like `*` or `+` in there for reproducible builds. 
 * `downloadDir` - optional directory where the downloaded JBR is downloaded and extracted to. The plugin defaults to
   `build/jbrDownload`
+  
+## Custom MPS Distribution
+
+Features that perform an action inside an MPS project, like the `modelcheck` or `generate-models` plugin, require 
+an MPS available to them. While for vanilla MPS it is enough to pass in a  reference to the MPS dependency via the
+`mpsConfig` property this doesn't work for custom distributions of MPS. A custom distribution of MPS is also called 
+a MPS RCP. If you like to use your own MPS distribution with preinstalled plugins and your own versioning scheme 
+then this is possible but requires additional steps in the build script. 
+
+When you are using a custom distribution of MPS you can no longer use the `mpsConfig` property and rely on 
+the plugin resolving it. The plugin needs to be configured with the properties `mpsVersion` and `mpsLocation`
+being set and no value set for `mpsConfig`. If you set `mpsVersion` but also set `mpsConfig` then `mpsConfig` 
+will take precedence over `mpsVersion` and the plugin will resolve that configuration into `mpsLocation`. 
+
+`mpsVersion` needs to be set to the exact MPS version your custom distribution is based on e.g. if you build a
+RCP with MPS 2020.3.3 you need to set this property to `2020.3.3`. `mpsLocation` needs to point to the location
+where you extracted your custom MPS distribution into e.g. `$buildDir/myAwesomeMPS` if you extracted into that location. 
+
+Each of the plugins creates a `resolveMpsFor<name>` task in the build. When `mpsVersion` and `mpsLocation` are set
+this task is still present in the task graph but becomes a noop. The task is present to be able to add your own task(s)
+as dependency to it. This is useful for extracting your custom distribution before its being used. A minimal example
+could look like this: 
+
+```
+def myCustomLocation = "$buildDir/myAwesomeMPS"
+
+task downloadAndExtractCustomMPS() {
+    // your logic to download and extract here
+}
+
+modelcheck {
+    mpsLocation = myCustomLocation
+    mpsVersion = "2020.3.3"
+    projectLocation = file("$rootDir/mps-prj")
+    modules = listOf("my.solution.with.errors")
+    junitFile = file("$buildDir/TEST-modelcheck-results.xml")
+}
+
+tasks.getByName("resolveMpsForModelcheck").dependsOn(downloadAndExtractCustomMPS)
+```

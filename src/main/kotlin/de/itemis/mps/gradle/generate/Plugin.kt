@@ -1,11 +1,10 @@
 package de.itemis.mps.gradle.generate
 
-import de.itemis.mps.gradle.BasePluginExtensions
-import de.itemis.mps.gradle.argsFromBaseExtension
-import de.itemis.mps.gradle.validateDefaultJvm
+import de.itemis.mps.gradle.*
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
@@ -28,48 +27,25 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
             val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
             afterEvaluate {
-                val mpsVersion = extension
-                        .mpsConfig
-                        .resolvedConfiguration
-                        .firstLevelModuleDependencies.find { it.moduleGroup == "com.jetbrains" && it.moduleName == "mps" }
-                        ?.moduleVersion ?: throw GradleException("MPS configuration doesn't contain MPS")
+                val mpsVersion = extension.getMPSVersion()
 
                 val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")
                 val genConfig = configurations.detachedConfiguration(dep)
 
+                if(mpsVersion.substring(0..3).toInt() < 2020) {
+                    throw GradleException(MPS_SUPPORT_MSG)
+                }
 
                 val args = argsFromBaseExtension(extension)
                 args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
-                val resolveMps = tasks.create("resolveMpsForGeneration", Copy::class.java) {
-                    from(extension.mpsConfig.resolve().map { zipTree(it) })
-                    /*
-                    Some 2019.2 src jars cause MPS startup to fail with an exception during indexing
-                    because of the wrong specification in module.xml -> we remove those broken parts as a workaround.
-                    In MPS 2019.3 those src jars are already removed.
-                     */
-                    val modelsTagRegEx = Regex("<models>.*</models>", RegexOption.DOT_MATCHES_ALL)
-                    val replaceTag = "<models/>"
-                    filesMatching(listOf("**/runtimes/*.feedback.*-src.jar", "**/runtimes/*.messages.api-src.jar")) {
-                        ZipInputStream(open()).use { zis ->
-                            val resultEntries = ArrayList<Pair<String, ByteArray>>()
-                            do {
-                                val nextEntry = zis.nextEntry ?: break
-                                val outputStream = ByteArrayOutputStream()
-                                zis.copyTo(outputStream)
-                                var byteArray : ByteArray
-                                if (nextEntry.name.contains(".msd")) {
-                                    byteArray = outputStream.toString().replace(modelsTagRegEx, replaceTag).toByteArray()
-                                } else {
-                                    byteArray = outputStream.toByteArray()
-                                }
-                                resultEntries.add(Pair(nextEntry.name, byteArray))
-                            } while (true)
-                            zipTo(File(mpsLocation, this.path), resultEntries.asSequence())
-                        }
-                        exclude()
+                val resolveMps: Task = if(extension.mpsConfig != null) {
+                    tasks.create("resolveMpsForGeneration", Copy::class.java) {
+                        from(extension.mpsConfig!!.resolve().map { zipTree(it) })
+                        into(mpsLocation)
                     }
-                    into(mpsLocation)
+                } else {
+                    tasks.create("resolveMpsForGeneration")
                 }
 
                 /*

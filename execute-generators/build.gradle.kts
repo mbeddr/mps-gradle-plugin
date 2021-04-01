@@ -24,7 +24,7 @@ val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
 
 val kotlinApiVersion: String by project
-val kotlinVersion: String by project
+val kotlinVersion: String   by project
 
 val pluginVersion = "2"
 

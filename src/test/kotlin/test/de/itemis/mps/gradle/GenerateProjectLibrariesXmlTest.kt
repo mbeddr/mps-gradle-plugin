@@ -1,3 +1,4 @@
+package test.de.itemis.mps.gradle
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -9,6 +10,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import kotlin.jvm.JvmField
 import java.io.File
+
 
 
 fun getExpectedLibContent(vars: List<Pair<String, String>>): String {
@@ -31,7 +33,7 @@ fun getExpectedLibContent(vars: List<Pair<String, String>>): String {
 </project>"""
 }
 
-class BuildLogicFunctionalTest {
+class GenerateProjectLibrariesXmlTest {
 
     @Rule @JvmField
     val testProjectDir: TemporaryFolder = TemporaryFolder()
