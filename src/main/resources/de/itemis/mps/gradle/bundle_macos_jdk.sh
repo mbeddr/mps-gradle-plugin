@@ -1,14 +1,14 @@
 #!/bin/bash
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 5 ]]; then
   cat <<EOF
 Usage:
 
-  $0 RCP_FILE TMP_DIR JDK_FILE OUT_FILE
+  $0 RCP_FILE TMP_DIR JDK_DIRNAME JDK_FILE OUT_FILE
 
 1. Extracts RCP_FILE into TMP_DIR
 2. Creates symlinks Contents/bin/*.dylib -> *.jnilib if any .jnilib files are present
    (this used to be the case for earlier versions of MPS)
-3. If JDK_FILE is given, extracts JDK_FILE under Contents/jre/
+3. If JDK_FILE is given, extracts JDK_FILE under Contents/$JDK_DIRNAME/
 4. Sets executable permissions on Contents/MacOS/* and appropriate Contents/bin/ files
 5. Compresses the result into OUT_FILE (tar/gzip)
 
@@ -22,8 +22,9 @@ set -o errexit # Exit immediately on any error
 # Arguments
 RCP_FILE="$1"
 TMP_DIR="$2"
-JDK_FILE="$3"
-OUT_FILE="$4"
+JDK_DIRNAME="$3"
+JDK_FILE="$4"
+OUT_FILE="$5"
 
 echo "Unzipping $RCP_FILE to $TMP_DIR..."
 unzip -q -o "$RCP_FILE" -d "$TMP_DIR"
@@ -59,9 +60,9 @@ if [[ -n "$JDK_FILE" ]]; then
   rm -f "$CONTENTS/Info.plist-e"
   echo "Info.plist has been modified"
 
-  echo "Extracting JDK: $JDK_FILE to $CONTENTS/jre"
-  mkdir -p "$CONTENTS/jre"
-  pushd "$CONTENTS/jre"
+  echo "Extracting JDK: $JDK_FILE to $CONTENTS/$JDK_DIRNAME"
+  mkdir -p "$CONTENTS/$JDK_DIRNAME"
+  pushd "$CONTENTS/$JDK_DIRNAME"
   COPY_EXTENDED_ATTRIBUTES_DISABLE=true COPYFILE_DISABLE=true tar xvf "$JDK_FILE" --exclude='._jdk' || exit 1
   echo "JDK has been extracted"
   popd
