@@ -43,6 +43,8 @@ version = if (!project.hasProperty("useSnapshot") &&
     "$versionMajor.$versionMinor-SNAPSHOT"
 }
 
+var currentBranch:String? = ""
+currentBranch = de.itemis.mps.gradle.GitBasedVersioning.getGitBranch()
 
 val mpsConfiguration = configurations.create("mps")
 
@@ -107,14 +109,14 @@ publishing {
         }
     }
     repositories {
-        if(currentBranch == "master" || currentBranch.startsWith("mps")) {
+        if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
                 if(project.hasProperty("gpr.token")) {
                     credentials {
-                        username = project.findProperty("gpr.user")
-                        password = project.findProperty("gpr.token")
+                        username = project.findProperty("gpr.user") as String
+                        password = project.findProperty("gpr.token") as String
                     }
                 }
             }
