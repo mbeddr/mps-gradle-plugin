@@ -106,6 +106,20 @@ publishing {
             }
         }
     }
+    repositories {
+        if(currentBranch == "master" || currentBranch.startsWith("mps")) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
+                if(project.hasProperty("gpr.token")) {
+                    credentials {
+                        username = project.findProperty("gpr.user")
+                        password = project.findProperty("gpr.token")
+                    }
+                }
+            }
+        }
+    }
 }
 
 subprojects {
