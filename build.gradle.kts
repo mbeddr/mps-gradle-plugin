@@ -115,8 +115,8 @@ publishing {
                 url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
                 if(project.hasProperty("gpr.token")) {
                     credentials {
-                        username = project.findProperty("gpr.user") as String
-                        password = project.findProperty("gpr.token") as String
+                        username = project.findProperty("gpr.user") as String?
+                        password = project.findProperty("gpr.key") as String?
                     }
                 }
             }
