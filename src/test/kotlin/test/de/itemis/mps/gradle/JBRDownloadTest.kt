@@ -60,7 +60,7 @@ class JBRDownloadTest {
 
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("downloadJbr","-Pgpr.user=${{github.actor}}","-Pgpr.token=${{ github.token }}")
+                .withArguments("downloadJbr","-Pgpr.user="+System.getenv("gpr.user"),"-Pgpr.token="+System.getenv("gpr.token"))
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
@@ -100,7 +100,7 @@ class JBRDownloadTest {
 
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("downloadJbr","-Pgpr.user=${{github.actor}}","-Pgpr.token=${{ github.token }}")
+                .withArguments("downloadJbr","-Pgpr.user="+System.getenv("gpr.user"),"-Pgpr.token="+System.getenv("gpr.token"))
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
@@ -146,7 +146,7 @@ class JBRDownloadTest {
 
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("exec","-Pgpr.user=${{github.actor}}","-Pgpr.token=${{ github.token }}")
+                .withArguments("exec","-Pgpr.user="+System.getenv("gpr.user"),"-Pgpr.token="+System.getenv("gpr.token"))
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
