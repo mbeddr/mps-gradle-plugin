@@ -45,10 +45,10 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
+                    url = URI("https://maven.pkg.github.com//xbeddr/build.publish.jdk")
                     credentials {
-                        username = project.findProperty("gpr.user") as String? ?: System.getenv("gpr.user")
-                        password = project.findProperty("gpr.token") as String? ?: System.getenv("gpr.token")
+                        username = project.findProperty("system.gpr.user") as String? ?: System.getenv("system.gpr.user")
+                        password = project.findProperty("system.gpr.token") as String? ?: System.getenv("system.gpr.token")
                     }
                 }
             }
@@ -60,7 +60,7 @@ class JBRDownloadTest {
 
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("downloadJbr")
+                .withArguments("downloadJbr" "-Pgrp.user="+system.getethfsnbjklsdfhg)
                 .withEnvironment(null)
                 .withPluginClasspath(cp)
                 .build()
@@ -89,8 +89,8 @@ class JBRDownloadTest {
                 maven {
                     url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
                     credentials {
-                        username = project.findProperty("gpr.user") as String? ?: System.getenv("gpr.user")
-                        password = project.findProperty("gpr.token") as String? ?: System.getenv("gpr.token")
+                        username = project.findProperty("system.gpr.user") as String? ?: System.getenv("system.gpr.user")
+                        password = project.findProperty("system.gpr.token") as String? ?: System.getenv("system.gpr.token")
                     }
                 }
             }
@@ -131,8 +131,8 @@ class JBRDownloadTest {
                 maven {
                     url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
                     credentials {
-                        username = project.findProperty("gpr.user") as String? ?: System.getenv("gpr.user")
-                        password = project.findProperty("gpr.token") as String? ?: System.getenv("gpr.token")
+                        username = project.findProperty("system.gpr.user") as String? ?: System.getenv("system.gpr.user")
+                        password = project.findProperty("system.gpr.token") as String? ?: System.getenv("system.gpr.token")
                     }
                 }
             }
