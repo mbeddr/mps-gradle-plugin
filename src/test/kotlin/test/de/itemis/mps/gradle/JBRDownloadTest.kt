@@ -39,20 +39,17 @@ class JBRDownloadTest {
                     "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
-            
             plugins {
                 id("download-jbr")
             }
-            
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
                 }
             }
-            
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion = "11_0_10-b1145.96"
                 downloadDir = file("jbrdl")
             }
         """.trimIndent())
@@ -78,20 +75,18 @@ class JBRDownloadTest {
                     "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
-            
+
             plugins {
                 id("download-jbr")
             }
-            
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
                 }
             }
-            
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion = "11_0_10-b1145.96"
             }
         """.trimIndent())
 
@@ -117,20 +112,19 @@ class JBRDownloadTest {
                     "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
                 }
             }
-            
+
             plugins {
                 id("download-jbr")
             }
-            
             repositories {
                 mavenCentral()
                 maven {
                     url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
                 }
             }
-            
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion = "11_0_10-b1145.96"
             }
             tasks.register<Exec>("exec") {
                 dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class))
