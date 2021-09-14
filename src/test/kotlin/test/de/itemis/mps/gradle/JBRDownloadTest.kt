@@ -45,7 +45,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
+                    url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
                 }
             }
             downloadJbr {
@@ -82,7 +82,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
+                    url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
                 }
             }
             downloadJbr {
@@ -119,8 +119,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-                    url = URI("https://github.com/mbeddr/build.publish.jdk/")
+                    url = URI("https://maven.pkg.github.com//mbeddr/build.publish.jdk")
                 }
             }
             downloadJbr {
