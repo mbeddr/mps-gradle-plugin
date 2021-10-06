@@ -69,7 +69,9 @@ if [[ -n "$JDK_FILE" ]]; then
 fi
 
 chmod a+x "$CONTENTS"/MacOS/*
-chmod a+x "$CONTENTS"/bin/*.py
+if ls "$CONTENTS"/bin/*.py 1> /dev/null 2>&1; then
+    chmod a+x "$CONTENTS"/bin/*.py
+fi
 chmod a+x "$CONTENTS"/bin/fs*
 chmod a+x "$CONTENTS"/bin/restarter
 
