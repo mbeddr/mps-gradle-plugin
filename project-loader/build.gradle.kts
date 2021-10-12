@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java-gradle-plugin`
 }
 
 group = "de.itemis.mps"
@@ -45,6 +44,7 @@ dependencies {
     compileOnly("com.jetbrains:mps-openapi:$mpsVersion")
     compileOnly("com.jetbrains:platform-api:$mpsVersion")
     compileOnly("com.jetbrains:util:$mpsVersion")
+    compileOnly("log4j:log4j:1.2.17")
     testImplementation("junit:junit:4.12")
     testImplementation("org.xmlunit:xmlunit-core:2.6.+")
 }

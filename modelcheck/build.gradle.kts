@@ -8,7 +8,6 @@ group = "de.itemis.mps"
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java-gradle-plugin`
 }
 
 repositories {
@@ -53,6 +52,7 @@ dependencies {
     compileOnly("com.jetbrains:platform-api:$mpsVersion")
     compileOnly("com.jetbrains:extensions:$mpsVersion")
     compileOnly("com.jetbrains:util:$mpsVersion")
+    compileOnly("log4j:log4j:1.2.17")
     implementation(project(":project-loader"))
 }
 
