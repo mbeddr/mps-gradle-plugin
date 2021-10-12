@@ -54,16 +54,3 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
 }
-
-publishing {
-    repositories {
-        maven {
-            name = "itemis"
-            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-            credentials {
-                username = nexusUsername
-                password = nexusPassword
-            }
-        }
-    }
-}
