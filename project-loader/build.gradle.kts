@@ -56,17 +56,6 @@ tasks.withType<KotlinCompile> {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "itemis"
-            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-            credentials {
-                username = nexusUsername
-                password = nexusPassword
-            }
-        }
-    }
-
     publications {
         create<MavenPublication>("projectLoader") {
             from(components["java"])

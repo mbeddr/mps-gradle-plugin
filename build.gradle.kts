@@ -97,26 +97,27 @@ tasks {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "itemis"
-            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-            credentials {
-                username = nexusUsername
-                password = nexusPassword
-            }
-        }
-    }
-    repositories {
-        if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
+allprojects {
+    apply<MavenPublishPlugin>()
+    publishing {
+        repositories {
             maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
-                if(project.hasProperty("gpr.token")) {
-                    credentials {
-                        username = project.findProperty("gpr.user") as String?
-                        password = project.findProperty("gpr.token") as String?
+                name = "itemis"
+                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                credentials {
+                    username = nexusUsername
+                    password = nexusPassword
+                }
+            }
+            if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
+                    if(project.hasProperty("gpr.token")) {
+                        credentials {
+                            username = project.findProperty("gpr.user") as String?
+                            password = project.findProperty("gpr.token") as String?
+                        }
                     }
                 }
             }
