@@ -178,4 +178,5 @@ fun <T> executeWithProject(parsed: Args, action: (Project) -> T) = executeWithPr
         macros = parsed.macros,
         buildNumber = parsed.buildNumber,
         pluginLocation = parsed.pluginLocation,
+        testMode = parsed.testMode,
         action = action)
