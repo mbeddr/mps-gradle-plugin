@@ -7,7 +7,6 @@ group = "de.itemis.mps"
 plugins {
     kotlin("jvm")
     `maven-publish`
-    `java-gradle-plugin`
 }
 
 repositories {
@@ -46,6 +45,7 @@ dependencies {
     compileOnly("com.jetbrains:mps-messaging:$mpsVersion")
     compileOnly("com.jetbrains:platform-api:$mpsVersion")
     compileOnly("com.jetbrains:platform-concurrency:$mpsVersion")
+    compileOnly("log4j:log4j:1.2.17")
     implementation(project(":project-loader"))
 }
 
@@ -53,4 +53,17 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("executeGenerators") {
+            from(components["java"])
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
 }
