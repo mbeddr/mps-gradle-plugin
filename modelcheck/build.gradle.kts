@@ -50,7 +50,7 @@ dependencies {
     compileOnly("com.jetbrains:mps-project-check:$mpsVersion")
     compileOnly("com.jetbrains:mps-platform:$mpsVersion")
     compileOnly("com.jetbrains:platform-api:$mpsVersion")
-    compileOnly("com.jetbrains:extensions:$mpsVersion")
+    //compileOnly("com.jetbrains:extensions:$mpsVersion")
     compileOnly("com.jetbrains:util:$mpsVersion")
     compileOnly("log4j:log4j:1.2.17")
     implementation(project(":project-loader"))
