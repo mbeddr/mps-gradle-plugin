@@ -63,7 +63,7 @@ class ModelCheckTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2021.1.3")
             }
             
             modelcheck {

@@ -18,3 +18,4 @@ test/generate-build-solution/mps-prj/solutions/my.build/build.xml
 workspace.xml
 **/*_gen*/
 .gradle
+.mps-caches
