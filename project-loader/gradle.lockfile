@@ -1,0 +1,43 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson.core:jackson-annotations:2.11.4=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-core:2.11.4=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-databind:2.11.4=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.11.4=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.4=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.woodstox:woodstox-core:6.2.3=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.jetbrains:mps-core:2020.3.4=compileClasspath
+com.jetbrains:mps-environment:2020.3.4=compileClasspath
+com.jetbrains:mps-openapi:2020.3.4=compileClasspath
+com.jetbrains:mps-platform:2020.3.4=compileClasspath
+com.jetbrains:platform-api:2020.3.4=compileClasspath
+com.jetbrains:util:2020.3.4=compileClasspath
+com.xenomachina:kotlin-argparser:2.0.7=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.xenomachina:xenocom:0.0.7=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+jakarta.activation:jakarta.activation-api:1.2.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+jakarta.xml.bind:jakarta.xml.bind-api:2.3.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+junit:junit:4.12=testCompileClasspath,testRuntimeClasspath
+log4j:log4j:1.2.17=compileClasspath
+org.codehaus.woodstox:stax2-api:4.2.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testRuntimeClasspath
+org.jetbrains.intellij.deps:trove4j:1.0.20181211=kotlinCompilerClasspath
+org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.31=kotlinCompilerClasspath
+org.jetbrains.kotlin:kotlin-daemon-embeddable:1.5.31=kotlinCompilerClasspath
+org.jetbrains.kotlin:kotlin-reflect:1.5.31=kotlinCompilerClasspath
+org.jetbrains.kotlin:kotlin-script-runtime:1.5.31=kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-common:1.5.31=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.31=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.5.31=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-jvm:1.5.31=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib:1.5.31=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains:annotations:13.0=compileClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.xmlunit:xmlunit-core:2.6.4=testCompileClasspath,testRuntimeClasspath
+empty=
