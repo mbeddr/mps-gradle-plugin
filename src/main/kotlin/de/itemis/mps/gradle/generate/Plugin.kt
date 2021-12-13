@@ -80,7 +80,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     classpath(fileTree(File(mpsLocation, "/plugins")).include("git4idea/**/*.jar"))
                     classpath(genConfig)
                     debug = extension.debug
-                    main = "de.itemis.mps.gradle.generate.MainKt"
+                    mainClass.set("de.itemis.mps.gradle.generate.MainKt")
                 }
             }
         }
