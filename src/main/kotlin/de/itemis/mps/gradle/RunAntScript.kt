@@ -1,4 +1,4 @@
-package de.itemis.mps.gradle;
+package de.itemis.mps.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
@@ -76,7 +76,7 @@ open class RunAntScript : DefaultTask() {
                 }
             }
 
-            main = "org.apache.tools.ant.launch.Launcher"
+            mainClass.set("org.apache.tools.ant.launch.Launcher")
             workingDir = project.rootDir
 
             if (includeDefaultClasspath) {

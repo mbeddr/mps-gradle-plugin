@@ -4,7 +4,8 @@ import org.apache.log4j.Logger
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Configuration
-import org.gradle.initialization.GradleLauncher
+import java.util.Collections.emptyList
+
 import java.io.File
 
 private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
