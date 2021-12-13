@@ -102,7 +102,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     )
                     classpath(genConfig)
                     debug = extension.debug
-                    main = "de.itemis.mps.gradle.modelcheck.MainKt"
+                    mainClass.set("de.itemis.mps.gradle.modelcheck.MainKt")
                 }
             }
 
