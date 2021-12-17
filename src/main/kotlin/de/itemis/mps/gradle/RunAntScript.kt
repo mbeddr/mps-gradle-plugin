@@ -50,8 +50,9 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
          *   passed to Ant. Any outside customizations made to targets and Ant arguments are left intact so the build may
          *   in fact be incremental.
          */
-        @Input
-        var incremental: Boolean = false
+    @Optional
+    @Input
+    val incremental: Property<Boolean> = of.property(Boolean::class.java)
 
         fun targets(vararg targets: String) {
             this.targets = targets.toList()
@@ -75,11 +76,11 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
                 allArgs += "-Dmps.ant.log=${logging.level.toString().toLowerCase(Locale.ENGLISH)}"
             }
 
-            if (incremental) {
+            if (incremental.getOrElse(false)) {
                 allArgs += "-Dmps.generator.skipUnmodifiedModels=true"
             }
 
-            val targets = if (incremental) {
+            val targets = if (incremental.getOrElse(false)) {
                 targets - "clean"
             } else {
                 targets
