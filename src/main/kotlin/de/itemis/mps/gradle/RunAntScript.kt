@@ -10,12 +10,13 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.property
 import java.util.*
 import javax.inject.Inject
 
 open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
     @Input
-    lateinit var script: Any
+    val script: Property<Any> = of.property(Any::class.java)
 
     @Input
     var targets: List<String> = emptyList()
@@ -111,7 +112,7 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
                 }
 
                 args(allArgs)
-                args("-buildfile", project.file(script))
+                args("-buildfile", project.file(script.get()))
                 args(targets)
             }
         }
