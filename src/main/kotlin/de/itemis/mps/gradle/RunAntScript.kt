@@ -5,21 +5,19 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.*
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.property
 import java.util.*
 import javax.inject.Inject
 
-open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
-    @Input
+abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
+    @get:Input
     val script: Property<Any> = of.property(Any::class.java)
 
-    @Input
-    var targets: List<String> = emptyList()
+    @get:Input
+    abstract val targets: ListProperty<String>
 
     @Optional
     @InputFiles
@@ -29,15 +27,15 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
     var scriptArgs: List<String> = emptyList()
 
     @Optional
-    @Input
+    @get:Input
     val includeDefaultArgs: Property<Boolean> = of.property(Boolean::class.java)
 
     @Optional
-    @Input
+    @get:Input
     val includeDefaultClasspath: Property<Boolean> = of.property(Boolean::class.java)
 
     @Optional
-    @Input
+    @get:Input
     val executable: Property<Any> = of.property(Any::class.java)
 
         /**
@@ -51,11 +49,11 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
          *   in fact be incremental.
          */
     @Optional
-    @Input
+    @get:Input
     val incremental: Property<Boolean> = of.property(Boolean::class.java)
 
         fun targets(vararg targets: String) {
-            this.targets = targets.toList()
+            this.targets.set(targets.toList())
         }
 
         fun executable(executable: Any?) {
@@ -76,15 +74,16 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
                 allArgs += "-Dmps.ant.log=${logging.level.toString().toLowerCase(Locale.ENGLISH)}"
             }
 
-            if (incremental.getOrElse(false)) {
+            val isIncremental = incremental.getOrElse(false)
+            if (isIncremental) {
                 allArgs += "-Dmps.generator.skipUnmodifiedModels=true"
             }
 
-            val targets = if (incremental.getOrElse(false)) {
-                targets - "clean"
-            } else {
-                targets
+            var targs: List<String> = targets.get().toList()
+            if (isIncremental) {
+                targs = targs.filter { s -> "clean" != s }
             }
+
 
             project.javaexec {
                 if (this@RunAntScript.executable.isPresent) {
@@ -114,19 +113,29 @@ open class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask() {
 
                 args(allArgs)
                 args("-buildfile", project.file(script.get()))
-                args(targets)
+                println("targets $targs")
+                args(targs)
+                println("---------> OK")
             }
         }
 }
 
-open class BuildLanguages @Inject constructor(of: ObjectFactory) : RunAntScript(of) {
-    init {
-        targets = listOf("clean", "generate", "assemble")
-    }
+open class BuildLanguages @Inject constructor(@Internal val of: ObjectFactory) : RunAntScript(of) {
+
+    override val targets: ListProperty<String>
+        get() {
+            val listProperty = of.listProperty(String::class.java)
+            listProperty.addAll(listOf("clean", "generate", "assemble"))
+            return listProperty
+        }
 }
 
-open class TestLanguages @Inject constructor(of: ObjectFactory) : RunAntScript(of) {
-    init {
-        targets = listOf("clean", "generate", "assemble", "check")
-    }
+open class TestLanguages @Inject constructor(@Internal val of: ObjectFactory) : RunAntScript(of) {
+
+    override val targets: ListProperty<String>
+        get() {
+            val listProperty = of.listProperty(String::class.java)
+            listProperty.addAll(listOf("clean", "generate", "assemble", "check"))
+            return listProperty
+        }
 }
