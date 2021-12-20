@@ -3,6 +3,7 @@ package de.itemis.mps.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
@@ -21,10 +22,10 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
 
     @Optional
     @InputFiles
-    var scriptClasspath: FileCollection? = null
+    var scriptClasspath: RegularFileProperty = of.fileProperty()
 
     @Input
-    var scriptArgs: List<String> = emptyList()
+    var scriptArgs: ListProperty<String> = of.listProperty(String::class.java)
 
     @Optional
     @get:Input
@@ -62,7 +63,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
 
         @TaskAction
         fun build() {
-            val allArgs = scriptArgs.toMutableList()
+            val allArgs = scriptArgs.get().toMutableList()
             if (includeDefaultArgs.getOrElse(true)) {
                 val defaultArgs = project.findProperty("itemis.mps.gradle.ant.defaultScriptArgs") as Collection<*>?
                 if (defaultArgs != null) {
@@ -107,15 +108,13 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
                     }
                 }
 
-                if (scriptClasspath != null) {
-                    classpath(scriptClasspath)
+                if (scriptClasspath.isPresent) {
+                    classpath(scriptClasspath.get())
                 }
 
                 args(allArgs)
                 args("-buildfile", project.file(script.get()))
-                println("targets $targs")
                 args(targs)
-                println("---------> OK")
             }
         }
 }
