@@ -1,16 +1,18 @@
 package de.itemis.mps.gradle.downloadJBR
 
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.DefaultTask
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.tasks.*
-import java.io.File
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.OutputFile
+import javax.inject.Inject
 
-open class DownloadJbrForPlatform : DefaultTask() {
+open class DownloadJbrForPlatform @Inject constructor(of: ObjectFactory) : DefaultTask() {
 
-    @OutputDirectory
-    lateinit var jbrDir : File
+    @get:OutputDirectory
+    val jbrDir: DirectoryProperty = of.directoryProperty()
 
-    @OutputFile
-    lateinit var javaExecutable: File
+    @get:OutputFile
+    val javaExecutable: RegularFileProperty = of.fileProperty()
 }

@@ -5,6 +5,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.api.file.DirectoryProperty
 import java.io.File
 
 open class DownloadJbrConfiguration {
@@ -18,6 +19,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
             val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
 
+            //Todo remove
             afterEvaluate {
                 val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
                 val version = extension.jbrVersion
@@ -43,7 +45,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     doFirst {
                         downloadDir.delete()
                     }
-                    from(configuration.resolve().map { tarTree(it) })
+                    from({configuration.resolve().map { tarTree(it) }})
                     into(downloadDir)
                 }
 
@@ -60,8 +62,10 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     dependsOn(extractJbr)
                     group = "Build"
                     description = "Downloads the JetBrains Runtime for the current platform and extracts it."
-                    jbrDir = jbrSubdir
-                    javaExecutable = File(jbrSubdir, "bin/java")
+                    val directoryProperty: DirectoryProperty = layout.buildDirectory.fileValue(jbrSubdir)
+                    jbrDir.set(directoryProperty)
+                    val dirFile = directoryProperty.file("bin/java")
+                    javaExecutable.set(dirFile)
                 }
             }
         }

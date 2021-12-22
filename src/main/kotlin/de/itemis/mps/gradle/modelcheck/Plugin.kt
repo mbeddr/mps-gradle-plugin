@@ -26,7 +26,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
-
+            //Todo remove
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
@@ -66,7 +66,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val resolveMps: Task = if (extension.mpsConfig != null) {
                     tasks.create("resolveMpsForModelcheck", Copy::class.java) {
-                        from(extension.mpsConfig!!.resolve().map { zipTree(it) })
+                        from({extension.mpsConfig!!.resolve().map { zipTree(it) }})
                         into(mpsLocation)
                     }
                 } else {

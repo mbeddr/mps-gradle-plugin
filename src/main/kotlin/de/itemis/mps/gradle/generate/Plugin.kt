@@ -40,7 +40,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
 
                 val resolveMps: Task = if(extension.mpsConfig != null) {
                     tasks.create("resolveMpsForGeneration", Copy::class.java) {
-                        from(extension.mpsConfig!!.resolve().map { zipTree(it) })
+                        from({extension.mpsConfig!!.resolve().map { zipTree(it) }})
                         into(mpsLocation)
                     }
                 } else {
