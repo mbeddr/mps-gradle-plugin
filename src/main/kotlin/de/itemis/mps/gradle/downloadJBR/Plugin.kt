@@ -6,10 +6,15 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFile
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
 import java.io.File
+import javax.inject.Inject
 
-open class DownloadJbrConfiguration {
-    lateinit var jbrVersion: String
+open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
+    val jbrVersion: Property<String>  = of.property(String::class.java)
     var downloadDir: File? = null
 }
 
@@ -21,8 +26,8 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
             //Todo remove
             afterEvaluate {
+                val version = extension.jbrVersion.get()
                 val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
-                val version = extension.jbrVersion
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {
                         "com.jetbrains.jdk:jbr:$version:osx-x64@tgz"
@@ -37,7 +42,6 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                         throw GradleException("Unsupported platform! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system.")
                     }
                 }
-
                 val dependency = project.dependencies.create(dependencyString)
                 val configuration = configurations.detachedConfiguration(dependency)
 

@@ -52,7 +52,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion.set("11_0_6-b520.66")
                 downloadDir = file("jbrdl")
             }
         """.trimIndent())
@@ -91,7 +91,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion.set("11_0_6-b520.66")
             }
         """.trimIndent())
 
@@ -130,7 +130,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion.set("11_0_6-b520.66")
             }
             tasks.register<Exec>("exec") {
                 dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class))
