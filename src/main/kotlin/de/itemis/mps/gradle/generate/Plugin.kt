@@ -60,7 +60,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 *
                 */
                 val fake = tasks.create("fakeBuildNumber", FakeBuildNumberTask::class.java) {
-                    mpsDir = mpsLocation
+                    mpsDir.set(mpsLocation)
                     dependsOn(resolveMps)
                 }
 
