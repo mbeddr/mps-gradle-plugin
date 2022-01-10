@@ -69,7 +69,7 @@ class ModelCheckTest {
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsConfig = mps
-                junitFile = file("${junitFile.absolutePath}")
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )
@@ -170,7 +170,7 @@ class ModelCheckTest {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsVersion = "2020.2.2"
                 mpsLocation = file(".")
-                junitFile = file("${junitFile.absolutePath}")
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )

@@ -5,21 +5,29 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.support.zipTo
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 import java.util.zip.ZipInputStream
+import javax.inject.Inject
 
-open class ModelCheckPluginExtensions : BasePluginExtensions() {
-    var models: List<String> = emptyList()
-    var modules: List<String> = emptyList()
-    var warningAsError = false
-    var errorNoFail = false
-    var junitFile: File? = null
-    var junitFormat: String? = null
-    var maxHeap: String? = null
+open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions() {
+    var models: ListProperty<String> = of.listProperty(String::class.java)
+
+    var modules: ListProperty<String> = of.listProperty(String::class.java)
+
+    var warningAsError: Property<Boolean> = of.property(Boolean::class.java)
+    var errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
+    var junitFile: RegularFileProperty = of.fileProperty()
+    var junitFormat: Property<String> = of.property(String::class.java)
+    var maxHeap: Property<String> = of.property(String::class.java)
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
@@ -27,11 +35,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
             //Todo remove
+            val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
 
                 val mpsVersion = extension.getMPSVersion()
-
                 // this dependency will never resolve against SNAPSHOT version, if there is a previously released version for $mpsVersion
                 // hence if testing SNAPSHOT version locally, replace '+' with '.[pluginVersion]-SNAPSHOT', e.g. '.2-SNAPSHOT'
                 // to make sure that your local SNAPSHOT version will be resolved here
@@ -42,25 +49,27 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
+
+
                 val args = argsFromBaseExtension(extension)
 
-                args.addAll(extension.models.map { "--model=$it" }.asSequence())
-                args.addAll(extension.modules.map { "--module=$it" }.asSequence())
+                args.addAll(extension.models.getOrElse(emptyList()).map { "--model=$it" }.asSequence())
+                args.addAll(extension.modules.getOrElse(emptyList()).map { "--module=$it" }.asSequence())
 
-                if (extension.warningAsError) {
+                if (extension.warningAsError.getOrElse(false)) {
                     args.add("--warning-as-error")
                 }
 
-                if (extension.errorNoFail) {
+                if (extension.errorNoFail.getOrElse(false)) {
                     args.add("--error-no-fail")
                 }
 
-                if (extension.junitFile != null) {
-                    args.add("--result-file=${extension.junitFile!!.absolutePath}")
+                if (extension.junitFile.isPresent) {
+                    args.add("--result-file=${extension.junitFile.get().getAsFile().absolutePath}")
                 }
 
-                if (extension.junitFormat != null) {
-                    args.add("--result-format=${extension.junitFormat}")
+                if (extension.junitFormat.isPresent) {
+                    args.add("--result-format=${extension.junitFormat.get()}")
                 }
 
 
@@ -84,8 +93,8 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                     group = "test"
                     description = "Check models in the project"
-                    if (extension.maxHeap != null) {
-                        maxHeapSize = extension.maxHeap!!
+                    if (extension.maxHeap.isPresent) {
+                        maxHeapSize = extension.maxHeap.get()
                     }
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))
                     // add only minimal number of plugins jars that are required by the modelcheck code
