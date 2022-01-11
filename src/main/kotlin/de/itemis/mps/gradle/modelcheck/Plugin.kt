@@ -18,7 +18,7 @@ import java.util.*
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
-open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions() {
+open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
     val models: ListProperty<String> = of.listProperty(String::class.java)
 
     val modules: ListProperty<String> = of.listProperty(String::class.java)
@@ -35,7 +35,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
             //Todo remove
-            val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+            val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
             afterEvaluate {
 
                 val mpsVersion = extension.getMPSVersion()
@@ -73,9 +73,9 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 }
 
 
-                val resolveMps: Task = if (extension.mpsConfig != null) {
+                val resolveMps: Task = if (extension.mpsConfig.isPresent) {
                     tasks.create("resolveMpsForModelcheck", Copy::class.java) {
-                        from({extension.mpsConfig!!.resolve().map { zipTree(it) }})
+                        from({extension.mpsConfig.get().resolve().map { zipTree(it) }})
                         into(mpsLocation)
                     }
                 } else {
@@ -86,8 +86,8 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 tasks.create("checkmodels", JavaExec::class.java) {
                     dependsOn(resolveMps)
                     args(args)
-                    if (extension.javaExec != null)
-                        executable(extension.javaExec!!)
+                    if (extension.javaExec.isPresent)
+                        executable(extension.javaExec.get())
                     else
                         validateDefaultJvm()
 
@@ -110,7 +110,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                         )
                     )
                     classpath(genConfig)
-                    debug = extension.debug
+                    debug = extension.debug.getOrElse(false)
                     mainClass.set("de.itemis.mps.gradle.modelcheck.MainKt")
                 }
             }

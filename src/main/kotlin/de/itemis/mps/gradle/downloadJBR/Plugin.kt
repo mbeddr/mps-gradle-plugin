@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
     val jbrVersion: Property<String>  = of.property(String::class.java)
-    var downloadDir: File? = null
+    val downloadDir: RegularFileProperty = of.fileProperty()
 }
 
 open class DownloadJbrProjectPlugin : Plugin<Project> {
@@ -27,7 +27,8 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
             //Todo remove
             afterEvaluate {
                 val version = extension.jbrVersion.get()
-                val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
+                val downloadDir = if (extension.downloadDir.isPresent) extension.downloadDir.get().asFile else File(buildDir, "jbrDownload")
+
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {
                         "com.jetbrains.jdk:jbr:$version:osx-x64@tgz"

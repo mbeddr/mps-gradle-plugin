@@ -53,7 +53,7 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_6-b520.66")
-                downloadDir = file("jbrdl")
+                downloadDir.set(file("jbrdl"))
             }
         """.trimIndent())
 

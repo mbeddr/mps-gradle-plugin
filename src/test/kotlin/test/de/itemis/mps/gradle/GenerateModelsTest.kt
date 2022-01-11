@@ -64,7 +64,7 @@ class GenerateModelsTest {
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsConfig = mps
+                mpsConfig,set(mps)
             }
         """.trimIndent()
         )
@@ -112,7 +112,7 @@ class GenerateModelsTest {
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsConfig = mps
+                mpsConfig.set(mps)
             }
         """.trimIndent()
         )
@@ -158,9 +158,9 @@ class GenerateModelsTest {
             }
             
             generate {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
-                mpsLocation = file(".")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsVersion.set("2020.2.2")
+                mpsLocation.set(file("."))
             }
         """.trimIndent()
         )
@@ -208,7 +208,7 @@ class GenerateModelsTest {
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2019.2.2"
+                mpsVersion.set"2019.2.2")
                 mpsLocation = file(".")
             }
         """.trimIndent()
@@ -256,7 +256,7 @@ class GenerateModelsTest {
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
+                mpsVersion.set("2020.2.2")
             }
         """.trimIndent()
         )

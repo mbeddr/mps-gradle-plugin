@@ -48,7 +48,6 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
          *   passed to Ant. Any outside customizations made to targets and Ant arguments are left intact so the build may
          *   in fact be incremental.
          */
-    @Optional
     @get:Input
     val incremental: Property<Boolean> = of.property(Boolean::class.java)
 
