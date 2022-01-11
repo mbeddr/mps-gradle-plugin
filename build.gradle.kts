@@ -63,7 +63,7 @@ dependencyLocking {
 dependencies {
     implementation(localGroovy())
     implementation(kotlin("stdlib", version = kotlinVersion))
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
 }
 
 

@@ -20,22 +20,21 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
     @get:Input
     abstract val targets: ListProperty<String>
 
-    @Optional
-    @InputFiles
-    var scriptClasspath: RegularFileProperty = of.fileProperty()
+    @get:Input
+    val scriptClasspath: RegularFileProperty = of.fileProperty()
 
     @Input
-    var scriptArgs: ListProperty<String> = of.listProperty(String::class.java)
+    val scriptArgs: ListProperty<String> = of.listProperty(String::class.java)
 
-    @Optional
+
     @get:Input
     val includeDefaultArgs: Property<Boolean> = of.property(Boolean::class.java)
 
-    @Optional
+
     @get:Input
     val includeDefaultClasspath: Property<Boolean> = of.property(Boolean::class.java)
 
-    @Optional
+
     @get:Input
     val executable: Property<Any> = of.property(Any::class.java)
 

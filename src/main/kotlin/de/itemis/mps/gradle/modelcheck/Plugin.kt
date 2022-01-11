@@ -19,15 +19,15 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions() {
-    var models: ListProperty<String> = of.listProperty(String::class.java)
+    val models: ListProperty<String> = of.listProperty(String::class.java)
 
-    var modules: ListProperty<String> = of.listProperty(String::class.java)
+    val modules: ListProperty<String> = of.listProperty(String::class.java)
 
-    var warningAsError: Property<Boolean> = of.property(Boolean::class.java)
-    var errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
-    var junitFile: RegularFileProperty = of.fileProperty()
-    var junitFormat: Property<String> = of.property(String::class.java)
-    var maxHeap: Property<String> = of.property(String::class.java)
+    val warningAsError: Property<Boolean> = of.property(Boolean::class.java)
+    val errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
+    val junitFile: RegularFileProperty = of.fileProperty()
+    val junitFormat: Property<String> = of.property(String::class.java)
+    val maxHeap: Property<String> = of.property(String::class.java)
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
