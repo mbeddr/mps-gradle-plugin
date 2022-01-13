@@ -21,7 +21,9 @@ open class FakeBuildNumberTask @Inject constructor(of: ObjectFactory): DefaultTa
 
     @TaskAction
     fun fakeBuildNumber() {
-
+        if (!mpsDir.isPresent){
+            throw GradleException("'mpsDir' not present!")
+        }
         val buildProperties = mpsDir.get().files().find { "build.properties" == it.name } ?: throw GradleException("can't locate build.properties file in MPS directory")
 
         val props = Properties()

@@ -20,9 +20,7 @@ import javax.inject.Inject
 
 open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
     val models: ListProperty<String> = of.listProperty(String::class.java)
-
     val modules: ListProperty<String> = of.listProperty(String::class.java)
-
     val warningAsError: Property<Boolean> = of.property(Boolean::class.java)
     val errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
     val junitFile: RegularFileProperty = of.fileProperty()
@@ -34,9 +32,8 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
-            //Todo remove
-            val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
             afterEvaluate {
+                val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
 
                 val mpsVersion = extension.getMPSVersion()
                 // this dependency will never resolve against SNAPSHOT version, if there is a previously released version for $mpsVersion
@@ -45,10 +42,9 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 val dep = project.dependencies.create("de.itemis.mps:modelcheck:$mpsVersion+")
                 val genConfig = configurations.detachedConfiguration(dep)
 
-                if(mpsVersion.substring(0..3).toInt() < 2020) {
+                if (mpsVersion.substring(0..3).toInt() < 2020) {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
-
 
 
                 val args = argsFromBaseExtension(extension)

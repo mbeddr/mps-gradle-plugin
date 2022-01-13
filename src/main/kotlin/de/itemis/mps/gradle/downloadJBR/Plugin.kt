@@ -24,10 +24,9 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
             val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
 
-            //Todo remove
             afterEvaluate {
                 val version = extension.jbrVersion.get()
-                val downloadDir = if (extension.downloadDir.isPresent) extension.downloadDir.get().asFile else File(buildDir, "jbrDownload")
+                val downloadDir = extension.downloadDir.map { it.asFile }.getOrElse(File(buildDir, "jbrDownload"))
 
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {

@@ -22,13 +22,12 @@ open class GeneratePluginExtensions @Inject constructor(of: ObjectFactory) : Bas
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
-
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation.map { it.asFile  }.getOrElse(File(project.buildDir, "mps"))
+                val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
                 val mpsVersion = extension.getMPSVersion()
 
                 val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")
