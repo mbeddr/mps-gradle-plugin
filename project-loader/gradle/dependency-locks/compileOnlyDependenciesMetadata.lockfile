@@ -1,9 +1,9 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.jetbrains:mps-core:2020.3.4
-com.jetbrains:mps-environment:2020.3.4
-com.jetbrains:mps-openapi:2020.3.4
-com.jetbrains:mps-platform:2020.3.4
-com.jetbrains:platform-api:2020.3.4
-com.jetbrains:util:2020.3.4
+com.jetbrains:mps-core:2020.3.6
+com.jetbrains:mps-environment:2020.3.6
+com.jetbrains:mps-openapi:2020.3.6
+com.jetbrains:mps-platform:2020.3.6
+com.jetbrains:platform-api:2020.3.6
+com.jetbrains:util:2020.3.6
