@@ -17,6 +17,7 @@ com.xenomachina:kotlin-argparser:2.0.7
 com.xenomachina:xenocom:0.0.7
 jakarta.activation:jakarta.activation-api:1.2.1
 jakarta.xml.bind:jakarta.xml.bind-api:2.3.2
+log4j:log4j:1.2.17
 org.codehaus.woodstox:stax2-api:4.2.1
 org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.11

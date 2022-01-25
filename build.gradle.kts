@@ -43,6 +43,8 @@ version = if (!project.hasProperty("useSnapshot") &&
     "$versionMajor.$versionMinor-SNAPSHOT"
 }
 
+var currentBranch:String? = ""
+currentBranch = de.itemis.mps.gradle.GitBasedVersioning.getGitBranch()
 
 val mpsConfiguration = configurations.create("mps")
 
@@ -95,14 +97,29 @@ tasks {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "itemis"
-            url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-            credentials {
-                username = nexusUsername
-                password = nexusPassword
+allprojects {
+    apply<MavenPublishPlugin>()
+    publishing {
+        repositories {
+            maven {
+                name = "itemis"
+                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                credentials {
+                    username = nexusUsername
+                    password = nexusPassword
+                }
+            }
+            if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
+                    if(project.hasProperty("gpr.token")) {
+                        credentials {
+                            username = project.findProperty("gpr.user") as String?
+                            password = project.findProperty("gpr.token") as String?
+                        }
+                    }
+                }
             }
         }
     }
@@ -152,5 +169,3 @@ tasks.register("resolveAndLockAll") {
         }
     }
 }
-
-
