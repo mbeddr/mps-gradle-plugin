@@ -12,6 +12,7 @@ import de.itemis.mps.gradle.junit.Testsuites
 import de.itemis.mps.gradle.project.loader.Args
 import de.itemis.mps.gradle.project.loader.executeWithProject
 import jetbrains.mps.checkers.*
+import jetbrains.mps.errors.CheckerRegistry
 import jetbrains.mps.errors.MessageStatus
 import jetbrains.mps.errors.item.IssueKindReportItem
 import jetbrains.mps.ide.MPSCoreComponents
@@ -247,20 +248,11 @@ fun modelCheckProject(args: ModelCheckArgs, project: Project): Boolean {
 
     val componentHost = ApplicationManager.getApplication().getComponent(MPSCoreComponents::class.java).platform
 
-    // see ModelCheckerSettings.getSpecificCheckers for details
-    // we do not call into that class because we don't want to load the settings from the user
-    val checkers = listOf(TypesystemChecker(),
-            NonTypesystemChecker(),
-            ConstraintsChecker(componentHost),
-            RefScopeChecker(),
-            TargetConceptChecker2(componentHost),
-            StructureChecker(),
-            UsedLanguagesChecker(),
-            ModelPropertiesChecker(componentHost),
-            UnresolvedReferencesChecker(project),
-            ModuleChecker(),
-            SuppressErrorsChecker())
+    val checkers = componentHost.findComponent(CheckerRegistry::class.java)!!.checkers
 
+    if (logger.isInfoEnabled) {
+        logger.info(checkers.joinToString(prefix = "Found the following checkers in CheckerRegistry: "))
+    }
 
     // We don't use ModelCheckerIssueFinder because it has strange dependency on the ModelCheckerSettings which we
     // want to avoid when running in headless mode
