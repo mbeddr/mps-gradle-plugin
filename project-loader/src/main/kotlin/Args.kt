@@ -38,4 +38,6 @@ open class Args(parser: ArgParser) {
 
     val project by parser.storing("--project",
             help = "project to generate from") { File(this) }
+
+    val testMode by parser.flagging("--test-mode", help = "run in test mode")
 }

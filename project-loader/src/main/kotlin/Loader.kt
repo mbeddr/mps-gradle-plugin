@@ -82,6 +82,7 @@ fun <T> executeWithProject(project: File,
                            macros: List<Macro> = emptyList(),
                            pluginLocation: File? = null,
                            buildNumber: String? = null,
+                           testMode: Boolean = false,
                            action: (Project) -> T): T {
 
     val propertyOverrides = mutableListOf<Pair<String,String?>>()
@@ -118,6 +119,8 @@ fun <T> executeWithProject(project: File,
             }
         }
     macros.forEach { cfg.addMacro(it.name, File(it.value)) }
+
+    if (testMode) cfg.withTestModeOn()
 
     val ideaEnvironment = IdeaEnvironment(cfg)
 
@@ -175,4 +178,5 @@ fun <T> executeWithProject(parsed: Args, action: (Project) -> T) = executeWithPr
         macros = parsed.macros,
         buildNumber = parsed.buildNumber,
         pluginLocation = parsed.pluginLocation,
+        testMode = parsed.testMode,
         action = action)

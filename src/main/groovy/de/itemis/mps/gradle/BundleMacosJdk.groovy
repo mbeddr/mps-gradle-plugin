@@ -3,13 +3,18 @@ package de.itemis.mps.gradle
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
 class BundleMacosJdk extends DefaultTask {
     @InputFile
     File rcpArtifact
+
+    @Optional @Input
+    String jdkDirname  = "jre"
 
     @InputFile
     File jdk
@@ -19,6 +24,10 @@ class BundleMacosJdk extends DefaultTask {
 
     def setRcpArtifact(Object file) {
         this.rcpArtifact = project.file(file)
+    }
+
+    def setJdkDirname(String dirname) {
+        this.jdkDirname = dirname
     }
 
     def setJdk(Object file) {
@@ -45,6 +54,7 @@ class BundleMacosJdk extends DefaultTask {
 
     @TaskAction
     def build() {
+        project.logger.lifecycle("The jdkDirname: ${jdkDirname}")
         File scriptsDir = File.createTempDir()
         File tmpDir = File.createTempDir()
         try {
@@ -52,7 +62,7 @@ class BundleMacosJdk extends DefaultTask {
             BundledScripts.extractScriptsToDir(scriptsDir, scriptName)
             project.exec {
                 executable new File(scriptsDir, scriptName)
-                args rcpArtifact, tmpDir, jdk, outputFile
+                args rcpArtifact, tmpDir, jdkDirname, jdk, outputFile
                 workingDir scriptsDir
             }
         } finally {
