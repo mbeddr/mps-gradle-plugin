@@ -22,7 +22,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
             afterEvaluate {
                 val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
                 val version = extension.jbrVersion
-                // from version 10 on we the jbr distribution type is replaced with jbr_jcef
+                // from version 10 on the jbr distribution type is replaced with jbr_jcef
                 // jbr_jcef is the distribution used to start a normal desktop ide and should include everything 
                 // required for running tests. While a little bit larger than jbr_nomod it should cause the least
                 // surprises when using it as a default. 
