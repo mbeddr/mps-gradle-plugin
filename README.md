@@ -399,6 +399,7 @@ downloadJbr {
 ### Parameters
 * `jbrVersion` - version of the JBR to download. While this supports maven version selectors we highly recomment not
   using wildcards like `*` or `+` in there for reproducible builds. 
+* `distributionType` - optional distribution type for the JBR to use. Will default to `jbr_jcef` if omitted. 
 * `downloadDir` - optional directory where the downloaded JBR is downloaded and extracted to. The plugin defaults to
   `build/jbrDownload`
   
