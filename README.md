@@ -282,7 +282,7 @@ ext.mpsVersion = '2018.3.6'
 modelcheck {
     projectLocation = new File("./mps-prj")
     mpsConfig = configurations.mps
-    macros = listOf(Macro("mypath", "/your/path"))
+    macros = [Macro("mypath", "/your/path")]
 }
 ```
 
@@ -436,7 +436,7 @@ modelcheck {
     mpsLocation = myCustomLocation
     mpsVersion = "2020.3.3"
     projectLocation = file("$rootDir/mps-prj")
-    modules = listOf("my.solution.with.errors")
+    modules = ["my.solution.with.errors"]
     junitFile = file("$buildDir/TEST-modelcheck-results.xml")
 }
 
