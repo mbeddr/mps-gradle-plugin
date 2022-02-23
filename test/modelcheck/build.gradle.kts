@@ -4,7 +4,7 @@ group = "test.de.itemis.mps.gradle.modelcheck"
 version = "1.3-SNAPSHOT"
 
 plugins {
-    id("modelcheck") version "1.4-SNAPSHOT"
+    id("modelcheck") version "1.5-SNAPSHOT"
 }
 
 repositories {
@@ -16,7 +16,7 @@ repositories {
 }
 
 var mps = configurations.create("mps")
-val mpsVersion = "2020.2.3"
+val mpsVersion = "2021.1.3"
 
 dependencies{
     mps("com.jetbrains:mps:$mpsVersion")
@@ -31,7 +31,7 @@ modelcheck {
 
     modules = listOf("my.solution.with.errors")
     junitFile = file("$buildDir/TEST-modelcheck-results.xml")
-    //errorNoFail = true
+    errorNoFail = true
     //junitFormat = "message"
     //debug = true
 }
