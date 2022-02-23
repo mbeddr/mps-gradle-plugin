@@ -27,7 +27,7 @@ val fastXmlJacksonVersion: String by project
 val kotlinApiVersion: String by project
 val kotlinVersion: String by project
 
-val pluginVersion = "3"
+val pluginVersion = "4"
 
 version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity")) {
     // maintenance builds for specific MPS versions should be published without branch prefix, so that they can be
