@@ -137,7 +137,6 @@ class JBRDownloadTest {
                 println("Lala 1")
                 
                 executable = tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class).javaExecutable.get().getAsFile().getAbsolutePath()
-                println("Lala " + executable)
                 args("--version")
             }
         """.trimIndent())

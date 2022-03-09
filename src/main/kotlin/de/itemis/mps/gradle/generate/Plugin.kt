@@ -9,7 +9,9 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.support.zipTo
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -18,6 +20,8 @@ import javax.inject.Inject
 
 
 open class GeneratePluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
+    @get:Input
+    @get:Optional
     val models: ListProperty<String> = of.listProperty(String::class.java)
 }
 

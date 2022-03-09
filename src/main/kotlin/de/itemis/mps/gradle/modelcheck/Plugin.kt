@@ -10,7 +10,9 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.support.zipTo
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -19,12 +21,32 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
+    @get:Input
+    @get:Optional
     val models: ListProperty<String> = of.listProperty(String::class.java)
+
+    @get:Input
+    @get:Optional
     val modules: ListProperty<String> = of.listProperty(String::class.java)
+
+    @get:Input
+    @get:Optional
     val warningAsError: Property<Boolean> = of.property(Boolean::class.java)
+
+    @get:Input
+    @get:Optional
     val errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
+
+    @get:Input
+    @get:Optional
     val junitFile: RegularFileProperty = of.fileProperty()
+
+    @get:Input
+    @get:Optional
     val junitFormat: Property<String> = of.property(String::class.java)
+
+    @get:Input
+    @get:Optional
     val maxHeap: Property<String> = of.property(String::class.java)
 }
 

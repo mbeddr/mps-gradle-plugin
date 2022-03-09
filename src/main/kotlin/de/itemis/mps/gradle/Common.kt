@@ -12,6 +12,8 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskContainer
 import java.util.Collections.emptyList
 
@@ -34,14 +36,40 @@ data class Macro(
 )
 
 open class BasePluginExtensions @Inject constructor(of: ObjectFactory) {
+    @get:Input
+    @get:Optional
     val mpsConfig: Property<Configuration> = of.property(Configuration::class.java)
+
+    @get:Input
+    @get:Optional
     val mpsLocation: RegularFileProperty = of.fileProperty()
+
+    @get:Input
+    @get:Optional
     val mpsVersion: Property<String> = of.property(String::class.java)
+
+    @get:Input
+    @get:Optional
     val plugins: ListProperty<Plugin> = of.listProperty(Plugin::class.java)
+
+    @get:Input
+    @get:Optional
     val pluginLocation: RegularFileProperty = of.fileProperty()
+
+    @get:Input
+    @get:Optional
     val macros: ListProperty<Macro> = of.listProperty(Macro::class.java)
+
+    @get:Input
+    @get:Optional
     val projectLocation: RegularFileProperty = of.fileProperty()
+
+    @get:Input
+    @get:Optional
     val debug: Property<Boolean> = of.property(Boolean::class.java)
+
+    @get:Input
+    @get:Optional
     val javaExec: RegularFileProperty = of.fileProperty()
 }
 

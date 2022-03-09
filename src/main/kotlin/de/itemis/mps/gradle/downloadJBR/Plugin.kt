@@ -10,11 +10,17 @@ import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import java.io.File
 import javax.inject.Inject
 
 open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
+    @get:Input
     val jbrVersion: Property<String>  = of.property(String::class.java)
+
+    @get:Input
+    @get:Optional
     val downloadDir: RegularFileProperty = of.fileProperty()
 }
 
