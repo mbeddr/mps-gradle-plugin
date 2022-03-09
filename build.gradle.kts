@@ -3,7 +3,7 @@ import java.net.URI
 
 buildscript {
     configurations.classpath {
-        //resolutionStrategy.activateDependencyLocking()
+        resolutionStrategy.activateDependencyLocking()
     }
 }
 
@@ -86,7 +86,7 @@ gradlePlugin {
 
 tasks {
     wrapper {
-        gradleVersion = "7.3.1"
+        gradleVersion = "7.4.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 
@@ -152,7 +152,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
-    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.apiVersion = kotlinVersion
     kotlinOptions.allWarningsAsErrors = true
 }
 
