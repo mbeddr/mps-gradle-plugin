@@ -37,6 +37,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 val cpuArch = when(System.getProperty ("os.arch")) {
                     "aarch64" -> "aarch64"
                     "amd64" -> "x64"
+                    "x86_64" -> "x64"
                     else -> throw GradleException("Unsupported CPU Architecture: ${System.getProperty ("os.arch")}! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system and CPU.")
 
                 }
