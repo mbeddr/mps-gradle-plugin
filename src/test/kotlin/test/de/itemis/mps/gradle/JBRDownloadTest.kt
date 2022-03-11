@@ -105,6 +105,85 @@ class JBRDownloadTest {
     }
 
     @Test
+    fun `download new version without distribution type`() {
+        settingsFile.writeText("""
+            rootProject.name = "hello-world"
+        """.trimIndent())
+
+        buildFile.writeText("""
+            import java.net.URI
+            buildscript {
+                dependencies {
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                }
+            }
+            
+            plugins {
+                id("download-jbr")
+            }
+            
+            repositories {
+                mavenCentral()
+                maven {
+                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                }
+            }
+            
+            downloadJbr {
+                jbrVersion = "11_0_11-b1341.60"
+            }
+        """.trimIndent())
+
+        val result = GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments("downloadJbr")
+                .withPluginClasspath(cp)
+                .build()
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
+        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+    }
+
+    @Test
+    fun `download new version with distribution type`() {
+        settingsFile.writeText("""
+            rootProject.name = "hello-world"
+        """.trimIndent())
+
+        buildFile.writeText("""
+            import java.net.URI
+            buildscript {
+                dependencies {
+                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                }
+            }
+            
+            plugins {
+                id("download-jbr")
+            }
+            
+            repositories {
+                mavenCentral()
+                maven {
+                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                }
+            }
+            
+            downloadJbr {
+                jbrVersion = "11_0_11-b1341.60"
+                distributionType = "jbr_nomod"
+            }
+        """.trimIndent())
+
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("downloadJbr")
+            .withPluginClasspath(cp)
+            .build()
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
+        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+    }
+
+    @Test
     fun `executed downloaded java`() {
         settingsFile.writeText("""
             rootProject.name = "hello-world"
@@ -130,11 +209,11 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_6-b520.66")
+                jbrVersion = "11_0_11-b1341.60"
             }
             tasks.register<Exec>("exec") {
                 dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class))
-                println("Lala 1")
+              
                 
                 executable = tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class).javaExecutable.get().getAsFile().getAbsolutePath()
                 args("--version")

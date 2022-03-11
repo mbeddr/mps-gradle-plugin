@@ -19,6 +19,8 @@ open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
     @get:Input
     val jbrVersion: Property<String>  = of.property(String::class.java)
 
+    var distributionType : String? = null
+
     @get:Input
     @get:Optional
     val downloadDir: RegularFileProperty = of.fileProperty()
@@ -34,15 +36,34 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 val version = extension.jbrVersion.get()
                 val downloadDir = extension.downloadDir.map { it.asFile }.getOrElse(File(buildDir, "jbrDownload"))
 
+                // from version 10 on the jbr distribution type is replaced with jbr_jcef
+                // jbr_jcef is the distribution used to start a normal desktop ide and should include everything
+                // required for running tests. While a little bit larger than jbr_nomod it should cause the least
+                // surprises when using it as a default.
+                // see https://github.com/mbeddr/build.publish.jdk/commit/10bbf7d177336179ca189fc8bb4c1262029c69da
+                val distributionType = if(extension.distributionType == null &&
+                Regex("""11_0_[0-9][^0-9]""").find(version) != null) {
+                    "jbr"
+                } else {
+                    "jbr_jcef"
+                }
+
+                val cpuArch = when(System.getProperty ("os.arch")) {
+                    "aarch64" -> "aarch64"
+                    "amd64" -> "x64"
+                    "x86_64" -> "x64"
+                    else -> throw GradleException("Unsupported CPU Architecture: ${System.getProperty ("os.arch")}! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system and CPU.")
+
+                }
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {
-                        "com.jetbrains.jdk:jbr:$version:osx-x64@tgz"
+                        "com.jetbrains.jdk:$distributionType:$version:osx-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_WINDOWS) -> {
-                        "com.jetbrains.jdk:jbr:$version:windows-x64@tgz"
+                        "com.jetbrains.jdk:$distributionType:$version:windows-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_UNIX) -> {
-                        "com.jetbrains.jdk:jbr:$version:linux-x64@tgz"
+                        "com.jetbrains.jdk:$distributionType:$version:linux-$cpuArch@tgz"
                     }
                     else -> {
                         throw GradleException("Unsupported platform! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system.")
