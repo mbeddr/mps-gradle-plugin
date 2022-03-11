@@ -6,7 +6,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
@@ -19,7 +18,9 @@ open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
     @get:Input
     val jbrVersion: Property<String>  = of.property(String::class.java)
 
-    var distributionType : String? = null
+    @get:Input
+    @get:Optional
+    var distributionType : Property<String>  = of.property(String::class.java)
 
     @get:Input
     @get:Optional
@@ -41,7 +42,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 // required for running tests. While a little bit larger than jbr_nomod it should cause the least
                 // surprises when using it as a default.
                 // see https://github.com/mbeddr/build.publish.jdk/commit/10bbf7d177336179ca189fc8bb4c1262029c69da
-                val distributionType = if(extension.distributionType == null &&
+                val distributionTypeVal = if(!extension.distributionType.isPresent &&
                 Regex("""11_0_[0-9][^0-9]""").find(version) != null) {
                     "jbr"
                 } else {
@@ -57,13 +58,13 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 }
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:osx-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:osx-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_WINDOWS) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:windows-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:windows-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_UNIX) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:linux-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:linux-$cpuArch@tgz"
                     }
                     else -> {
                         throw GradleException("Unsupported platform! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system.")
