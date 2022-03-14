@@ -253,6 +253,8 @@ Parameters:
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
+* `backendConfig` - optional configuration providing the backend libraries. If not given,
+  [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used, in version `1.+`.
 
 ## Model Check
 

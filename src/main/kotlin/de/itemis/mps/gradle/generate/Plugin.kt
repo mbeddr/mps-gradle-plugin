@@ -8,11 +8,7 @@ import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
-import org.gradle.kotlin.dsl.support.zipTo
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.util.zip.ZipInputStream
-
 
 open class GeneratePluginExtensions: BasePluginExtensions() {
     var models: List<String> = emptyList()
@@ -28,8 +24,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val mpsVersion = extension.getMPSVersion()
 
-                val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")
-                val genConfig = configurations.detachedConfiguration(dep)
+                val genConfig = extension.backendConfig ?: createDetachedBackendConfig(project)
 
                 if(mpsVersion.substring(0..3).toInt() < 2020) {
                     throw GradleException(MPS_SUPPORT_MSG)
@@ -48,7 +43,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 }
 
                 /*
-                * The problem her is is that for some reason the ApplicationInfo isn't initialised properly.
+                * The problem here is is that for some reason the ApplicationInfo isn't initialised properly.
                 * That causes PluginManagerCore.BUILD_NUMBER to be null.
                 * In this case the PluginManagerCore resorts to BuildNumber.currentVersion() which finally
                 * calls into BuildNumber.fromFile().
@@ -84,5 +79,11 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    private fun createDetachedBackendConfig(project: Project): Configuration {
+        val dep = project.dependencies.create("de.itemis.mps.build-backends:execute-generators:${MPS_BUILD_BACKENDS_VERSION}")
+        val genConfig = project.configurations.detachedConfiguration(dep)
+        return genConfig
     }
 }
