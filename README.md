@@ -253,8 +253,8 @@ Parameters:
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
-* `backendConfig` - optional configuration providing the backend libraries. If not given,
-  [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used, in version `1.+`.
+* `backendConfig` - optional configuration providing the backend. If not given, the `execute-generators` backend from
+  [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used.
 
 ## Model Check
 
@@ -303,8 +303,11 @@ Parameters:
   * if it's a folder located under `pluginLocation` the plugin is loaded from that folder
   * otherwise it should be a plugin folder located under the default `mps/plugins` 
 * `models` - optional list of models to check. RegEx can be used for matching multiple models.
+* `excludeModels` - optional list of models to exclude from checking. RegEx can be used for matching multiple models.
 * `modules` - optional list of modules to check. Expects ordinary name (w/o virtual folders). RegEx can be used for matching multiple modules.
-  If both parameters, `models` and `modules`, are omitted - all models in the project will be checked.
+  If both parameters, `models` and `modules`, are omitted - all models in the project will be checked, except as
+  excluded by `excludeModels` and `excludeModules`.
+* `excludeModules` - optional list of modules to exclude from checking. RegEx can be used for matching multiple modules.
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
 * `projectLocation` - location of the MPS project to check.
 * `errorNoFail` - report errors but do not fail the build.
@@ -323,6 +326,8 @@ Parameters:
 * `maxHeap` - maximum heap size setting for the JVM that executes the modelchecker. This is useful to limit the heap usage
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
   to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
+* `backendConfig` - optional configuration providing the backend. If not given, the `modelcheck` backend from
+  [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used.
   
 ### Additional Plugins 
 

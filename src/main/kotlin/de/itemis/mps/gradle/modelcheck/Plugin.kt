@@ -16,6 +16,8 @@ import java.util.zip.ZipInputStream
 open class ModelCheckPluginExtensions : BasePluginExtensions() {
     var models: List<String> = emptyList()
     var modules: List<String> = emptyList()
+    var excludeModels: List<String> = emptyList()
+    var excludeModules: List<String> = emptyList()
     var warningAsError = false
     var errorNoFail = false
     var junitFile: File? = null
@@ -41,8 +43,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val args = argsFromBaseExtension(extension)
 
-                args.addAll(extension.models.map { "--model=$it" }.asSequence())
-                args.addAll(extension.modules.map { "--module=$it" }.asSequence())
+                args.addAll(extension.models.map { "--model=$it" })
+                args.addAll(extension.modules.map { "--module=$it" })
+                args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
+                args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
 
                 if (extension.warningAsError) {
                     args.add("--warning-as-error")
