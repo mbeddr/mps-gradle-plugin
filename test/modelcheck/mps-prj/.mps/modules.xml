@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="MPSProject">
-    <projectModules>
-      <modulePath path="$PROJECT_DIR$/solutions/my.solution.with.errors/my.solution.with.errors.msd" folder="" />
-      <modulePath path="$PROJECT_DIR$/solutions/my.solution/my.solution.msd" folder="" />
-    </projectModules>
-  </component>
-</project>
