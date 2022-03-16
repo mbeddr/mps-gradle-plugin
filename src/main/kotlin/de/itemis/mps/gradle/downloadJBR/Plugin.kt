@@ -15,15 +15,11 @@ import java.io.File
 import javax.inject.Inject
 
 open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
-    @get:Input
+
     val jbrVersion: Property<String>  = of.property(String::class.java)
 
-    @get:Input
-    @get:Optional
     var distributionType : Property<String>  = of.property(String::class.java)
 
-    @get:Input
-    @get:Optional
     val downloadDir: RegularFileProperty = of.fileProperty()
 }
 
@@ -35,7 +31,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
             afterEvaluate {
                 val version = extension.jbrVersion.get()
-                val downloadDir = extension.downloadDir.map { it.asFile }.getOrElse(File(buildDir, "jbrDownload"))
+                val downloadDir = extension.downloadDir.convention{File(buildDir, "jbrDownload")}.map { it.asFile }.get()
 
                 // from version 10 on the jbr distribution type is replaced with jbr_jcef
                 // jbr_jcef is the distribution used to start a normal desktop ide and should include everything

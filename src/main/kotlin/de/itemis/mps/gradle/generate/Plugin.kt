@@ -5,13 +5,11 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
-import org.gradle.api.tasks.Optional
+import org.gradle.internal.file.impl.DefaultFileMetadata.file
 import org.gradle.kotlin.dsl.support.zipTo
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -20,9 +18,7 @@ import javax.inject.Inject
 
 
 open class GeneratePluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
-    @get:Input
-    @get:Optional
-    val models: ListProperty<String> = of.listProperty(String::class.java)
+    val models: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
@@ -31,7 +27,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
+                val mpsLocation = extension.mpsLocation.convention{ File(project.buildDir, "mps") }.map { it.asFile }.get()
                 val mpsVersion = extension.getMPSVersion()
 
                 val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")
@@ -42,7 +38,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 }
 
                 val args = argsFromBaseExtension(extension)
-                args.addAll(extension.models.getOrElse(emptyList()).map { "--model=$it" }.asSequence())
+                args.addAll(extension.models.get().map { "--model=$it" }.asSequence())
 
                 val resolveMps: Task = if (extension.mpsConfig.isPresent) {
                     tasks.create("resolveMpsForGeneration", Copy::class.java) {
@@ -85,7 +81,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     // git4idea: has to be on classpath as bundled plugin to be loaded (since 2019.3)
                     classpath(fileTree(File(mpsLocation, "/plugins")).include("git4idea/**/*.jar"))
                     classpath(genConfig)
-                    debug = extension.debug.getOrElse(false)
+                    debug = extension.debug.get()
                     mainClass.set("de.itemis.mps.gradle.generate.MainKt")
                 }
             }

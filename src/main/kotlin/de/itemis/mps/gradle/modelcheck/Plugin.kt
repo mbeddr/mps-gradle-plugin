@@ -10,43 +10,23 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
-import org.gradle.api.tasks.Optional
-import org.gradle.kotlin.dsl.support.zipTo
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.util.*
-import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
-    @get:Input
-    @get:Optional
-    val models: ListProperty<String> = of.listProperty(String::class.java)
+    val models: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())
 
-    @get:Input
-    @get:Optional
-    val modules: ListProperty<String> = of.listProperty(String::class.java)
+    val modules: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())
 
-    @get:Input
-    @get:Optional
-    val warningAsError: Property<Boolean> = of.property(Boolean::class.java)
+    val warningAsError: Property<Boolean> = of.property(Boolean::class.java).convention(false)
 
-    @get:Input
-    @get:Optional
-    val errorNoFail: Property<Boolean> = of.property(Boolean::class.java)
+    val errorNoFail: Property<Boolean> = of.property(Boolean::class.java).convention(false)
 
-    @get:Input
-    @get:Optional
     val junitFile: RegularFileProperty = of.fileProperty()
 
-    @get:Input
-    @get:Optional
     val junitFormat: Property<String> = of.property(String::class.java)
 
-    @get:Input
-    @get:Optional
     val maxHeap: Property<String> = of.property(String::class.java)
 }
 
@@ -55,7 +35,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
         project.run {
             val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation.map { it.asFile }.getOrElse(File(project.buildDir, "mps"))
+                val mpsLocation = extension.mpsLocation.convention{ File(project.buildDir, "mps") }.map { it.asFile }.get()
 
                 val mpsVersion = extension.getMPSVersion()
                 // this dependency will never resolve against SNAPSHOT version, if there is a previously released version for $mpsVersion
@@ -71,14 +51,14 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val args = argsFromBaseExtension(extension)
 
-                args.addAll(extension.models.getOrElse(emptyList()).map { "--model=$it" }.asSequence())
-                args.addAll(extension.modules.getOrElse(emptyList()).map { "--module=$it" }.asSequence())
+                args.addAll(extension.models.get().map { "--model=$it" }.asSequence())
+                args.addAll(extension.modules.get().map { "--module=$it" }.asSequence())
 
-                if (extension.warningAsError.getOrElse(false)) {
+                if (extension.warningAsError.get()) {
                     args.add("--warning-as-error")
                 }
 
-                if (extension.errorNoFail.getOrElse(false)) {
+                if (extension.errorNoFail.get()) {
                     args.add("--error-no-fail")
                 }
 
@@ -128,7 +108,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                         )
                     )
                     classpath(genConfig)
-                    debug = extension.debug.getOrElse(false)
+                    debug = extension.debug.get()
                     mainClass.set("de.itemis.mps.gradle.modelcheck.MainKt")
                 }
             }

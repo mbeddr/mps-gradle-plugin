@@ -30,12 +30,12 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
 
     @get:Input
     @get:Optional
-    val includeDefaultArgs: Property<Boolean> = of.property(Boolean::class.java)
+    val includeDefaultArgs: Property<Boolean> = of.property(Boolean::class.java).convention(true)
 
 
     @get:Input
     @get:Optional
-    val includeDefaultClasspath: Property<Boolean> = of.property(Boolean::class.java)
+    val includeDefaultClasspath: Property<Boolean> = of.property(Boolean::class.java).convention(true)
 
 
     @get:Input
@@ -54,7 +54,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
          */
     @get:Input
     @get:Optional
-    val incremental: Property<Boolean> = of.property(Boolean::class.java)
+    val incremental: Property<Boolean> = of.property(Boolean::class.java).convention(false)
 
         fun targets(vararg targets: String) {
             this.targets.set(targets.toList())
@@ -67,7 +67,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
         @TaskAction
         fun build() {
             val allArgs = scriptArgs.get().toMutableList()
-            if (includeDefaultArgs.getOrElse(true)) {
+            if (includeDefaultArgs.get()) {
                 val defaultArgs = project.findProperty("itemis.mps.gradle.ant.defaultScriptArgs") as Collection<*>?
                 if (defaultArgs != null) {
                     allArgs += defaultArgs.map { it as String }
@@ -78,7 +78,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
                 allArgs += "-Dmps.ant.log=${logging.level.toString().toLowerCase(Locale.ENGLISH)}"
             }
 
-            val isIncremental = incremental.getOrElse(false)
+            val isIncremental = incremental.get()
             if (isIncremental) {
                 allArgs += "-Dmps.generator.skipUnmodifiedModels=true"
             }
@@ -102,7 +102,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
                 mainClass.set("org.apache.tools.ant.launch.Launcher")
                 workingDir = project.rootDir
 
-                if (includeDefaultClasspath.getOrElse(true)) {
+                if (includeDefaultClasspath.get()) {
                     val defaultClasspath = project.findProperty(
                         "itemis.mps.gradle.ant.defaultScriptClasspath"
                     ) as FileCollection?

@@ -36,40 +36,23 @@ data class Macro(
 )
 
 open class BasePluginExtensions @Inject constructor(of: ObjectFactory) {
-    @get:Input
-    @get:Optional
+
     val mpsConfig: Property<Configuration> = of.property(Configuration::class.java)
 
-    @get:Input
-    @get:Optional
     val mpsLocation: RegularFileProperty = of.fileProperty()
 
-    @get:Input
-    @get:Optional
     val mpsVersion: Property<String> = of.property(String::class.java)
 
-    @get:Input
-    @get:Optional
-    val plugins: ListProperty<Plugin> = of.listProperty(Plugin::class.java)
+    val plugins: ListProperty<Plugin> = of.listProperty(Plugin::class.java).convention(emptyList())
 
-    @get:Input
-    @get:Optional
     val pluginLocation: RegularFileProperty = of.fileProperty()
 
-    @get:Input
-    @get:Optional
-    val macros: ListProperty<Macro> = of.listProperty(Macro::class.java)
+    val macros: ListProperty<Macro> = of.listProperty(Macro::class.java).convention(emptyList())
 
-    @get:Input
-    @get:Optional
     val projectLocation: RegularFileProperty = of.fileProperty()
 
-    @get:Input
-    @get:Optional
-    val debug: Property<Boolean> = of.property(Boolean::class.java)
+    val debug: Property<Boolean> = of.property(Boolean::class.java).convention(false)
 
-    @get:Input
-    @get:Optional
     val javaExec: RegularFileProperty = of.fileProperty()
 }
 
@@ -88,8 +71,8 @@ fun argsFromBaseExtension(extensions: BasePluginExtensions): MutableList<String>
 
     return sequenceOf(
         pluginLocation,
-        extensions.plugins.getOrElse(emptyList()).map { "--plugin=${it.id}::${it.path}" }.asSequence(),
-        extensions.macros.getOrElse(emptyList()).map { "--macro=${it.name}::${it.value}" }.asSequence(),
+        extensions.plugins.get().map { "--plugin=${it.id}::${it.path}" }.asSequence(),
+        extensions.macros.get().map { "--macro=${it.name}::${it.value}" }.asSequence(),
         prj
     ).flatten().toMutableList()
 }
