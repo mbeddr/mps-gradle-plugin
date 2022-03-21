@@ -35,11 +35,11 @@ data class Macro(
     val value: String
 )
 
-open class BasePluginExtensions @Inject constructor(of: ObjectFactory) {
+open class BasePluginExtensions @Inject constructor(of: ObjectFactory, project: Project) {
 
     val mpsConfig: Property<Configuration> = of.property(Configuration::class.java)
 
-    val mpsLocation: RegularFileProperty = of.fileProperty()
+    val mpsLocation: RegularFileProperty = of.fileProperty().convention { File(project.buildDir, "mps") }
 
     val mpsVersion: Property<String> = of.property(String::class.java)
 

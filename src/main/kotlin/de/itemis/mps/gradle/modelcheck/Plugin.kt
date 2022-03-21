@@ -14,7 +14,7 @@ import org.gradle.api.tasks.JavaExec
 import java.io.File
 import javax.inject.Inject
 
-open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
+open class ModelCheckPluginExtensions @Inject constructor(of: ObjectFactory, project: Project) : BasePluginExtensions(of, project) {
     val models: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())
 
     val modules: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())

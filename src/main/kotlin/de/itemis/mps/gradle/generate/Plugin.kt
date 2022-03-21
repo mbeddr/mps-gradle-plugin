@@ -17,7 +17,7 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 
-open class GeneratePluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
+open class GeneratePluginExtensions @Inject constructor(of: ObjectFactory, project: Project) : BasePluginExtensions(of, project) {
     val models: ListProperty<String> = of.listProperty(String::class.java).convention(emptyList())
 }
 
@@ -27,7 +27,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation.convention{ File(project.buildDir, "mps") }.map { it.asFile }.get()
+                val mpsLocation = extension.mpsLocation.map { it.asFile }.get()
                 val mpsVersion = extension.getMPSVersion()
 
                 val dep = project.dependencies.create("de.itemis.mps:execute-generators:$mpsVersion+")

@@ -223,8 +223,8 @@ configurations {
 ext.mpsVersion = '2018.3.6'
 
 generate {
-    projectLocation = new File("./mps-prj")
-    mpsConfig = configurations.mps
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
 }
 
 dependencies {
@@ -280,9 +280,9 @@ dependencies {
 ext.mpsVersion = '2018.3.6'
 
 modelcheck {
-    projectLocation = new File("./mps-prj")
-    mpsConfig = configurations.mps
-    macros = [Macro("mypath", "/your/path")]
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
+    macros.set([Macro("mypath", "/your/path")])
 }
 ```
 
@@ -333,10 +333,10 @@ apply plugin: 'modelcheck'
 ...
 
 modelcheck {
-    pluginLocation = new File("path/to/my/plugins")
-    plugins = [new Plugin("com.mbeddr.core", "mbeddr.core")]
-    projectLocation = new File("./mps-prj")
-    mpsConfig = configurations.mps
+    pluginLocation.set(new File("path/to/my/plugins"))
+    plugins.set([new Plugin("com.mbeddr.core", "mbeddr.core")])
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
 }
 
 ```
@@ -377,7 +377,7 @@ repositories {
 }
 
 downloadJbr {
-    jbrVersion = "11_0_6-b520.66"
+    jbrVersion.set("11_0_6-b520.66")
 }
 ```
 
@@ -392,7 +392,7 @@ repositories {
 }
 
 downloadJbr {
-    jbrVersion = '11_0_6-b520.66'
+    jbrVersion.set('11_0_6-b520.66')
 }
 ```
 
@@ -433,11 +433,11 @@ task downloadAndExtractCustomMPS() {
 }
 
 modelcheck {
-    mpsLocation = myCustomLocation
-    mpsVersion = "2020.3.3"
-    projectLocation = file("$rootDir/mps-prj")
-    modules = ["my.solution.with.errors"]
-    junitFile = file("$buildDir/TEST-modelcheck-results.xml")
+    mpsLocation.set(myCustomLocation)
+    mpsVersion.set("2020.3.3")
+    projectLocation.set(file("$rootDir/mps-prj"))
+    modules.set(["my.solution.with.errors"])
+    junitFile.set(file("$buildDir/TEST-modelcheck-results.xml"))
 }
 
 tasks.getByName("resolveMpsForModelcheck").dependsOn(downloadAndExtractCustomMPS)
