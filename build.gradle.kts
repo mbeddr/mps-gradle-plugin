@@ -35,16 +35,19 @@ val mpsVersion by extra { "2020.3.4" }
 val fastXmlJacksonVersion by extra { "2.11.+" }
 
 
+var currentBranch:String? = ""
+currentBranch = de.itemis.mps.gradle.GitBasedVersioning.getGitBranch()
+
 version = if (!project.hasProperty("useSnapshot") &&
     (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 ) {
-    de.itemis.mps.gradle.GitBasedVersioning.getVersion(versionMajor, versionMinor)
+    de.itemis.mps.gradle.GitBasedVersioning.getVersion(
+        // Publish releases from v1.x branch without v1.x prefix
+        if (currentBranch == "v1.x") "HEAD" else currentBranch,
+        versionMajor.toString(), versionMinor.toString())
 } else {
     "$versionMajor.$versionMinor-SNAPSHOT"
 }
-
-var currentBranch:String? = ""
-currentBranch = de.itemis.mps.gradle.GitBasedVersioning.getGitBranch()
 
 val mpsConfiguration = configurations.create("mps")
 
@@ -109,7 +112,7 @@ allprojects {
                     password = nexusPassword
                 }
             }
-            if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
+            if (currentBranch == "master" || currentBranch == "v1.x") {
                 maven {
                     name = "GitHubPackages"
                     url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
