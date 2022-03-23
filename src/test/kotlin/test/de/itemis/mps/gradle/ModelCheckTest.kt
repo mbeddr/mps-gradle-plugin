@@ -67,9 +67,9 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsConfig = mps
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsConfig.set(mps)
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )
@@ -117,9 +117,9 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsConfig = mps
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsConfig.set(mps)
+                junitFile.set(file("${junitFile.absolutePath}"))
 
             }
         """.trimIndent()
@@ -167,10 +167,10 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
-                mpsLocation = file(".")
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsVersion.set("2020.2.2")
+                mpsLocation.set(file("."))
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )
@@ -217,10 +217,10 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2019.2.2"
-                mpsLocation = file(".")
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsVersion.set("2019.2.2")
+                mpsLocation.set(file("."))
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )
@@ -266,9 +266,9 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsVersion.set("2020.2.2")
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )
@@ -314,9 +314,9 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsLocation = file(".")
-                junitFile = file("${junitFile.absolutePath}")
+                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
+                mpsLocation.set(file("."))
+                junitFile.set(file("${junitFile.absolutePath}"))
             }
         """.trimIndent()
         )

@@ -7,20 +7,20 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra { "1.3" }
-val kotlinVersion by extra { "$kotlinApiVersion.11" }
-
+val kotlinApiVersion by extra { "1.5" }
+val kotlinVersion by extra { "$kotlinApiVersion.31" }
 
 plugins {
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.5.31"
 }
 
-val versionMajor = 1
-val versionMinor = 7
+//Gradle-Pluign-Version
+val versionMajor = 2
+val versionMinor = 0
 
 group = "de.itemis.mps"
 
@@ -63,7 +63,7 @@ dependencyLocking {
 dependencies {
     implementation(localGroovy())
     implementation(kotlin("stdlib", version = kotlinVersion))
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
 }
 
 
@@ -86,7 +86,7 @@ gradlePlugin {
 
 tasks {
     wrapper {
-        gradleVersion = "6.2.2"
+        gradleVersion = "7.4.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 
@@ -151,8 +151,8 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.apiVersion = kotlinVersion
     kotlinOptions.allWarningsAsErrors = true
 }
 

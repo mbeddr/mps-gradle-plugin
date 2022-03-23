@@ -5,12 +5,22 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import java.io.File
+import javax.inject.Inject
 
-open class DownloadJbrConfiguration {
-    lateinit var jbrVersion: String
-    var distributionType : String? = null
-    var downloadDir: File? = null
+open class DownloadJbrConfiguration @Inject constructor(of: ObjectFactory) {
+
+    val jbrVersion: Property<String>  = of.property(String::class.java)
+
+    var distributionType : Property<String>  = of.property(String::class.java)
+
+    val downloadDir: RegularFileProperty = of.fileProperty()
 }
 
 open class DownloadJbrProjectPlugin : Plugin<Project> {
@@ -20,20 +30,21 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
             val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
 
             afterEvaluate {
-                val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
-                val version = extension.jbrVersion
+                val version = extension.jbrVersion.get()
+                val downloadDir = extension.downloadDir.convention{File(buildDir, "jbrDownload")}.map { it.asFile }.get()
+
                 // from version 10 on the jbr distribution type is replaced with jbr_jcef
-                // jbr_jcef is the distribution used to start a normal desktop ide and should include everything 
+                // jbr_jcef is the distribution used to start a normal desktop ide and should include everything
                 // required for running tests. While a little bit larger than jbr_nomod it should cause the least
-                // surprises when using it as a default. 
-                // see https://github.com/mbeddr/build.publish.jdk/commit/10bbf7d177336179ca189fc8bb4c1262029c69da 
-                val distributionType = if(extension.distributionType == null && 
+                // surprises when using it as a default.
+                // see https://github.com/mbeddr/build.publish.jdk/commit/10bbf7d177336179ca189fc8bb4c1262029c69da
+                val distributionTypeVal = if(!extension.distributionType.isPresent &&
                 Regex("""11_0_[0-9][^0-9]""").find(version) != null) {
                     "jbr"
                 } else {
                     "jbr_jcef"
                 }
-                
+
                 val cpuArch = when(System.getProperty ("os.arch")) {
                     "aarch64" -> "aarch64"
                     "amd64" -> "x64"
@@ -43,19 +54,18 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 }
                 val dependencyString = when {
                     Os.isFamily(Os.FAMILY_MAC) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:osx-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:osx-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_WINDOWS) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:windows-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:windows-$cpuArch@tgz"
                     }
                     Os.isFamily(Os.FAMILY_UNIX) -> {
-                        "com.jetbrains.jdk:$distributionType:$version:linux-$cpuArch@tgz"
+                        "com.jetbrains.jdk:$distributionTypeVal:$version:linux-$cpuArch@tgz"
                     }
                     else -> {
                         throw GradleException("Unsupported platform! Please open a bug at https://github.com/mbeddr/mps-gradle-plugin with details about your operating system.")
                     }
                 }
-
                 val dependency = project.dependencies.create(dependencyString)
                 val configuration = configurations.detachedConfiguration(dependency)
 
@@ -63,7 +73,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     doFirst {
                         downloadDir.delete()
                     }
-                    from(configuration.resolve().map { tarTree(it) })
+                    from({configuration.resolve().map { tarTree(it) }})
                     into(downloadDir)
                 }
 
@@ -80,8 +90,10 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     dependsOn(extractJbr)
                     group = "Build"
                     description = "Downloads the JetBrains Runtime for the current platform and extracts it."
-                    jbrDir = jbrSubdir
-                    javaExecutable = File(jbrSubdir, "bin/java")
+                    val directoryProperty: DirectoryProperty = layout.buildDirectory.fileValue(jbrSubdir)
+                    jbrDir.set(directoryProperty)
+                    val dirFile = directoryProperty.file("bin/java")
+                    javaExecutable.set(dirFile)
                 }
             }
         }
