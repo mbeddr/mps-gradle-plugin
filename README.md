@@ -3,6 +3,11 @@
 Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
+# Version 2.x
+
+Version 2.x of the plugin is somewhat experimental and incompatible with 1.x because all extensions and tasks were 
+converted to use Gradle lazy properties.
+
 # Using the Plugin
 
 Add the following `buildscript` block to your build script:
