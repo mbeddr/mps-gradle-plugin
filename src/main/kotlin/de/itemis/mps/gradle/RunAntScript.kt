@@ -76,7 +76,7 @@ open class RunAntScript : DefaultTask() {
                 }
             }
 
-            main = "org.apache.tools.ant.launch.Launcher"
+            mainClass.set("org.apache.tools.ant.launch.Launcher")
             workingDir = project.rootDir
 
             if (includeDefaultClasspath) {
