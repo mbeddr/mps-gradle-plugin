@@ -5,6 +5,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.support.zipTo
@@ -15,6 +16,8 @@ import java.util.zip.ZipInputStream
 open class ModelCheckPluginExtensions : BasePluginExtensions() {
     var models: List<String> = emptyList()
     var modules: List<String> = emptyList()
+    var excludeModels: List<String> = emptyList()
+    var excludeModules: List<String> = emptyList()
     var warningAsError = false
     var errorNoFail = false
     var junitFile: File? = null
@@ -32,11 +35,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val mpsVersion = extension.getMPSVersion()
 
-                // this dependency will never resolve against SNAPSHOT version, if there is a previously released version for $mpsVersion
-                // hence if testing SNAPSHOT version locally, replace '+' with '.[pluginVersion]-SNAPSHOT', e.g. '.2-SNAPSHOT'
-                // to make sure that your local SNAPSHOT version will be resolved here
-                val dep = project.dependencies.create("de.itemis.mps:modelcheck:$mpsVersion+")
-                val genConfig = configurations.detachedConfiguration(dep)
+                val genConfig = extension.backendConfig ?: createDetachedBackendConfig(project)
 
                 if(mpsVersion.substring(0..3).toInt() < 2020) {
                     throw GradleException(MPS_SUPPORT_MSG)
@@ -44,8 +43,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val args = argsFromBaseExtension(extension)
 
-                args.addAll(extension.models.map { "--model=$it" }.asSequence())
-                args.addAll(extension.modules.map { "--module=$it" }.asSequence())
+                args.addAll(extension.models.map { "--model=$it" })
+                args.addAll(extension.modules.map { "--module=$it" })
+                args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
+                args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
 
                 if (extension.warningAsError) {
                     args.add("--warning-as-error")
@@ -108,4 +109,11 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
         }
     }
+
+    private fun createDetachedBackendConfig(project: Project): Configuration {
+        val dep = project.dependencies.create("de.itemis.mps.build-backends:modelcheck:${MPS_BUILD_BACKENDS_VERSION}")
+        val genConfig = project.configurations.detachedConfiguration(dep)
+        return genConfig
+    }
+
 }

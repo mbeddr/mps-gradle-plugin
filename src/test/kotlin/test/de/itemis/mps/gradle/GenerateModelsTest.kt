@@ -24,7 +24,7 @@ class GenerateModelsTest {
             "plugin-classpath.txt"
         )!!.readText().lines().map { File(it) }
         mpsTestPrjLocation = testProjectDir.newFolder("mps-prj")
-        ProjectHelper().extractTestProject(mpsTestPrjLocation)
+        ProjectHelper().extractTestProject("test-project", mpsTestPrjLocation)
     }
 
     @Test

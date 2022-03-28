@@ -4,8 +4,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.8
 
+### Added
+- `modelcheck`: Can now exclude models or modules from model checking.
+- `generate`, `modelcheck`: Can specify configuration for the "backend" explicitly so that it can be locked via 
+  Gradle lockfiles. 
+
 ### Changed
-- Upgrade to Gradle 7.4.1, Kotlin 1.5.31.
+- Upgraded to Gradle 7.4.1, Kotlin 1.5.31.
+- Build backends (`execute-generators`, `modelcheck`) extracted into a separate repository (mbeddr/mps-build-backends).
 
 ## 1.7
 

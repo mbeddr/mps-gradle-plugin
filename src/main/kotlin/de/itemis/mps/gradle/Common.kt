@@ -8,7 +8,9 @@ import java.io.File
 
 private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
-const val MPS_SUPPORT_MSG = "Version 1.5 doesn't only support MPS 2020.1+, please use versions 1.4 or below with older versions of MPS."
+const val MPS_SUPPORT_MSG = "Version 1.8 doesn't only support MPS 2020.1+, please use versions 1.4 or below with older versions of MPS."
+
+const val MPS_BUILD_BACKENDS_VERSION = "[1.1,2.0)"
 
 data class Plugin(
         var id: String,
@@ -30,6 +32,7 @@ open class BasePluginExtensions {
     var projectLocation: File? = null
     var debug = false
     var javaExec: File? = null
+    var backendConfig: Configuration? = null
 }
 
 fun validateDefaultJvm(){
