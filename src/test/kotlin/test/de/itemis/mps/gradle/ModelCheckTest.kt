@@ -266,7 +266,6 @@ class ModelCheckTest {
             }
             
             modelcheck {
-                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
                 mpsVersion.set("2020.2.2")
                 junitFile.set(file("${junitFile.absolutePath}"))
             }
