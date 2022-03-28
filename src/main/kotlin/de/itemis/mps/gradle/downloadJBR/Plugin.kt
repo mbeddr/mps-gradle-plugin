@@ -63,7 +63,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     doFirst {
                         downloadDir.delete()
                     }
-                    from(configuration.resolve().map { tarTree(it) })
+                    from({ configuration.resolve().map { tarTree(it) } })
                     into(downloadDir)
                 }
 
