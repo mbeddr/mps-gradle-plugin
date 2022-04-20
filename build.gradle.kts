@@ -153,6 +153,10 @@ dependencies {
     testRuntimeOnly(files(tasks["createClasspathManifest"]))
 }
 
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
