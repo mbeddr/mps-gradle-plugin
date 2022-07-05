@@ -111,13 +111,15 @@ allprojects {
             }
             maven {
                 name = "itemisCloud"
-                url = project.hasProperty("useSnapshot")
-                        ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
-                        : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                url = if(project.hasProperty("useSnapshot")) {
+                        uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
+                      } else { 
+                        uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                      }
                 if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
                     credentials {
-                        username = project.findProperty("artifacts.itemis.cloud.user")
-                        password = project.findProperty("artifacts.itemis.cloud.pw")
+                        username = project.findProperty("artifacts.itemis.cloud.user") as String?
+                        password = project.findProperty("artifacts.itemis.cloud.pw") as String?
                     }
                 }
             }
