@@ -111,7 +111,7 @@ allprojects {
             }
             maven {
                 name = "itemisCloud"
-                url = project.version.contains("SNAPSHOT")
+                url = project.hasProperty("useSnapshot")
                         ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
                         : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
                 if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
