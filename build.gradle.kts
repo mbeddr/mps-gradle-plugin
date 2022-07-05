@@ -109,6 +109,18 @@ allprojects {
                     password = nexusPassword
                 }
             }
+            maven {
+                name = "itemisCloud"
+                url = project.version.contains("SNAPSHOT")
+                        ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
+                        : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
+                    credentials {
+                        username = project.findProperty("artifacts.itemis.cloud.user")
+                        password = project.findProperty("artifacts.itemis.cloud.pw")
+                    }
+                }
+            }
             if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
                 maven {
                     name = "GitHubPackages"
