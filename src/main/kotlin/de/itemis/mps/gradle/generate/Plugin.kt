@@ -20,6 +20,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
+            val generate = tasks.register("generate", JavaExec::class.java)
 
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
@@ -60,7 +61,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     dependsOn(resolveMps)
                 }
 
-                tasks.register("generate", JavaExec::class.java) {
+                generate.configure {
                     dependsOn(fake)
                     args(args)
                     if (extension.javaExec != null)
