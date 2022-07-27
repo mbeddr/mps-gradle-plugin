@@ -240,11 +240,12 @@ Parameters:
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
-* `plugins` - optional list of plugins to load before generation is attempted.
+* `plugins` - deprecated, use `pluginsProperty`.
+* `pluginsProperty` - optional list of plugins to load before generation is attempted.
   The notation is `new Plugin("pluginID", "somePath")`. The first parameter is the plugin id.
   For the second parameter `"somePath"` there are several options:
   * if it's an absolute path, the plugin is loaded from that path
-  * if it's a folder located under `pluginLocation` the plugin is loaded from  that folder
+  * if it's a folder located under `pluginLocation` the plugin is loaded from that folder
   * otherwise it should be a plugin folder located under the default `mps/plugins` 
 * `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
   matched are supported and no RegEx or partial name matching.
@@ -296,7 +297,8 @@ Parameters:
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
-* `plugins` - optional list of plugins to load before generation is attempted.
+* `plugins` - deprecated, use `pluginsProperty`. 
+* `pluginsProperty` - optional list of plugins to load before generation is attempted.
   The notation is `new Plugin("pluginID", "somePath")`. The first parameter is the plugin id.
   For the second parameter `"somePath"` there are several options:
   * if it's an absolute path, the plugin is loaded from that path
@@ -341,22 +343,22 @@ apply plugin: 'modelcheck'
 
 modelcheck {
     pluginLocation = new File("path/to/my/plugins")
-    plugins = [new Plugin("com.mbeddr.core", "mbeddr.core")]
+    pluginsProperty = [new Plugin("com.mbeddr.core", "mbeddr.core")]
     projectLocation = new File("./mps-prj")
     mpsConfig = configurations.mps
 }
 
 ```
 
-Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
-MPS. If they are not found the the build will fail.
+Dependencies of the specified plugins are automatically loaded from the `pluginLocation` and the plugins directory of 
+MPS. If they are not found the build will fail.
 
 ## Download JetBrains Runtime
 
 When building MPS projects with the JatBrains Runtime, the JDK/JRE used by MPS and other intellij based IDEs, it's
 required to download the correct version of the runtime. Since the runtime is platform dependent it's required to 
 download a platform dependent binary. While it's possible to add the logic to your own build script we provide a convenient
-way of doing this with a gradle plugin. 
+way of doing this with a Gradle plugin. 
 
 The download-jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
 to your build, you need to make sure that it is available in your dependency repositories. The itemis maven repository at 

@@ -2,6 +2,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.9
+
+### Added
+- `generate`, `modelcheck`: Can specify the list of plugins lazily via the new `pluginsProperty`. This is useful if
+  they may be downloaded by a preceding task in the same build.
+- `generate`, `modelcheck`: Register the `generate` and `checkmodels` tasks when the plugin is applied instead of in
+  `project.afterEvaluate`, so that they can be configured by the build.
+
+### Changed
+- `generate`, `modelcheck`: Use `register` rather than `create` to help with configuration avoidance.
+
 ## 1.8
 
 ### Added
