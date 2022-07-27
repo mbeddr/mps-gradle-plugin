@@ -8,6 +8,7 @@ import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.TaskProvider
 import java.io.File
 
 open class GeneratePluginExtensions: BasePluginExtensions() {
@@ -33,13 +34,13 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val args = argsFromBaseExtension(extension)
                 args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
-                val resolveMps: Task = if(extension.mpsConfig != null) {
-                    tasks.create("resolveMpsForGeneration", Copy::class.java) {
+                val resolveMps: TaskProvider<out Task> = if(extension.mpsConfig != null) {
+                    tasks.register("resolveMpsForGeneration", Copy::class.java) {
                         from(extension.mpsConfig!!.resolve().map { zipTree(it) })
                         into(mpsLocation)
                     }
                 } else {
-                    tasks.create("resolveMpsForGeneration")
+                    tasks.register("resolveMpsForGeneration")
                 }
 
                 /*
@@ -54,12 +55,12 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 * TODO: Since MPS 2018.2 a newer version of the platform allows to get a similar behaviour via setting idea.plugins.compatible.build property.
                 *
                 */
-                val fake = tasks.create("fakeBuildNumber", FakeBuildNumberTask::class.java) {
+                val fake = tasks.register("fakeBuildNumber", FakeBuildNumberTask::class.java) {
                     mpsDir = mpsLocation
                     dependsOn(resolveMps)
                 }
 
-                tasks.create("generate", JavaExec::class.java) {
+                tasks.register("generate", JavaExec::class.java) {
                     dependsOn(fake)
                     args(args)
                     if (extension.javaExec != null)

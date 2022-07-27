@@ -8,10 +8,8 @@ import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
-import org.gradle.kotlin.dsl.support.zipTo
-import java.io.ByteArrayOutputStream
+import org.gradle.api.tasks.TaskProvider
 import java.io.File
-import java.util.zip.ZipInputStream
 
 open class ModelCheckPluginExtensions : BasePluginExtensions() {
     var models: List<String> = emptyList()
@@ -65,17 +63,17 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                 }
 
 
-                val resolveMps: Task = if (extension.mpsConfig != null) {
-                    tasks.create("resolveMpsForModelcheck", Copy::class.java) {
+                val resolveMps: TaskProvider<out Task> = if (extension.mpsConfig != null) {
+                    tasks.register("resolveMpsForModelcheck", Copy::class.java) {
                         from(extension.mpsConfig!!.resolve().map { zipTree(it) })
                         into(mpsLocation)
                     }
                 } else {
-                    tasks.create("resolveMpsForModelcheck")
+                    tasks.register("resolveMpsForModelcheck")
                 }
 
 
-                tasks.create("checkmodels", JavaExec::class.java) {
+                tasks.register("checkmodels", JavaExec::class.java) {
                     dependsOn(resolveMps)
                     args(args)
                     if (extension.javaExec != null)
