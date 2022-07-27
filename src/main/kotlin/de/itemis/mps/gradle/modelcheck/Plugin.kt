@@ -65,7 +65,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val resolveMps: TaskProvider<out Task> = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForModelcheck", Copy::class.java) {
-                        from(extension.mpsConfig!!.resolve().map { zipTree(it) })
+                        from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
                 } else {
