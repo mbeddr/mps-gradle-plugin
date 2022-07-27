@@ -4,14 +4,14 @@ import de.itemis.mps.gradle.*
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
-import org.gradle.api.tasks.TaskProvider
+import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
 
-open class ModelCheckPluginExtensions : BasePluginExtensions() {
+open class ModelCheckPluginExtensions(objectFactory: ObjectFactory) : BasePluginExtensions(objectFactory) {
     var models: List<String> = emptyList()
     var modules: List<String> = emptyList()
     var excludeModels: List<String> = emptyList()
@@ -40,29 +40,6 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
-                val args = argsFromBaseExtension(extension)
-
-                args.addAll(extension.models.map { "--model=$it" })
-                args.addAll(extension.modules.map { "--module=$it" })
-                args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
-                args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
-
-                if (extension.warningAsError) {
-                    args.add("--warning-as-error")
-                }
-
-                if (extension.errorNoFail) {
-                    args.add("--error-no-fail")
-                }
-
-                if (extension.junitFile != null) {
-                    args.add("--result-file=${extension.junitFile!!.absolutePath}")
-                }
-
-                if (extension.junitFormat != null) {
-                    args.add("--result-format=${extension.junitFormat}")
-                }
-
                 val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForModelcheck", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
@@ -74,7 +51,33 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 checkmodels.configure {
                     dependsOn(resolveMps)
-                    args(args)
+
+                    argumentProviders.add(argsFromBaseExtension(extension))
+                    argumentProviders.add(CommandLineArgumentProvider {
+                        val args = mutableListOf<String>()
+                        args.addAll(extension.models.map { "--model=$it" })
+                        args.addAll(extension.modules.map { "--module=$it" })
+                        args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
+                        args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
+
+                        if (extension.warningAsError) {
+                            args.add("--warning-as-error")
+                        }
+
+                        if (extension.errorNoFail) {
+                            args.add("--error-no-fail")
+                        }
+
+                        if (extension.junitFile != null) {
+                            args.add("--result-file=${extension.junitFile!!.absolutePath}")
+                        }
+
+                        if (extension.junitFormat != null) {
+                            args.add("--result-format=${extension.junitFormat}")
+                        }
+                        args
+                    })
+
                     if (extension.javaExec != null)
                         executable(extension.javaExec!!)
                     else

@@ -4,14 +4,14 @@ import de.itemis.mps.gradle.*
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
-import org.gradle.api.tasks.TaskProvider
+import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
 
-open class GeneratePluginExtensions: BasePluginExtensions() {
+open class GeneratePluginExtensions(objectFactory: ObjectFactory): BasePluginExtensions(objectFactory) {
     var models: List<String> = emptyList()
 }
 
@@ -31,9 +31,6 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 if(mpsVersion.substring(0..3).toInt() < 2020) {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
-
-                val args = argsFromBaseExtension(extension)
-                args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
                 val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForGeneration", Copy::class.java) {
@@ -63,7 +60,10 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
 
                 generate.configure {
                     dependsOn(fake)
-                    args(args)
+
+                    argumentProviders.add(argsFromBaseExtension(extension))
+                    argumentProviders.add(CommandLineArgumentProvider { extension.models.map { "--model=$it" } })
+
                     if (extension.javaExec != null)
                         executable(extension.javaExec!!)
                     else
