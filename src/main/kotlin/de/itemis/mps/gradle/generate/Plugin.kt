@@ -35,7 +35,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 val args = argsFromBaseExtension(extension)
                 args.addAll(extension.models.map { "--model=$it" }.asSequence())
 
-                val resolveMps: TaskProvider<out Task> = if(extension.mpsConfig != null) {
+                val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForGeneration", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)

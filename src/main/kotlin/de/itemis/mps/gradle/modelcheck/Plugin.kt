@@ -63,8 +63,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     args.add("--result-format=${extension.junitFormat}")
                 }
 
-
-                val resolveMps: TaskProvider<out Task> = if (extension.mpsConfig != null) {
+                val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForModelcheck", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
