@@ -155,6 +155,7 @@ dependencies {
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
 }
 
 tasks.withType<KotlinCompile> {
