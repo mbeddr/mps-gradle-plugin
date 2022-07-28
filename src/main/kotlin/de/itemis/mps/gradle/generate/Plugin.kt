@@ -21,6 +21,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
         project.run {
             val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
             val generate = tasks.register("generate", JavaExec::class.java)
+            val fake = tasks.register("fakeBuildNumber", FakeBuildNumberTask::class.java)
 
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
@@ -53,7 +54,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 * TODO: Since MPS 2018.2 a newer version of the platform allows to get a similar behaviour via setting idea.plugins.compatible.build property.
                 *
                 */
-                val fake = tasks.register("fakeBuildNumber", FakeBuildNumberTask::class.java) {
+                fake.configure {
                     mpsDir = mpsLocation
                     dependsOn(resolveMps)
                 }
