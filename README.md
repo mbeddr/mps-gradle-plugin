@@ -1,5 +1,9 @@
 # mps-gradle-plugin
 
+[![artifacts.itemis.cloud](https://img.shields.io/badge/dynamic/xml?url=https://artifacts.itemis.cloud/repository/maven-mps/de/itemis/mps/mps-gradle-plugin/maven-metadata.xml&label=artifacts.itemis.cloud&color=success&query=.//versioning/latest)](https://artifacts.itemis.cloud/#browse/browse:maven-mps:de%2Fitemis%2Fmps%2Fmps-gradle-plugin)
+[![Github pages](https://img.shields.io/badge/Github-pages-success)](https://github.com/orgs/mbeddr/packages?repo_name=mps-gradle-plugin)
+[![projects.itemis.de](https://img.shields.io/badge/dynamic/xml?url=https://projects.itemis.de/nexus/content/repositories/mbeddr/de/itemis/mps/mps-gradle-plugin/maven-metadata.xml&label=projects.itemis.de&color=inactive&query=.//versioning/latest)](https://projects.itemis.de/nexus/#nexus-search;gav~de.itemis.mps~mps-gradle-plugin~~~)
+
 Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
