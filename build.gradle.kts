@@ -102,14 +102,6 @@ allprojects {
     publishing {
         repositories {
             maven {
-                name = "itemis"
-                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-                credentials {
-                    username = nexusUsername
-                    password = nexusPassword
-                }
-            }
-            maven {
                 name = "itemisCloud"
                 url = if(project.hasProperty("useSnapshot")) {
                         uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
