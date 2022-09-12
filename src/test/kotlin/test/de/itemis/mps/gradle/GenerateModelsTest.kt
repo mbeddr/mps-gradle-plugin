@@ -59,7 +59,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.6")
             }
             
             generate {
@@ -154,7 +154,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.6")
             }
             
             generate {
@@ -203,7 +203,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.6")
             }
             
             generate {
@@ -251,7 +251,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.6")
             }
             
             generate {
@@ -297,7 +297,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.6")
             }
             
             generate {
