@@ -9,7 +9,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url = java.net.URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = java.net.URI("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 

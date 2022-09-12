@@ -30,7 +30,7 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = uri("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 
