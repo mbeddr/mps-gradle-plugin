@@ -386,7 +386,7 @@ repositories {
 }
 
 downloadJbr {
-    jbrVersion.set("11_0_10-b1341.41")
+    jbrVersion.set("11_0_10-b1145.96")
 }
 ```
 
@@ -401,7 +401,7 @@ repositories {
 }
 
 downloadJbr {
-    jbrVersion.set('11_0_10-b1341.41')
+    jbrVersion.set('11_0_10-b1145.96')
 }
 ```
 
