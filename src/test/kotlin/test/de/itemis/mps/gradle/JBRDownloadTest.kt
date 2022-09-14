@@ -27,7 +27,7 @@ class JBRDownloadTest {
     }
 
     @Test
-    fun `download with download dir`() {
+    fun `download with download dir and distribution type`() {
         settingsFile.writeText("""
             rootProject.name = "hello-world"
         """.trimIndent())
@@ -53,6 +53,7 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_10-b1145.96")
+                distributionType.set("jbr_nomod")
                 downloadDir.set(file("jbrdl"))
             }
         """.trimIndent())
@@ -66,7 +67,7 @@ class JBRDownloadTest {
         Assert.assertTrue(File(testProjectDir.root, "jbrdl").exists())
     }
     @Test
-    fun `download without download dir`() {
+    fun `download without download dir and distribution type`() {
         settingsFile.writeText("""
             rootProject.name = "hello-world"
         """.trimIndent())
@@ -92,6 +93,7 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_10-b1145.96")
+                distributionType.set("jbr_nomod")
             }
         """.trimIndent())
 
