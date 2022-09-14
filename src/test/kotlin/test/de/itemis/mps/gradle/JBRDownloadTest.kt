@@ -53,7 +53,7 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_10-b1145.96")
-                distributionType.set("jbr_nomod")
+                distributionType.set("jbr")
                 downloadDir.set(file("jbrdl"))
             }
         """.trimIndent())
@@ -93,7 +93,7 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_10-b1145.96")
-                distributionType.set("jbr_nomod")
+                distributionType.set("jbr")
             }
         """.trimIndent())
 
