@@ -36,7 +36,7 @@ class JBRDownloadTest {
             import java.net.URI
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.joinToString { """"${it.invariantSeparatorsPath}"""" }}))
                 }
             }
             
@@ -75,7 +75,7 @@ class JBRDownloadTest {
             import java.net.URI
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.joinToString { """"${it.invariantSeparatorsPath}"""" }}))
                 }
             }
             
@@ -114,7 +114,7 @@ class JBRDownloadTest {
             import java.net.URI
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.joinToString { """"${it.invariantSeparatorsPath}"""" }}))
                 }
             }
             
@@ -140,7 +140,11 @@ class JBRDownloadTest {
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
-        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+        val jbrDownloadDir = File(testProjectDir.root, "build/jbrDownload")
+        Assert.assertTrue(jbrDownloadDir.exists())
+        val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
+        Assert.assertTrue(jbrReleaseFile.exists())
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-jcef"))
     }
 
     @Test
@@ -153,7 +157,7 @@ class JBRDownloadTest {
             import java.net.URI
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.joinToString { """"${it.invariantSeparatorsPath}"""" }}))
                 }
             }
             
@@ -180,7 +184,11 @@ class JBRDownloadTest {
             .withPluginClasspath(cp)
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
-        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+        val jbrDownloadDir = File(testProjectDir.root, "build/jbrDownload")
+        Assert.assertTrue(jbrDownloadDir.exists())
+        val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
+        Assert.assertTrue(jbrReleaseFile.exists())
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-nomod"))
     }
 
     @Test
@@ -193,7 +201,7 @@ class JBRDownloadTest {
             import java.net.URI
             buildscript {
                 dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
+                    "classpath"(files(${cp.joinToString { """"${it.invariantSeparatorsPath}"""" }}))
                 }
             }
             
