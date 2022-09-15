@@ -136,7 +136,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_11-b1341.60")
+                jbrVersion.set("11_0_10-b1145.96")
             }
         """.trimIndent())
 
@@ -150,7 +150,7 @@ class JBRDownloadTest {
         Assert.assertTrue(jbrDownloadDir.exists())
         val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
         Assert.assertTrue(jbrReleaseFile.exists())
-        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-jcef"))
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-jcef"))
     }
 
     @Test
@@ -179,7 +179,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_11-b1341.60")
+                jbrVersion.set("11_0_10-b1145.96")
                 distributionType.set("jbr_nomod")
             }
         """.trimIndent())
@@ -194,7 +194,7 @@ class JBRDownloadTest {
         Assert.assertTrue(jbrDownloadDir.exists())
         val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
         Assert.assertTrue(jbrReleaseFile.exists())
-        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-nomod"))
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-nomod"))
     }
 
     @Test
