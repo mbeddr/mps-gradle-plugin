@@ -426,7 +426,7 @@ being set and no value set for `mpsConfig`. If you set `mpsVersion` but also set
 will take precedence over `mpsVersion` and the plugin will resolve that configuration into `mpsLocation`. 
 
 `mpsVersion` needs to be set to the exact MPS version your custom distribution is based on e.g. if you build a
-RCP with MPS 2020.3.6 you need to set this property to `2020.3.6`. `mpsLocation` needs to point to the location
+RCP with MPS 2020.3.4 you need to set this property to `2020.3.4`. `mpsLocation` needs to point to the location
 where you extracted your custom MPS distribution into e.g. `$buildDir/myAwesomeMPS` if you extracted into that location. 
 
 Each of the plugins creates a `resolveMpsFor<name>` task in the build. When `mpsVersion` and `mpsLocation` are set
@@ -443,7 +443,7 @@ task downloadAndExtractCustomMPS() {
 
 modelcheck {
     mpsLocation.set(myCustomLocation)
-    mpsVersion.set("2020.3.6")
+    mpsVersion.set("2020.3.4")
     projectLocation.set(file("$rootDir/mps-prj"))
     modules.set(["my.solution.with.errors"])
     junitFile.set(file("$buildDir/TEST-modelcheck-results.xml"))

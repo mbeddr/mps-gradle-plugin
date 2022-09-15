@@ -25,7 +25,7 @@ val versionMinor = 0
 group = "de.itemis.mps"
 
 val kotlinArgParserVersion by extra { "2.0.7" }
-val mpsVersion by extra { "2020.3.6" }
+val mpsVersion by extra { "2020.3.4" }
 //this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
 //surface because mismatching jars on the classpath.
 val fastXmlJacksonVersion by extra { "2.11.+" }
