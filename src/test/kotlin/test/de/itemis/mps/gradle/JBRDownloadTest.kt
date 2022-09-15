@@ -47,12 +47,12 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_6-b520.66")
+                jbrVersion.set("11_0_10-b1145.96")
                 downloadDir.set(file("jbrdl"))
             }
         """.trimIndent())
@@ -66,7 +66,7 @@ class JBRDownloadTest {
         Assert.assertTrue(File(testProjectDir.root, "jbrdl").exists())
     }
     @Test
-    fun `download without download dir`() {
+    fun `download without download dir and distribution type`() {
         settingsFile.writeText("""
             rootProject.name = "hello-world"
         """.trimIndent())
@@ -86,12 +86,13 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_6-b520.66")
+                jbrVersion.set("11_0_10-b1145.96")
+                distributionType.set("jbr")
             }
         """.trimIndent())
 
@@ -101,7 +102,12 @@ class JBRDownloadTest {
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
-        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+        val jbrDownloadDir = File(testProjectDir.root, "build/jbrDownload")
+        Assert.assertTrue(jbrDownloadDir.exists())
+        val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
+        Assert.assertTrue(jbrReleaseFile.exists())
+        // distro type "jbr" contains jfx prefix
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-jfx_jcef"))
     }
 
     @Test
@@ -125,12 +131,12 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_11-b1341.60")
+                jbrVersion.set("11_0_10-b1145.96")
             }
         """.trimIndent())
 
@@ -144,7 +150,7 @@ class JBRDownloadTest {
         Assert.assertTrue(jbrDownloadDir.exists())
         val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
         Assert.assertTrue(jbrReleaseFile.exists())
-        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-jcef"))
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-jcef"))
     }
 
     @Test
@@ -168,12 +174,12 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion.set("11_0_11-b1341.60")
+                jbrVersion.set("11_0_10-b1145.96")
                 distributionType.set("jbr_nomod")
             }
         """.trimIndent())
@@ -188,7 +194,7 @@ class JBRDownloadTest {
         Assert.assertTrue(jbrDownloadDir.exists())
         val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
         Assert.assertTrue(jbrReleaseFile.exists())
-        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1341.60-nomod"))
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-nomod"))
     }
 
     @Test
@@ -212,7 +218,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             

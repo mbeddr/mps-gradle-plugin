@@ -24,10 +24,6 @@ val versionMinor = 0
 
 group = "de.itemis.mps"
 
-
-val nexusUsername: String? by project
-val nexusPassword: String? by project
-
 val kotlinArgParserVersion by extra { "2.0.7" }
 val mpsVersion by extra { "2020.3.4" }
 //this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
@@ -52,7 +48,7 @@ val mpsConfiguration = configurations.create("mps")
 repositories {
     mavenCentral()
     maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 
@@ -102,20 +98,8 @@ allprojects {
     publishing {
         repositories {
             maven {
-                name = "itemis"
-                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-                credentials {
-                    username = nexusUsername
-                    password = nexusPassword
-                }
-            }
-            maven {
                 name = "itemisCloud"
-                url = if(project.hasProperty("useSnapshot")) {
-                        uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
-                      } else { 
-                        uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
-                      }
+                url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
                 if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
                     credentials {
                         username = project.findProperty("artifacts.itemis.cloud.user") as String?

@@ -52,14 +52,14 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.4")
             }
             
             generate {
@@ -100,7 +100,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -147,14 +147,14 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.4")
             }
             
             generate {
@@ -196,14 +196,14 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.4")
             }
             
             generate {
@@ -244,14 +244,14 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.4")
             }
             
             generate {
@@ -290,14 +290,14 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2020.3.4")
             }
             
             generate {

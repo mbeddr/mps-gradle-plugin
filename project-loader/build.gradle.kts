@@ -13,8 +13,6 @@ val kotlinArgParserVersion: String by project
 val kotlinApiVersion: String by project
 val kotlinVersion: String by project
 
-val nexusUsername: String? by project
-val nexusPassword: String? by project
 val fastXmlJacksonVersion: String by project
 
 val pluginVersion = "1"
@@ -30,7 +28,7 @@ version = if (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = uri("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 

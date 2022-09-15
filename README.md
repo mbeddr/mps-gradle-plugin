@@ -19,7 +19,7 @@ Add the following `buildscript` block to your build script:
 ```
 buildscript {
     repositories {
-        maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+        maven { url 'https://artifacts.itemis.cloud/repository/maven-mps' }
         mavenCentral()
     }
 
@@ -362,7 +362,7 @@ way of doing this with a gradle plugin.
 
 The download-jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
 to your build, you need to make sure that it is available in your dependency repositories. The itemis maven repository at 
-`https://projects.itemis.de/nexus/content/repositories/mbeddr` provides this dependency, but you can create your own with
+`https://artifacts.itemis.cloud/repository/maven-mps` provides this dependency, but you can create your own with
 the scripts located in mbeddr/build.publish.jdk 
 
 For easy consumption and incremental build support the plugin creates a task `downloadJbr` which exposes the location of 
@@ -381,12 +381,12 @@ plugins {
 repositories {
     mavenCentral()
     maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 
 downloadJbr {
-    jbrVersion.set("11_0_6-b520.66")
+    jbrVersion.set("11_0_10-b1145.96")
 }
 ```
 
@@ -396,12 +396,12 @@ apply plugin: 'download-jbr'
 ...
 
 repositories {
-    maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+    maven { url 'https://artifacts.itemis.cloud/repository/maven-mps' }
     mavenCentral()
 }
 
 downloadJbr {
-    jbrVersion.set('11_0_6-b520.66')
+    jbrVersion.set('11_0_10-b1145.96')
 }
 ```
 
@@ -426,7 +426,7 @@ being set and no value set for `mpsConfig`. If you set `mpsVersion` but also set
 will take precedence over `mpsVersion` and the plugin will resolve that configuration into `mpsLocation`. 
 
 `mpsVersion` needs to be set to the exact MPS version your custom distribution is based on e.g. if you build a
-RCP with MPS 2020.3.3 you need to set this property to `2020.3.3`. `mpsLocation` needs to point to the location
+RCP with MPS 2020.3.4 you need to set this property to `2020.3.4`. `mpsLocation` needs to point to the location
 where you extracted your custom MPS distribution into e.g. `$buildDir/myAwesomeMPS` if you extracted into that location. 
 
 Each of the plugins creates a `resolveMpsFor<name>` task in the build. When `mpsVersion` and `mpsLocation` are set
@@ -443,7 +443,7 @@ task downloadAndExtractCustomMPS() {
 
 modelcheck {
     mpsLocation.set(myCustomLocation)
-    mpsVersion.set("2020.3.3")
+    mpsVersion.set("2020.3.4")
     projectLocation.set(file("$rootDir/mps-prj"))
     modules.set(["my.solution.with.errors"])
     junitFile.set(file("$buildDir/TEST-modelcheck-results.xml"))

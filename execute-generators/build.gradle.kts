@@ -12,12 +12,9 @@ plugins {
 repositories {
     mavenCentral()
     maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
-
-val nexusUsername: String? by project
-val nexusPassword: String? by project
 
 val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
