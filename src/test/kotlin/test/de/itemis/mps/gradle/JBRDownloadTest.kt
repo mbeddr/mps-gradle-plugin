@@ -27,7 +27,7 @@ class JBRDownloadTest {
     }
 
     @Test
-    fun `download with download dir and distribution type`() {
+    fun `download with download dir`() {
         settingsFile.writeText("""
             rootProject.name = "hello-world"
         """.trimIndent())
@@ -53,7 +53,6 @@ class JBRDownloadTest {
             
             downloadJbr {
                 jbrVersion.set("11_0_10-b1145.96")
-                distributionType.set("jbr")
                 downloadDir.set(file("jbrdl"))
             }
         """.trimIndent())
@@ -103,7 +102,12 @@ class JBRDownloadTest {
                 .withPluginClasspath(cp)
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
-        Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
+        val jbrDownloadDir = File(testProjectDir.root, "build/jbrDownload")
+        Assert.assertTrue(jbrDownloadDir.exists())
+        val jbrReleaseFile = File(jbrDownloadDir, "jbr/release")
+        Assert.assertTrue(jbrReleaseFile.exists())
+        // distro type "jbr" contains jfx prefix
+        Assert.assertTrue("downloaded jbr doesn't contain expected distro", jbrReleaseFile.readText().contains("1145.96-jfx_jcef"))
     }
 
     @Test
