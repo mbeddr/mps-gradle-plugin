@@ -13,8 +13,6 @@ val kotlinArgParserVersion: String by project
 val kotlinApiVersion: String by project
 val kotlinVersion: String by project
 
-val nexusUsername: String? by project
-val nexusPassword: String? by project
 val fastXmlJacksonVersion: String by project
 
 val pluginVersion = "1"

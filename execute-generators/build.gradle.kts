@@ -16,9 +16,6 @@ repositories {
     }
 }
 
-val nexusUsername: String? by project
-val nexusPassword: String? by project
-
 val kotlinArgParserVersion: String by project
 val mpsVersion: String by project
 

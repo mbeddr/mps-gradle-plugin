@@ -24,10 +24,6 @@ val versionMinor = 0
 
 group = "de.itemis.mps"
 
-
-val nexusUsername: String? by project
-val nexusPassword: String? by project
-
 val kotlinArgParserVersion by extra { "2.0.7" }
 val mpsVersion by extra { "2020.3.6" }
 //this version needs to align with the version shiped with MPS found in the /lib folder otherwise, runtime problems will
@@ -101,14 +97,6 @@ allprojects {
     apply<MavenPublishPlugin>()
     publishing {
         repositories {
-            maven {
-                name = "itemis"
-                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-                credentials {
-                    username = nexusUsername
-                    password = nexusPassword
-                }
-            }
             maven {
                 name = "itemisCloud"
                 url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
