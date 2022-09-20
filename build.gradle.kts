@@ -97,17 +97,17 @@ allprojects {
     apply<MavenPublishPlugin>()
     publishing {
         repositories {
-            maven {
-                name = "itemisCloud"
-                url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
-                if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
-                    credentials {
-                        username = project.findProperty("artifacts.itemis.cloud.user") as String?
-                        password = project.findProperty("artifacts.itemis.cloud.pw") as String?
+            if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
+                maven {
+                    name = "itemisCloud"
+                    url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                    if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
+                        credentials {
+                            username = project.findProperty("artifacts.itemis.cloud.user") as String?
+                            password = project.findProperty("artifacts.itemis.cloud.pw") as String?
+                        }
                     }
                 }
-            }
-            if(currentBranch == "master" || currentBranch!!.startsWith("mps")) {
                 maven {
                     name = "GitHubPackages"
                     url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
