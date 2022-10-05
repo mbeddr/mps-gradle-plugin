@@ -256,6 +256,9 @@ Parameters:
   the build.
 * `backendConfig` - optional configuration providing the backend. If not given, the `execute-generators` backend from
   [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used.
+* `environmentKind` - optional kind of environment (MPS or IDEA) to execute the generators in. IDEA environment is used
+  by default for backwards compatibility but MPS environment may be faster. See
+  [MPS vs IDEA environment](#mps-vs-idea-environment) below.
 
 ## Model Check
 
@@ -330,7 +333,10 @@ Parameters:
   to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
 * `backendConfig` - optional configuration providing the backend. If not given, the `modelcheck` backend from
   [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used.
-  
+* `environmentKind` - optional kind of environment (MPS or IDEA) to execute the generators in. IDEA environment is used
+  by default for backwards compatibility but MPS environment may be faster. See
+  [MPS vs IDEA environment](#mps-vs-idea-environment) below.
+
 ### Additional Plugins 
 
 By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
@@ -451,3 +457,10 @@ modelcheck {
 
 tasks.getByName("resolveMpsForModelcheck").dependsOn(downloadAndExtractCustomMPS)
 ```
+
+## MPS vs IDEA environment
+
+Since plugin version 1.10, the `environmentKind` parameter allows to choose between MPS or IDEA environment for
+generation or model check. The default is to use the IDEA environment because that was the case in earlier versions, but
+the MPS environment is lighter and likely to be more performant. On the other hand, the MPS environment does not load
+some plugins or extensions and may lead to different results.

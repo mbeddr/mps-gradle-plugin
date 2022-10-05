@@ -6,6 +6,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
+import org.gradle.kotlin.dsl.property
 import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
 import javax.inject.Inject
@@ -14,7 +15,7 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 const val MPS_SUPPORT_MSG = "Version 1.8 doesn't only support MPS 2020.1+, please use versions 1.4 or below with older versions of MPS."
 
-const val MPS_BUILD_BACKENDS_VERSION = "[1.1,2.0)"
+const val MPS_BUILD_BACKENDS_VERSION = "[1.2,2.0)"
 
 data class Plugin(
         var id: String,
@@ -25,6 +26,8 @@ data class Macro(
         var name: String,
         var value: String
 )
+
+enum class EnvironmentKind { MPS, IDEA }
 
 open class BasePluginExtensions @Inject constructor(objectFactory: ObjectFactory) {
     var mpsConfig: Configuration? = null
@@ -50,6 +53,11 @@ open class BasePluginExtensions @Inject constructor(objectFactory: ObjectFactory
     var debug = false
     var javaExec: File? = null
     var backendConfig: Configuration? = null
+
+    /**
+     * The environment to set up, IDEA or MPS. Default is IDEA for backwards compatibility reasons.
+     */
+    val environmentKind = objectFactory.property(EnvironmentKind::class).convention(EnvironmentKind.IDEA)
 }
 
 fun validateDefaultJvm(){
@@ -69,6 +77,9 @@ fun argsFromBaseExtension(extensions: BasePluginExtensions): CommandLineArgument
 
         extensions.pluginsProperty.get().mapTo(result) { "--plugin=${it.id}::${it.path}" }
         extensions.macros.mapTo(result) { "--macro=${it.name}::${it.value}" }
+
+        // --environment is supported by backend 1.2 and above
+        result.add("--environment=${extensions.environmentKind.get().name}")
 
         result
     }
