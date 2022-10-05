@@ -337,11 +337,11 @@ Parameters:
   by default for backwards compatibility but MPS environment may be faster. See
   [MPS vs IDEA environment](#mps-vs-idea-environment) below.
 
-### Additional Plugins 
+### Additional Plugins
 
 By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
-HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location 
-to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list: 
+HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location
+to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list:
 
 ```
 apply plugin: 'modelcheck'
