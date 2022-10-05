@@ -28,8 +28,7 @@ class GenerateModelsTest {
     }
 
     @Test
-    @Ignore
-    fun `generate works with latest MPS`() {
+    fun `generate works with latest MPS in MPS environment`() {
         settingsFile.writeText(
             """
             rootProject.name = "hello-world"
@@ -39,6 +38,8 @@ class GenerateModelsTest {
         buildFile.writeText(
             """
             import java.net.URI
+            import de.itemis.mps.gradle.EnvironmentKind
+            
             buildscript {
                 dependencies {
                     "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
@@ -52,19 +53,20 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2021.3.1")
             }
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsConfig = mps
+                environmentKind.set(EnvironmentKind.MPS)
             }
         """.trimIndent()
         )
@@ -100,7 +102,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -147,7 +149,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -196,7 +198,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -244,7 +246,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -291,7 +293,7 @@ class GenerateModelsTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             

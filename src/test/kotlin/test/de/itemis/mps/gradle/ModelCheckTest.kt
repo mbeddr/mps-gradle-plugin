@@ -59,7 +59,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -112,14 +112,14 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2021.1.3")
+                mps("com.jetbrains:mps:2021.1.4")
             }
             
             modelcheck {
@@ -165,14 +165,14 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2021.1.3")
+                mps("com.jetbrains:mps:2021.1.4")
             }
             
             modelcheck {
@@ -219,7 +219,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -272,7 +272,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -324,7 +324,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -376,7 +376,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -424,7 +424,7 @@ class ModelCheckTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             

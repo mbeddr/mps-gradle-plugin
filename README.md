@@ -10,7 +10,7 @@ Add the following `buildscript` block to your build script:
 ```
 buildscript {
     repositories {
-        maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+        maven { url 'https://artifacts.itemis.cloud/repository/maven-mps' }
         mavenCentral()
     }
 
@@ -367,8 +367,8 @@ download a platform dependent binary. While it's possible to add the logic to yo
 way of doing this with a Gradle plugin. 
 
 The download-jbr plugin will add new dependencies and a task to your build. It will add a dependency to `com.jetbrains.jdk:jbr`
-to your build, you need to make sure that it is available in your dependency repositories. The itemis maven repository at 
-`https://projects.itemis.de/nexus/content/repositories/mbeddr` provides this dependency, but you can create your own with
+to your build, you need to make sure that it is available in your dependency repositories. The itemis Maven repository at 
+`https://artifacts.itemis.cloud/repository/maven-mps` provides this dependency, but you can create your own with
 the scripts located in mbeddr/build.publish.jdk 
 
 For easy consumption and incremental build support the plugin creates a task `downloadJbr` which exposes the location of 
@@ -387,7 +387,7 @@ plugins {
 repositories {
     mavenCentral()
     maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+        url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
     }
 }
 
@@ -402,7 +402,7 @@ apply plugin: 'download-jbr'
 ...
 
 repositories {
-    maven { url 'https://projects.itemis.de/nexus/content/repositories/mbeddr' }
+    maven { url 'https://artifacts.itemis.cloud/repository/maven-mps' }
     mavenCentral()
 }
 

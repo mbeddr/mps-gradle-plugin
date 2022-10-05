@@ -47,12 +47,12 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion = "11_0_10-b1145.96"
                 downloadDir = file("jbrdl")
             }
         """.trimIndent())
@@ -86,12 +86,12 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
             downloadJbr {
-                jbrVersion = "11_0_6-b520.66"
+                jbrVersion = "11_0_10-b1145.96"
             }
         """.trimIndent())
 
@@ -125,7 +125,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -164,7 +164,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
@@ -204,7 +204,7 @@ class JBRDownloadTest {
             repositories {
                 mavenCentral()
                 maven {
-                    url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
                 }
             }
             
