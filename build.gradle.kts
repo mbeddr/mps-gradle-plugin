@@ -47,9 +47,10 @@ version = if (!project.hasProperty("useSnapshot") &&
 
 val mpsConfiguration = configurations.create("mps")
 
-
 repositories {
     mavenCentral()
+    // For mps-build-backends, during tests
+    maven(url = "https://artifacts.itemis.cloud/repository/maven-mps")
 }
 
 dependencyLocking {
@@ -80,16 +81,9 @@ gradlePlugin {
     }
 }
 
-tasks {
-    wrapper {
-        gradleVersion = "6.2.2"
-        distributionType = Wrapper.DistributionType.ALL
-    }
-
-    register("setTeamCityBuildNumber") {
-        doLast {
-            println("##teamcity[buildNumber '$version']")
-        }
+tasks.register("setTeamCityBuildNumber") {
+    doLast {
+        println("##teamcity[buildNumber '$version']")
     }
 }
 
@@ -120,10 +114,6 @@ publishing {
     }
 }
 
-dependencyLocking {
-    lockAllConfigurations()
-}
-
 tasks.register("createClasspathManifest") {
     val outputDir = file("$buildDir/$name")
 
@@ -152,18 +142,4 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
-}
-
-
-
-tasks.register("resolveAndLockAll") {
-    doFirst {
-        require(gradle.startParameter.isWriteDependencyLocks)
-    }
-    doLast {
-        configurations.filter { it.isCanBeResolved }.forEach { it.resolve() }
-        subprojects.forEach { project ->
-            project.configurations.filter { it.isCanBeResolved }.forEach { it.resolve() }
-        }
-    }
 }
