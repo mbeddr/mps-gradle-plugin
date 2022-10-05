@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 buildscript {
     configurations.classpath {
@@ -24,9 +23,6 @@ val versionMinor = 10
 
 group = "de.itemis.mps"
 
-
-val nexusUsername: String? by project
-val nexusPassword: String? by project
 
 val kotlinArgParserVersion by extra { "2.0.7" }
 val mpsVersion by extra { "2020.3.4" }
@@ -54,9 +50,6 @@ val mpsConfiguration = configurations.create("mps")
 
 repositories {
     mavenCentral()
-    maven {
-        url = URI("https://projects.itemis.de/nexus/content/repositories/mbeddr")
-    }
 }
 
 dependencyLocking {
@@ -66,7 +59,7 @@ dependencyLocking {
 dependencies {
     implementation(localGroovy())
     implementation(kotlin("stdlib", version = kotlinVersion))
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.2")
 }
 
 
@@ -100,37 +93,26 @@ tasks {
     }
 }
 
-allprojects {
-    apply<MavenPublishPlugin>()
-    publishing {
-        repositories {
-            maven {
-                name = "itemis"
-                url = uri("https://projects.itemis.de/nexus/content/repositories/mbeddr")
+publishing {
+    repositories {
+        maven {
+            name = "itemisCloud"
+            url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+            if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
                 credentials {
-                    username = nexusUsername
-                    password = nexusPassword
+                    username = project.findProperty("artifacts.itemis.cloud.user") as String?
+                    password = project.findProperty("artifacts.itemis.cloud.pw") as String?
                 }
             }
+        }
+        if (currentBranch == "master" || currentBranch == "v1.x") {
             maven {
-                name = "itemisCloud"
-                url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
-                if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
+                if(project.hasProperty("gpr.token")) {
                     credentials {
-                        username = project.findProperty("artifacts.itemis.cloud.user") as String?
-                        password = project.findProperty("artifacts.itemis.cloud.pw") as String?
-                    }
-                }
-            }
-            if (currentBranch == "master" || currentBranch == "v1.x") {
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
-                    if(project.hasProperty("gpr.token")) {
-                        credentials {
-                            username = project.findProperty("gpr.user") as String?
-                            password = project.findProperty("gpr.token") as String?
-                        }
+                        username = project.findProperty("gpr.user") as String?
+                        password = project.findProperty("gpr.token") as String?
                     }
                 }
             }
@@ -138,10 +120,8 @@ allprojects {
     }
 }
 
-subprojects {
-    dependencyLocking {
-        lockAllConfigurations()
-    }
+dependencyLocking {
+    lockAllConfigurations()
 }
 
 tasks.register("createClasspathManifest") {
