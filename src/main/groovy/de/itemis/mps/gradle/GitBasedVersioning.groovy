@@ -78,9 +78,13 @@ class GitBasedVersioning {
         getVersion(getGitBranch(), major, minor, count)
     }
 
-    static String getVersion(String branch, String major, String minor, int count) {
+    static String getVersionWithBugfixAndCount(String major, String minor, String bugfix, int count) {
+        getVersion(getGitBranch(), major, minor, bugfix, count)
+    }
+
+    static String getVersion(String branch, String major, String minor, String bugfix = "", int count) {
         def hash = getGitShortCommitHash()
-        def baseVersion = "$major.$minor.$count.$hash"
+        def baseVersion = bugfix.isEmpty() ? "$major.$minor.$count.$hash" : "$major.$minor.$bugfix.$count.$hash"
         if (branch == 'master' || branch == 'HEAD' /*this happens in detached head situations*/) {
             return baseVersion
         }
