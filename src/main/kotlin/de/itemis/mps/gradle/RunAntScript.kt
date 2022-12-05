@@ -20,7 +20,7 @@ abstract class RunAntScript @Inject constructor(of: ObjectFactory) : DefaultTask
     @get:Input
     abstract val targets: ListProperty<String>
 
-    @get:Input
+    @get:InputFile
     @get:Optional
     val scriptClasspath: RegularFileProperty = of.fileProperty()
 
