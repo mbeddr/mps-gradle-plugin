@@ -5,6 +5,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.api.tasks.Sync
 import java.io.File
 
 open class DownloadJbrConfiguration {
@@ -59,10 +60,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 val dependency = project.dependencies.create(dependencyString)
                 val configuration = configurations.detachedConfiguration(dependency)
 
-                val extractJbr = tasks.create("extractJbr", Copy::class.java) {
-                    doFirst {
-                        downloadDir.delete()
-                    }
+                val extractJbr = tasks.create("extractJbr", Sync::class.java) {
                     from({ configuration.resolve().map { tarTree(it) } })
                     into(downloadDir)
                 }
