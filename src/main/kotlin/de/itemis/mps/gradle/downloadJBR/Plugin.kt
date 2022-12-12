@@ -14,8 +14,8 @@ open class DownloadJbrConfiguration {
 }
 
 open class DownloadJbrProjectPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        target.run {
+    override fun apply(project: Project) {
+        project.run {
 
             val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
 
