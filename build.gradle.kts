@@ -52,6 +52,7 @@ dependencyLocking {
 dependencies {
     implementation(localGroovy())
     implementation(kotlin("stdlib", version = kotlinVersion))
+    implementation("net.swiftzer.semver:semver:1.1.2")
     testImplementation("junit:junit:4.13.2")
 }
 
@@ -65,6 +66,10 @@ gradlePlugin {
         register("modelcheck") {
             id = "modelcheck"
             implementationClass = "de.itemis.mps.gradle.modelcheck.ModelcheckMpsProjectPlugin"
+        }
+        register("migrations-executor") {
+            id = "run-migrations"
+            implementationClass = "de.itemis.mps.gradle.runmigrations.RunMigrationsMpsProjectPlugin"
         }
         register("download-jbr") {
             id = "download-jbr"

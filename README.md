@@ -359,6 +359,38 @@ modelcheck {
 Dependencies of the specified plugins are automatically loaded from the `pluginLocation` and the plugins directory of 
 MPS. If they are not found the build will fail.
 
+## Run migrations
+
+Run all pending migrations in the project.
+
+### Usage
+
+A minimal build script to check all models in a MPS project with no external plugins would look like this:
+
+```
+apply plugin: 'run-migrations"'
+
+configurations {
+    mps
+}
+
+dependencies {
+    mps "com.jetbrains:mps:$mpsVersion"
+}
+
+runMigrations {
+    projectLocation = new File("./mps-prj")
+    mpsConfig = configurations.mps
+}
+```
+
+Parameters:
+* `mpsConfig` - the configuration used to resolve MPS.
+* `mpsLocation` - optional location where to place the MPS files.
+* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS.
+* `projectLocation` - optional location of the project that should be migrated.
+* `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
+
 ## Download JetBrains Runtime
 
 When building MPS projects with the JatBrains Runtime, the JDK/JRE used by MPS and other intellij based IDEs, it's
