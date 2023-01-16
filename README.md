@@ -245,7 +245,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
+* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -299,7 +299,7 @@ Parameters:
 * `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
   Custom plugins are supported via the `pluginLocation` parameter.
 * `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
+* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -330,7 +330,40 @@ Parameters:
 * `maxHeap` - maximum heap size setting for the JVM that executes the modelchecker. This is useful to limit the heap usage
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
   to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
-  
+
+
+## Run migrations
+
+Run all pending migrations in the project.
+
+### Usage
+
+A minimal build script to check all models in a MPS project with no external plugins would look like this:
+
+```
+apply plugin: 'run-migrations"'
+
+configurations {
+    mps
+}
+
+dependencies {
+    mps "com.jetbrains:mps:$mpsVersion"
+}
+
+runMigrations {
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
+}
+```
+
+Parameters:
+* `mpsConfig` - the configuration used to resolve MPS.
+* `mpsLocation` - optional location where to place the MPS files.
+* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS.
+* `projectLocation` - optional location of the project that should be migrated.
+* `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
+
 ### Additional Plugins 
 
 By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
