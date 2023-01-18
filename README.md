@@ -358,11 +358,13 @@ runMigrations {
 ```
 
 Parameters:
-* `mpsConfig` - the configuration used to resolve MPS.
-* `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS.
-* `projectLocation` - optional location of the project that should be migrated.
+* `mpsConfig` - configuration used to resolve MPS.
+* `mpsLocation` - location where to place the MPS files.
+* `mpsVersion` - if you use a [custom distribution](#custom-mps-distribution) of MPS.
+* `projectLocation` - location of the project that should be migrated.
 * `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
+
+At least `mpsConfig` or `mpsLocation` + `mpsVersion` must be set.
 
 ### Additional Plugins 
 
