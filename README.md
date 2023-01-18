@@ -359,6 +359,28 @@ modelcheck {
 Dependencies of the specified plugins are automatically loaded from the `pluginLocation` and the plugins directory of 
 MPS. If they are not found the build will fail.
 
+### Additional Plugins 
+
+By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
+HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location 
+to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list: 
+
+```
+apply plugin: 'modelcheck'
+...
+
+modelcheck {
+    pluginLocation.set(new File("path/to/my/plugins"))
+    plugins.set([new Plugin("com.mbeddr.core", "mbeddr.core")])
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
+}
+
+```
+
+Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
+MPS. If they are not found the the build will fail.
+
 ## Run migrations
 
 Run all pending migrations in the project.
@@ -385,11 +407,13 @@ runMigrations {
 ```
 
 Parameters:
-* `mpsConfig` - the configuration used to resolve MPS.
-* `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#custom-mps-distribution) of MPS.
-* `projectLocation` - optional location of the project that should be migrated.
+* `mpsConfig` - configuration used to resolve MPS.
+* `mpsLocation` - location where to place the MPS files.
+* `mpsVersion` - if you use a [custom distribution](#custom-mps-distribution) of MPS.
+* `projectLocation` - location of the project that should be migrated.
 * `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
+
+At least `mpsConfig` or `mpsLocation` + `mpsVersion` must be set.
 
 ## Download JetBrains Runtime
 
