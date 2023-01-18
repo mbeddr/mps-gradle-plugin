@@ -21,6 +21,8 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("runMigrations", MigrationExecutorPluginExtensions::class.java)
+            tasks.register("runMigrations")
+            
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation.convention{ File(project.buildDir, "mps") }.map { it.asFile }.get()
                 val projectLocation = extension.projectLocation.getOrElse { throw GradleException("No project path set") }
@@ -44,7 +46,7 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                     tasks.create("resolveMpsForMigrations")
                 }
                 
-                tasks.register("runMigrations") {
+                tasks.named("runMigrations") {
                     dependsOn(resolveMps)
                     doLast {
                         ant.withGroovyBuilder { 
