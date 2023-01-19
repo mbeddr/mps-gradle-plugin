@@ -331,6 +331,27 @@ Parameters:
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
   to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
 
+### Additional Plugins
+
+By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
+HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location
+to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list:
+
+```
+apply plugin: 'modelcheck'
+...
+
+modelcheck {
+    pluginLocation.set(new File("path/to/my/plugins"))
+    plugins.set([new Plugin("com.mbeddr.core", "mbeddr.core")])
+    projectLocation.set(new File("./mps-prj"))
+    mpsConfig.set(configurations.mps)
+}
+
+```
+
+Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of
+MPS. If they are not found the the build will fail.
 
 ## Run migrations
 
@@ -365,28 +386,6 @@ Parameters:
 * `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
 
 At least `mpsConfig` or `mpsLocation` + `mpsVersion` must be set.
-
-### Additional Plugins 
-
-By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
-HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location 
-to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list: 
-
-```
-apply plugin: 'modelcheck'
-...
-
-modelcheck {
-    pluginLocation.set(new File("path/to/my/plugins"))
-    plugins.set([new Plugin("com.mbeddr.core", "mbeddr.core")])
-    projectLocation.set(new File("./mps-prj"))
-    mpsConfig.set(configurations.mps)
-}
-
-```
-
-Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
-MPS. If they are not found the the build will fail.
 
 ## Download JetBrains Runtime
 
