@@ -55,9 +55,11 @@ class RunMigrationsTest {
             "plugin-classpath.txt"
         )!!.readText().lines().map { File(it) }
         mpsTestPrjLocation = testProjectDir.newFolder("mps-prj")
-        ProjectHelper().extractTestProject(mpsTestPrjLocation)
+        extractProject("test-project")
     }
-    
+
+    private fun extractProject(name: String) = ProjectHelper().extractTestProject(name, mpsTestPrjLocation)
+
     @Test
     fun `check run migrations works with MPS 2020_3`() {
         buildFile.writeText(
@@ -69,8 +71,8 @@ class RunMigrationsTest {
             }
             
             runMigrations {
-                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
-                mpsConfig.set(mps)
+                projectLocation = file("${mpsTestPrjLocation.toPath()}")
+                mpsConfig = mps
             }
         """.trimIndent()
         )
@@ -94,9 +96,9 @@ class RunMigrationsTest {
             }
             
             runMigrations {
-                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
-                mpsConfig.set(mps)
-                force.set(true)
+                projectLocation = file("${mpsTestPrjLocation.toPath()}")
+                mpsConfig = mps
+                force = true
             }
         """.trimIndent()
         )
@@ -120,9 +122,9 @@ class RunMigrationsTest {
             }
             
             runMigrations {
-                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
-                mpsConfig.set(mps)
-                force.set(true)
+                projectLocation = file("${mpsTestPrjLocation.toPath()}")
+                mpsConfig = mps
+                force = true
             }
         """.trimIndent()
         )
@@ -146,8 +148,8 @@ class RunMigrationsTest {
             }
             
             runMigrations {
-                projectLocation.set(file("not_existing"))
-                mpsConfig.set(mps)
+                projectLocation = file("not_existing")
+                mpsConfig = mps
             }
         """.trimIndent()
         )
@@ -170,8 +172,8 @@ class RunMigrationsTest {
             }
             
             runMigrations {
-                projectLocation.set(file("${mpsTestPrjLocation.toPath()}"))
-                mpsLocation.set(file("not_existing"))
+                projectLocation = file("${mpsTestPrjLocation.toPath()}")
+                mpsLocation = file("not_existing")
             }
         """.trimIndent()
         )

@@ -7,14 +7,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.withGroovyBuilder
 import java.io.File
 import javax.inject.Inject
 
-open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFactory, project: Project) : BasePluginExtensions(of, project) {
-    val force: Property<Boolean> = of.property(Boolean::class.java).convention(false)
+open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
+    var force = false
 }
 @Suppress("unused")
 open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
@@ -24,8 +23,8 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
             tasks.register("runMigrations")
             
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation.convention{ File(project.buildDir, "mps") }.map { it.asFile }.get()
-                val projectLocation = extension.projectLocation.getOrElse { throw GradleException("No project path set") }
+                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+                val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
                 if(!file(projectLocation).exists()) {
                     throw GradleException("The path to the project doesn't exist:$projectLocation")
                 }
@@ -33,13 +32,13 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                 
                 val mpsVersion = extension.getMPSVersion()
                 val parsedMPSVersion = SemVer.parse(mpsVersion)
-                if(forceMigration.getOrElse(false) && (parsedMPSVersion.major < 2021 || (parsedMPSVersion.major == 2021 && parsedMPSVersion.minor < 3))) {
+                if(forceMigration && (parsedMPSVersion.major < 2021 || (parsedMPSVersion.major == 2021 && parsedMPSVersion.minor < 3))) {
                     throw GradleException("The force migration flag is only supported for 2021.3.0 and higher.")
                 }
                 
-                val resolveMps: Task = if (extension.mpsConfig.isPresent) {
+                val resolveMps: Task = if (extension.mpsConfig != null) {
                     tasks.create("resolveMpsForMigrations", Copy::class.java) {
-                        from({extension.mpsConfig.get().resolve().map { zipTree(it) }})
+                        from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
                 } else {
@@ -56,7 +55,7 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                             }
                             "taskdef"("resource" to "jetbrains/mps/build/ant/antlib.xml", "classpathref" to "path.mps.ant.path")
                         }
-                        if(forceMigration.getOrElse(false)) {
+                        if(forceMigration) {
                             ant.withGroovyBuilder {
                                 "migrate"("project" to projectLocation, "mpsHome" to mpsLocation, "force" to true) {
                                     "macro"("name" to "mps_home", "path" to mpsLocation)
