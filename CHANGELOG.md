@@ -2,6 +2,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.12
+
+### Added
+
+- `run-migrations` plugin to execute pending migrations on a project.
+
+### Changed
+
+- `download-jbr`: `extractJbr` task class changed from `Copy` to `Sync`.
+
+### Fixed
+
+- `download-jbr`: as a result of the above change, `extractJbr` task can now be run multiple times and overwrite
+  the readonly files it previously wrote.
+
 ## 1.11
 
 ### Added
