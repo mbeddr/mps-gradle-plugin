@@ -1,10 +1,9 @@
 package de.itemis.mps.gradle.downloadJBR
 
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.tasks.Sync
 import java.io.File
 
@@ -19,6 +18,13 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
         project.run {
 
             val extension = extensions.create("downloadJbr", DownloadJbrConfiguration::class.java)
+            val extractJbr = tasks.register("extractJbr", Sync::class.java)
+
+            val downloadJbr = tasks.register("downloadJbr", DownloadJbrForPlatform::class.java) {
+                dependsOn(extractJbr)
+                group = "Build"
+                description = "Downloads the JetBrains Runtime for the current platform and extracts it."
+            }
 
             afterEvaluate {
                 val downloadDir = extension.downloadDir ?: File(buildDir, "jbrDownload")
@@ -60,7 +66,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 val dependency = project.dependencies.create(dependencyString)
                 val configuration = configurations.detachedConfiguration(dependency)
 
-                val extractJbr = tasks.create("extractJbr", Sync::class.java) {
+                extractJbr.configure {
                     from({ configuration.resolve().map { tarTree(it) } })
                     into(downloadDir)
                 }
@@ -74,10 +80,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     }
                 }
 
-                tasks.create("downloadJbr", DownloadJbrForPlatform::class.java) {
-                    dependsOn(extractJbr)
-                    group = "Build"
-                    description = "Downloads the JetBrains Runtime for the current platform and extracts it."
+                downloadJbr.configure {
                     jbrDir = jbrSubdir
                     javaExecutable = File(jbrSubdir, "bin/java")
                 }
