@@ -17,23 +17,27 @@ open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFacto
 }
 @Suppress("unused")
 open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
+    companion object {
+        val MIN_VERSION_FOR_FORCE = SemVer(2021, 3)
+    }
+
     override fun apply(project: Project) {
         project.run {
             val extension = extensions.create("runMigrations", MigrationExecutorPluginExtensions::class.java)
             tasks.register("runMigrations")
-            
+
             afterEvaluate {
                 val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
-                if(!file(projectLocation).exists()) {
-                    throw GradleException("The path to the project doesn't exist:$projectLocation")
+                if (!file(projectLocation).exists()) {
+                    throw GradleException("The path to the project doesn't exist: $projectLocation")
                 }
                 val forceMigration = extension.force
                 
                 val mpsVersion = extension.getMPSVersion()
                 val parsedMPSVersion = SemVer.parse(mpsVersion)
-                if(forceMigration && (parsedMPSVersion.major < 2021 || (parsedMPSVersion.major == 2021 && parsedMPSVersion.minor < 3))) {
-                    throw GradleException("The force migration flag is only supported for 2021.3.0 and higher.")
+                if (forceMigration && parsedMPSVersion < MIN_VERSION_FOR_FORCE) {
+                    throw GradleException("The force migration flag is only supported for MPS version $MIN_VERSION_FOR_FORCE and higher.")
                 }
                 
                 val resolveMps: Task = if (extension.mpsConfig != null) {
@@ -48,31 +52,25 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                 tasks.named("runMigrations") {
                     dependsOn(resolveMps)
                     doLast {
+                        if (!mpsLocation.isDirectory) {
+                            throw GradleException("Specified MPS location does not exist or is not a directory: $mpsLocation")
+                        }
+
                         ant.withGroovyBuilder { 
                             "path"("id" to "path.mps.ant.path",) {
                                 // The different MPS versions need different jars. Let's just keep it simple and include all jars.
                                 "fileset"("dir" to  "$mpsLocation/lib", "includes" to "**/*.jar")
                             }
                             "taskdef"("resource" to "jetbrains/mps/build/ant/antlib.xml", "classpathref" to "path.mps.ant.path")
-                        }
-                        if(forceMigration) {
-                            ant.withGroovyBuilder {
-                                "migrate"("project" to projectLocation, "mpsHome" to mpsLocation, "force" to true) {
-                                    "macro"("name" to "mps_home", "path" to mpsLocation)
-                                    "jvmargs"() {
-                                        "arg"("value" to "-Didea.log.config.file=log.xml")
-                                        "arg"("value" to "-ea")
-                                    }
-                                }
-                            }
-                        } else {
-                            ant.withGroovyBuilder {
-                                "migrate"("project" to projectLocation, "mpsHome" to mpsLocation) {
-                                    "macro"("name" to "mps_home", "path" to mpsLocation)
-                                    "jvmargs"() {
-                                        "arg"("value" to "-Didea.log.config.file=log.xml")
-                                        "arg"("value" to "-ea")
-                                    }
+
+                            val baseArgsToMigrate = arrayOf("project" to projectLocation, "mpsHome" to mpsLocation)
+                            val argsToMigrate = if (forceMigration) arrayOf(*baseArgsToMigrate, "force" to true) else baseArgsToMigrate
+
+                            "migrate"(*argsToMigrate) {
+                                "macro"("name" to "mps_home", "path" to mpsLocation)
+                                "jvmargs"() {
+                                    "arg"("value" to "-Didea.log.config.file=log.xml")
+                                    "arg"("value" to "-ea")
                                 }
                             }
                         }

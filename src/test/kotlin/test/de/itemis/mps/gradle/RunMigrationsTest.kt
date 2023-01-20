@@ -2,6 +2,8 @@ package test.de.itemis.mps.gradle
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -103,11 +105,13 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
             .withPluginClasspath(cp)
             .buildAndFail()
+
+        assertThat(result.output, containsString("The force migration flag is only supported for MPS version 2021.3.0 and higher."))
     }
 
 
@@ -134,6 +138,7 @@ class RunMigrationsTest {
             .withArguments("runMigrations")
             .withPluginClasspath(cp)
             .build()
+
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":runMigrations")?.outcome)
     }
 
@@ -154,11 +159,13 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
             .withPluginClasspath(cp)
             .buildAndFail()
+
+        assertThat(result.output, containsString("The path to the project doesn't exist:"))
     }
 
     @Test
@@ -167,21 +174,20 @@ class RunMigrationsTest {
             """
             ${commonGradleScriptPart()}
             
-            dependencies {
-                mps("com.jetbrains:mps:2021.3.2")
-            }
-            
             runMigrations {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsLocation = file("not_existing")
+                mpsVersion = "2021.3.2"
             }
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
             .withPluginClasspath(cp)
             .buildAndFail()
+
+        assertThat(result.output, containsString("Specified MPS location does not exist or is not a directory:"))
     }
 }
