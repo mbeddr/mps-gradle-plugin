@@ -69,6 +69,10 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 extractJbr.configure {
                     from({ configuration.resolve().map { tarTree(it) } })
                     into(downloadDir)
+                    includeEmptyDirs = false
+                    filesMatching("jbr*/**") {
+                        path = path.replace("jbr_(.*?)/(.*)".toRegex(), "jbr/$2")
+                    }
                 }
 
                 val jbrSubdir = when {
