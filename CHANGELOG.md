@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `download-jbr`: `extractJbr` task class changed from `Copy` to `Sync`.
+- `download-jbr`: `extractJbr` task will ensure all extracted files are user-writable.
 
 ### Fixed
 
-- `download-jbr`: as a result of the above change, `extractJbr` task can now be run multiple times and overwrite
-  the readonly files it previously wrote.
+- `download-jbr`: as a result of the above change, `extractJbr` task no longer fails due to trying to overwrite
+  read-only files it previously extracted.
 
 ## 1.11
 

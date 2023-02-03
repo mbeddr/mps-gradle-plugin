@@ -70,7 +70,10 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     from({ configuration.resolve().map { tarTree(it) } })
                     into(downloadDir)
                     includeEmptyDirs = false
-                    filesMatching("jbr*/**") {
+                    eachFile {
+                        mode = mode or Integer.parseInt("600", 8)
+                    }
+                    filesMatching("jbr_*/**") {
                         path = path.replace("jbr_(.*?)/(.*)".toRegex(), "jbr/$2")
                     }
                 }
