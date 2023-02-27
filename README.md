@@ -3,26 +3,36 @@
 Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
-# Using the Plugin
+# Configuring the plugin repository
 
-Add the following `buildscript` block to your build script:
+This plugin is not published to the Gradle plugin portal but to a public repository of itemis. To configure this
+repository add the following at the beginning of your `settings.gradle`:
 
-```
-buildscript {
+```groovy
+pluginManagement {
     repositories {
         maven { url 'https://artifacts.itemis.cloud/repository/maven-mps' }
-        mavenCentral()
+      
+        // Need to manually include the default Gradle plugin portal repository when overriding the defaults.
+        gradlePluginPortal()
     }
+}
+```
 
-    dependencies {
-        classpath 'de.itemis.mps:mps-gradle-plugin:1.2.+'
-    }
+# Custom tasks
+
+To make use of custom task types, add the following `plugins` block to your build script:
+
+```
+plugins {
+    id 'de.itemis.mps.gradle.common' version '1.13.+'
 }
 ```
 
 Use a fully specified version such as `1.0.123` for better build reproducibility.
 
-# Features
+The `de.itemis.mps.gradle.common` plugin is empty and does not do anything to your project by itself. However, applying
+it causes Gradle to put the included task classes (described below) onto the classpath of the build script.
 
 ## RunAntScript
 
