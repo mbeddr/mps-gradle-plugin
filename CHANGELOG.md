@@ -6,9 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `generator`: Added support in generate plugin in order to accept the new feature that was implemented on mps 
-- backend about adding the possibility to define include and exclude lists of models and solutions similar to the modelchecking plugin
-
+- `generate`: can now define include and exclude lists of models and modules, similar to the `modelcheck` plugin.
 
 ## 1.13
 
