@@ -259,6 +259,11 @@ Parameters:
   * otherwise it should be a plugin folder located under the default `mps/plugins` 
 * `models` - optional list of models to generate. If omitted all models in the project will be generated. Only full name
   matched are supported and no RegEx or partial name matching.
+* `excludeModels` - optional list of models to exclude from generating. RegEx can be used for matching multiple models.
+* `modules` - optional list of modules to generate. Expects ordinary name (w/o virtual folders). RegEx can be used for matching multiple modules.
+  If both parameters, `models` and `modules`, are omitted - all models in the project will be generated, except as
+  excluded by `excludeModels` and `excludeModules`.
+* `excludeModules` - optional list of modules to exclude from generate. RegEx can be used for matching multiple modules.  
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
 * `projectLocation` - location of the MPS project to generate.
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause

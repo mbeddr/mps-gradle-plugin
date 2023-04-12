@@ -11,8 +11,11 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
 
-open class GeneratePluginExtensions(objectFactory: ObjectFactory): BasePluginExtensions(objectFactory) {
+open class GeneratePluginExtensions(objectFactory: ObjectFactory): BasePluginExtensions(objectFactory){
     var models: List<String> = emptyList()
+    var modules: List<String> = emptyList()
+    var excludeModels: List<String> = emptyList()
+    var excludeModules: List<String> = emptyList()
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
@@ -63,7 +66,14 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     dependsOn(fake)
 
                     argumentProviders.add(argsFromBaseExtension(extension))
-                    argumentProviders.add(CommandLineArgumentProvider { extension.models.map { "--model=$it" } })
+                    argumentProviders.add(CommandLineArgumentProvider {
+                        val args = mutableListOf<String>()
+                        args.addAll(extension.models.map { "--model=$it" })
+                        args.addAll(extension.modules.map { "--module=$it" })
+                        args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
+                        args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
+                        args
+                    })
 
                     if (extension.javaExec != null)
                         executable(extension.javaExec!!)

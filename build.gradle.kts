@@ -19,7 +19,7 @@ plugins {
 }
 
 val versionMajor = 1
-val versionMinor = 13
+val versionMinor = 14
 
 group = "de.itemis.mps"
 

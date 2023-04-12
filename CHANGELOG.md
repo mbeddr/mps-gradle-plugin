@@ -2,6 +2,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.14
+
+### Added
+
+- `generator`: Added support in generate plugin in order to accept the new feature that was implemented on mps 
+- backend about adding the possibility to define include and exclude lists of models and solutions similar to the modelchecking plugin
+
+
 ## 1.13
 
 ### Added
