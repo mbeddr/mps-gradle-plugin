@@ -71,6 +71,9 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                                 "jvmargs"() {
                                     "arg"("value" to "-Didea.log.config.file=log.xml")
                                     "arg"("value" to "-ea")
+                                    if (extension.maxHeap != null) {
+                                        "arg"("value" to "-Xm${extension.maxHeap}")
+                                    }
                                 }
                             }
                         }

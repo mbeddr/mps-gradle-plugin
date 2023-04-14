@@ -20,7 +20,6 @@ open class ModelCheckPluginExtensions(objectFactory: ObjectFactory) : BasePlugin
     var errorNoFail = false
     var junitFile: File? = null
     var junitFormat: String? = null
-    var maxHeap: String? = null
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {

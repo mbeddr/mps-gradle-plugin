@@ -89,6 +89,10 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     classpath(genConfig)
                     debug = extension.debug
                     mainClass.set("de.itemis.mps.gradle.generate.MainKt")
+
+                    if (extension.maxHeap != null) {
+                        maxHeapSize = extension.maxHeap!!
+                    }
                 }
             }
         }

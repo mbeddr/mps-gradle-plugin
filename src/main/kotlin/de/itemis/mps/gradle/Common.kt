@@ -58,6 +58,11 @@ open class BasePluginExtensions @Inject constructor(objectFactory: ObjectFactory
      * The environment to set up, IDEA or MPS. Default is IDEA for backwards compatibility reasons.
      */
     val environmentKind = objectFactory.property(EnvironmentKind::class).convention(EnvironmentKind.IDEA)
+
+    /**
+     * Maximum heap size, passed as the argument to the `-Xmx` JVM option. Example: `4G`, `512m`.
+     */
+    var maxHeap: String? = null
 }
 
 fun validateDefaultJvm(){

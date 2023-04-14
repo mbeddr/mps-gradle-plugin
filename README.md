@@ -274,6 +274,8 @@ Parameters:
 * `environmentKind` - optional kind of environment (MPS or IDEA) to execute the generators in. IDEA environment is used
   by default for backwards compatibility but MPS environment may be faster. See
   [MPS vs IDEA environment](#mps-vs-idea-environment) below.
+* `maxHeap` (since 1.15) - maximum heap size setting for the JVM that executes the generator. The value is a string
+  understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
 
 ## Model Check
 
@@ -345,7 +347,7 @@ Parameters:
     Full error message and the node URL will be reported in the testcase failure. Checked models will be mapped to testsuites with this option.     
 * `maxHeap` - maximum heap size setting for the JVM that executes the modelchecker. This is useful to limit the heap usage
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
-  to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M
+  to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
 * `backendConfig` - optional configuration providing the backend. If not given, the `modelcheck` backend from
   [mps-build-backends](https://github.com/mbeddr/mps-build-backends) will be used.
 * `environmentKind` - optional kind of environment (MPS or IDEA) to execute the generators in. IDEA environment is used
@@ -427,6 +429,8 @@ Parameters:
 * `mpsVersion` - if you use a [custom distribution](#custom-mps-distribution) of MPS.
 * `projectLocation` - location of the project that should be migrated.
 * `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
+* `maxHeap` (since 1.15) - maximum heap size setting for the JVM that executes the migrations. The value is a string
+  understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
 
 At least `mpsConfig` or `mpsLocation` + `mpsVersion` must be set.
 
