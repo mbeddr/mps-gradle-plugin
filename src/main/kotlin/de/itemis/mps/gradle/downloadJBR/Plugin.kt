@@ -89,7 +89,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
                 downloadJbr.configure {
                     jbrDir = jbrSubdir
-                    javaExecutable = File(jbrSubdir, "bin/java")
+                    javaExecutable = if (Os.isFamily(Os.FAMILY_WINDOWS)) File(jbrSubdir, "bin/java.exe") else File(jbrSubdir, "bin/java")
                 }
             }
         }

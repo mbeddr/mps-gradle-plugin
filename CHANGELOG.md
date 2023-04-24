@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `generate`, `run-migrations` now support `maxHeap` option for specifying the maximum JVM heap size, similar to `modelcheck`.
 
+### Fixed
+
+- `downloadJbr`: property `downloadJbr.javaExecutable` now correctly points to `<JBR>/bin/java.exe` on Windows rather
+  than `<JBR>/bin/java`.
+
 ## 1.14
 
 ### Added
