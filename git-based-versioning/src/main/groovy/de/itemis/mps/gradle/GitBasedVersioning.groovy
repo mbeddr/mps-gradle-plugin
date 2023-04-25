@@ -3,6 +3,7 @@ package de.itemis.mps.gradle
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.GradleException
 
+@SuppressWarnings("unused")
 class GitBasedVersioning {
 
 

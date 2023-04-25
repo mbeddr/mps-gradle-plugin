@@ -1,8 +1,13 @@
+import de.itemis.mps.gradle.GitBasedVersioning
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     configurations.classpath {
         resolutionStrategy.activateDependencyLocking()
+    }
+
+    dependencies {
+        classpath("de.itemis.mps.gradle:git-based-versioning")
     }
 }
 
@@ -19,7 +24,7 @@ plugins {
 }
 
 val versionMajor = 1
-val versionMinor = 15
+val versionMinor = 16
 
 group = "de.itemis.mps"
 
@@ -50,7 +55,7 @@ dependencyLocking {
 }
 
 dependencies {
-    implementation(localGroovy())
+    api("de.itemis.mps.gradle:git-based-versioning")
     implementation(kotlin("stdlib", version = kotlinVersion))
     implementation("net.swiftzer.semver:semver:1.1.2")
     testImplementation("junit:junit:4.13.2")
@@ -106,6 +111,14 @@ publishing {
                         password = project.findProperty("gpr.token") as String?
                     }
                 }
+            }
+        }
+    }
+
+    publications.withType<MavenPublication>().configureEach {
+        versionMapping {
+            allVariants {
+                fromResolutionResult()
             }
         }
     }
