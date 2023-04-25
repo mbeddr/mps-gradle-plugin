@@ -4,6 +4,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.16
 
+### Added
+
+- `runMigrations` task now passes configured `plugins` and `macros` to MPS.
+- `runMigrations` task now supports `haltOnPrecheckFailure` parameter on MPS 2021.1 and above.
+
 ### Changed
 
 - Extracted Git-based versioning into a separate subproject, `git-based-versioning`.
