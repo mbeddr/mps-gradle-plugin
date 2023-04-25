@@ -18,13 +18,13 @@ open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFacto
      * (Since MPS 2021.1) Whether to halt if a pre-check has failed. Note that the check for migrated dependencies
      * cannot be skipped.
      */
-    var haltOnPrecheckFailure = true
+    var haltOnPrecheckFailure: Boolean? = null
 
     /**
      * (Since MPS 2021.3) Whether to force a migration even if the project directory contains `.allow-pending-migrations` file.
      */
 
-    var force = false
+    var force: Boolean? = null
 }
 
 @Suppress("unused")
@@ -49,11 +49,11 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                 val mpsVersion = extension.getMPSVersion()
                 val parsedMPSVersion = SemVer.parse(mpsVersion)
 
-                if (extension.force && parsedMPSVersion < MIN_VERSION_FOR_FORCE) {
+                if (extension.force != null && parsedMPSVersion < MIN_VERSION_FOR_FORCE) {
                     throw GradleException("The force migration flag is only supported for MPS version $MIN_VERSION_FOR_FORCE and higher.")
                 }
 
-                if (!extension.haltOnPrecheckFailure && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) {
+                if (extension.haltOnPrecheckFailure != null && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) {
                     throw GradleException("The 'do not halt on pre-check failure' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE and higher.")
                 }
 
@@ -84,8 +84,8 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                                 add("project" to projectLocation)
                                 add("mpsHome" to mpsLocation)
 
-                                if (parsedMPSVersion >= MIN_VERSION_FOR_FORCE) add("force" to extension.force)
-                                if (parsedMPSVersion >= MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) add("haltOnPrecheckFailure" to extension.haltOnPrecheckFailure)
+                                if (extension.force != null) add("force" to extension.force!!)
+                                if (extension.haltOnPrecheckFailure != null) add("haltOnPrecheckFailure" to extension.haltOnPrecheckFailure!!)
 
                                 toTypedArray()
                             }

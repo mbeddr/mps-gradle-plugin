@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Extracted Git-based versioning into a separate subproject, `git-based-versioning`.
+- `runMigrations`: `force` and `haltOnPrecheckFailure` are now nullable and null by default.
 
 ## 1.15
 

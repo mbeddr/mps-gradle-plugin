@@ -29,12 +29,12 @@ val versionMinor = 16
 group = "de.itemis.mps"
 
 var currentBranch:String? = ""
-currentBranch = de.itemis.mps.gradle.GitBasedVersioning.getGitBranch()
+currentBranch = GitBasedVersioning.getGitBranch()
 
 version = if (!project.hasProperty("useSnapshot") &&
     (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 ) {
-    de.itemis.mps.gradle.GitBasedVersioning.getVersion(
+    GitBasedVersioning.getVersion(
         // Publish releases from v1.x branch without v1.x prefix
         if (currentBranch == "v1.x") "HEAD" else currentBranch,
         versionMajor.toString(), versionMinor.toString())
