@@ -11,6 +11,8 @@ import java.io.File
 
 class JBRDownloadTest {
 
+    val JBR_VERSION = "11_0_10-b1341.41"
+
     @Rule
     @JvmField
     val testProjectDir: TemporaryFolder = TemporaryFolder()
@@ -52,7 +54,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_10-b1145.96"
+                jbrVersion = "$JBR_VERSION"
                 downloadDir = file("jbrdl")
             }
         """.trimIndent())
@@ -91,7 +93,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_10-b1145.96"
+                jbrVersion = "$JBR_VERSION"
             }
         """.trimIndent())
 
@@ -130,7 +132,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_11-b1341.60"
+                jbrVersion = "$JBR_VERSION"
             }
         """.trimIndent())
 
@@ -169,7 +171,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_11-b1341.60"
+                jbrVersion = "$JBR_VERSION"
                 distributionType = "jbr_nomod"
             }
         """.trimIndent())
@@ -209,7 +211,7 @@ class JBRDownloadTest {
             }
             
             downloadJbr {
-                jbrVersion = "11_0_11-b1341.60"
+                jbrVersion = "$JBR_VERSION"
             }
             tasks.register<Exec>("exec") {
                 dependsOn(tasks.getByName("downloadJbr", de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform::class))
