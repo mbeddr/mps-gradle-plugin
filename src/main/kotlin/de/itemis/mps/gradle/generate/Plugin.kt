@@ -16,6 +16,7 @@ open class GeneratePluginExtensions(objectFactory: ObjectFactory): BasePluginExt
     var modules: List<String> = emptyList()
     var excludeModels: List<String> = emptyList()
     var excludeModules: List<String> = emptyList()
+    var parallelGenerationThreads: Int = 0
 }
 
 open class GenerateMpsProjectPlugin : Plugin<Project> {
@@ -67,12 +68,13 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
 
                     argumentProviders.add(argsFromBaseExtension(extension))
                     argumentProviders.add(CommandLineArgumentProvider {
-                        val args = mutableListOf<String>()
-                        args.addAll(extension.models.map { "--model=$it" })
-                        args.addAll(extension.modules.map { "--module=$it" })
-                        args.addAll(extension.excludeModels.map { "--exclude-model=$it" })
-                        args.addAll(extension.excludeModules.map { "--exclude-module=$it" })
-                        args
+                        mutableListOf<String>().apply {
+                            addAll(extension.models.map { "--model=$it" })
+                            addAll(extension.modules.map { "--module=$it" })
+                            addAll(extension.excludeModels.map { "--exclude-model=$it" })
+                            addAll(extension.excludeModules.map { "--exclude-module=$it" })
+                            add("--parallel-generation-threads=${extension.parallelGenerationThreads}")
+                        }
                     })
 
                     if (extension.javaExec != null)

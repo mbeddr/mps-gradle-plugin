@@ -266,6 +266,8 @@ Parameters:
 * `excludeModules` (since 1.14) - optional list of modules to exclude from generate. RegEx can be used for matching multiple modules.
 * `macros` - optional list of path macros. The notation is `new Macro("name", "value")`.
 * `projectLocation` - location of the MPS project to generate.
+* `parallelGenerationThreads` (since 1.17) - optional number of threads to use for parallel generation. Defaults to `0`, 
+  which means that parallel generation is turned off.
 * `debug` - optionally allows to start the JVM that is used to generated with a debugger. Setting it to `true` will cause
   the started JVM to suspend until a debugger is attached. Useful for debugging classloading problems or exceptions during
   the build.
