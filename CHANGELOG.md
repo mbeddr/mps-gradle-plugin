@@ -2,6 +2,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.18
+
+### Changed
+
+- `generate`: exit code when there is nothing to generate is now `254` to distinguish it from the general MPS error.
+- `generate`: exit code for a general MPS error is now `255` on all systems. Changed from `-1`, which could  be 
+  interpreted as `255` or `-1` depending on the system.
+
 ## 1.17
 
 ### Added
