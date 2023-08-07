@@ -1,0 +1,306 @@
+public class de/itemis/mps/gradle/BasePluginExtensions {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getBackendConfig ()Lorg/gradle/api/artifacts/Configuration;
+	public final fun getDebug ()Z
+	public final fun getEnvironmentKind ()Lorg/gradle/api/provider/Property;
+	public final fun getJavaExec ()Ljava/io/File;
+	public final fun getMacros ()Ljava/util/List;
+	public final fun getMaxHeap ()Ljava/lang/String;
+	public final fun getMpsConfig ()Lorg/gradle/api/artifacts/Configuration;
+	public final fun getMpsLocation ()Ljava/io/File;
+	public final fun getMpsVersion ()Ljava/lang/String;
+	public final fun getPluginLocation ()Ljava/io/File;
+	public final fun getPlugins ()Ljava/util/List;
+	public final fun getPluginsProperty ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getProjectLocation ()Ljava/io/File;
+	public final fun setBackendConfig (Lorg/gradle/api/artifacts/Configuration;)V
+	public final fun setDebug (Z)V
+	public final fun setJavaExec (Ljava/io/File;)V
+	public final fun setMacros (Ljava/util/List;)V
+	public final fun setMaxHeap (Ljava/lang/String;)V
+	public final fun setMpsConfig (Lorg/gradle/api/artifacts/Configuration;)V
+	public final fun setMpsLocation (Ljava/io/File;)V
+	public final fun setMpsVersion (Ljava/lang/String;)V
+	public final fun setPluginLocation (Ljava/io/File;)V
+	public final fun setPlugins (Ljava/util/List;)V
+	public final fun setProjectLocation (Ljava/io/File;)V
+}
+
+public class de/itemis/mps/gradle/BuildLanguages : de/itemis/mps/gradle/RunAntScript {
+	public fun <init> ()V
+}
+
+public class de/itemis/mps/gradle/BundleMacosJdk : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public fun build ()Ljava/lang/Object;
+	public fun getJdk ()Ljava/io/File;
+	public fun getJdkDirname ()Ljava/lang/String;
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun getOutputFile ()Ljava/io/File;
+	public fun getRcpArtifact ()Ljava/io/File;
+	public fun setJdk (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setJdkDependency (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setJdkDirname (Ljava/lang/String;)Ljava/lang/Object;
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public fun setOutputFile (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setRcpArtifact (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public class de/itemis/mps/gradle/BundledScripts : groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public static fun extractScriptsToDir (Ljava/io/File;[Ljava/lang/String;)V
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+}
+
+public final class de/itemis/mps/gradle/CommonKt {
+	public static final field MPS_BUILD_BACKENDS_VERSION Ljava/lang/String;
+	public static final field MPS_SUPPORT_MSG Ljava/lang/String;
+	public static final fun argsFromBaseExtension (Lde/itemis/mps/gradle/BasePluginExtensions;)Lorg/gradle/process/CommandLineArgumentProvider;
+	public static final fun getMPSVersion (Lde/itemis/mps/gradle/BasePluginExtensions;)Ljava/lang/String;
+	public static final fun validateDefaultJvm ()V
+}
+
+public final class de/itemis/mps/gradle/CommonPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class de/itemis/mps/gradle/Common_gradle : org/gradle/kotlin/dsl/precompile/v1/PrecompiledProjectScript {
+	public final field $$implicitReceiver0 Lorg/gradle/api/Project;
+	public fun <init> (Lorg/gradle/api/Project;Lorg/gradle/api/Project;)V
+	public static final fun main ([Ljava/lang/String;)V
+}
+
+public class de/itemis/mps/gradle/CreateDmg : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public fun build ()Ljava/lang/Object;
+	public fun getBackgroundImage ()Ljava/io/File;
+	public fun getDmgFile ()Ljava/io/File;
+	public fun getJdk ()Ljava/io/File;
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun getRcpArtifact ()Ljava/io/File;
+	public fun getSignIdentity ()Ljava/lang/String;
+	public fun getSignKeyChain ()Ljava/io/File;
+	public fun getSignKeyChainPassword ()Ljava/lang/String;
+	public fun setBackgroundImage (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setDmgFile (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setJdk (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setJdkDependency (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public fun setRcpArtifact (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setSignIdentity (Ljava/lang/String;)V
+	public fun setSignKeyChain (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun setSignKeyChainPassword (Ljava/lang/String;)V
+}
+
+public final class de/itemis/mps/gradle/EnvironmentKind : java/lang/Enum {
+	public static final field IDEA Lde/itemis/mps/gradle/EnvironmentKind;
+	public static final field MPS Lde/itemis/mps/gradle/EnvironmentKind;
+	public static fun valueOf (Ljava/lang/String;)Lde/itemis/mps/gradle/EnvironmentKind;
+	public static fun values ()[Lde/itemis/mps/gradle/EnvironmentKind;
+}
+
+public class de/itemis/mps/gradle/GenerateLibrariesXml : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public fun generate ()Ljava/lang/Object;
+	public fun getDefaults ()Ljava/io/File;
+	public fun getDestination ()Ljava/io/File;
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun getOverrides ()Ljava/io/File;
+	public fun setDefaults (Ljava/io/File;)V
+	public fun setDestination (Ljava/io/File;)V
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public fun setOverrides (Ljava/lang/Object;)V
+}
+
+public class de/itemis/mps/gradle/GetMpsInBrowser : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public fun build ()Ljava/lang/Object;
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun getVersion ()Ljava/lang/String;
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public fun setVersion (Ljava/lang/String;)Ljava/lang/Object;
+}
+
+public final class de/itemis/mps/gradle/Macro {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lde/itemis/mps/gradle/Macro;
+	public static synthetic fun copy$default (Lde/itemis/mps/gradle/Macro;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lde/itemis/mps/gradle/Macro;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun setName (Ljava/lang/String;)V
+	public final fun setValue (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class de/itemis/mps/gradle/Plugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lde/itemis/mps/gradle/Plugin;
+	public static synthetic fun copy$default (Lde/itemis/mps/gradle/Plugin;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lde/itemis/mps/gradle/Plugin;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getPath ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun setId (Ljava/lang/String;)V
+	public final fun setPath (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public class de/itemis/mps/gradle/Pom : groovy/lang/GroovyObject {
+	public static synthetic field __$stMC Z
+	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+	public fun <init> ()V
+	public fun getMetaClass ()Lgroovy/lang/MetaClass;
+	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public fun withDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)Ljava/lang/Object;
+	public fun withProvidedDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)Ljava/lang/Object;
+}
+
+public class de/itemis/mps/gradle/RunAntScript : org/gradle/api/DefaultTask {
+	public field script Ljava/lang/Object;
+	public fun <init> ()V
+	public final fun build ()V
+	public final fun executable (Ljava/lang/Object;)V
+	public final fun getExecutable ()Ljava/lang/Object;
+	public final fun getIncludeDefaultArgs ()Z
+	public final fun getIncludeDefaultClasspath ()Z
+	public final fun getIncremental ()Z
+	public final fun getScript ()Ljava/lang/Object;
+	public final fun getScriptArgs ()Ljava/util/List;
+	public final fun getScriptClasspath ()Lorg/gradle/api/file/FileCollection;
+	public final fun getTargets ()Ljava/util/List;
+	public final fun setExecutable (Ljava/lang/Object;)V
+	public final fun setIncludeDefaultArgs (Z)V
+	public final fun setIncludeDefaultClasspath (Z)V
+	public final fun setIncremental (Z)V
+	public final fun setScript (Ljava/lang/Object;)V
+	public final fun setScriptArgs (Ljava/util/List;)V
+	public final fun setScriptClasspath (Lorg/gradle/api/file/FileCollection;)V
+	public final fun setTargets (Ljava/util/List;)V
+	public final fun targets ([Ljava/lang/String;)V
+}
+
+public class de/itemis/mps/gradle/TestLanguages : de/itemis/mps/gradle/RunAntScript {
+	public fun <init> ()V
+}
+
+public class de/itemis/mps/gradle/downloadJBR/DownloadJbrConfiguration {
+	public field jbrVersion Ljava/lang/String;
+	public fun <init> ()V
+	public final fun getDistributionType ()Ljava/lang/String;
+	public final fun getDownloadDir ()Ljava/io/File;
+	public final fun getJbrVersion ()Ljava/lang/String;
+	public final fun setDistributionType (Ljava/lang/String;)V
+	public final fun setDownloadDir (Ljava/io/File;)V
+	public final fun setJbrVersion (Ljava/lang/String;)V
+}
+
+public class de/itemis/mps/gradle/downloadJBR/DownloadJbrForPlatform : org/gradle/api/DefaultTask {
+	public field javaExecutable Ljava/io/File;
+	public field jbrDir Ljava/io/File;
+	public fun <init> ()V
+	public final fun getJavaExecutable ()Ljava/io/File;
+	public final fun getJbrDir ()Ljava/io/File;
+	public final fun setJavaExecutable (Ljava/io/File;)V
+	public final fun setJbrDir (Ljava/io/File;)V
+}
+
+public class de/itemis/mps/gradle/downloadJBR/DownloadJbrProjectPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class de/itemis/mps/gradle/generate/FakeBuildNumberTask : org/gradle/api/DefaultTask {
+	public field mpsDir Ljava/io/File;
+	public fun <init> ()V
+	public final fun fakeBuildNumber ()V
+	public final fun getBuildTxt ()Ljava/io/File;
+	public final fun getMpsDir ()Ljava/io/File;
+	public final fun setMpsDir (Ljava/io/File;)V
+}
+
+public class de/itemis/mps/gradle/generate/GenerateMpsProjectPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class de/itemis/mps/gradle/generate/GeneratePluginExtensions : de/itemis/mps/gradle/BasePluginExtensions {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getExcludeModels ()Ljava/util/List;
+	public final fun getExcludeModules ()Ljava/util/List;
+	public final fun getModels ()Ljava/util/List;
+	public final fun getModules ()Ljava/util/List;
+	public final fun getParallelGenerationThreads ()I
+	public final fun setExcludeModels (Ljava/util/List;)V
+	public final fun setExcludeModules (Ljava/util/List;)V
+	public final fun setModels (Ljava/util/List;)V
+	public final fun setModules (Ljava/util/List;)V
+	public final fun setParallelGenerationThreads (I)V
+}
+
+public class de/itemis/mps/gradle/modelcheck/ModelCheckPluginExtensions : de/itemis/mps/gradle/BasePluginExtensions {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getErrorNoFail ()Z
+	public final fun getExcludeModels ()Ljava/util/List;
+	public final fun getExcludeModules ()Ljava/util/List;
+	public final fun getJunitFile ()Ljava/io/File;
+	public final fun getJunitFormat ()Ljava/lang/String;
+	public final fun getModels ()Ljava/util/List;
+	public final fun getModules ()Ljava/util/List;
+	public final fun getWarningAsError ()Z
+	public final fun setErrorNoFail (Z)V
+	public final fun setExcludeModels (Ljava/util/List;)V
+	public final fun setExcludeModules (Ljava/util/List;)V
+	public final fun setJunitFile (Ljava/io/File;)V
+	public final fun setJunitFormat (Ljava/lang/String;)V
+	public final fun setModels (Ljava/util/List;)V
+	public final fun setModules (Ljava/util/List;)V
+	public final fun setWarningAsError (Z)V
+}
+
+public class de/itemis/mps/gradle/modelcheck/ModelcheckMpsProjectPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class de/itemis/mps/gradle/runmigrations/MigrationExecutorPluginExtensions : de/itemis/mps/gradle/BasePluginExtensions {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getForce ()Ljava/lang/Boolean;
+	public final fun getHaltOnPrecheckFailure ()Ljava/lang/Boolean;
+	public final fun setForce (Ljava/lang/Boolean;)V
+	public final fun setHaltOnPrecheckFailure (Ljava/lang/Boolean;)V
+}
+
+public class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin : org/gradle/api/Plugin {
+	public static final field Companion Lde/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin$Companion;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin$Companion {
+	public final fun getMIN_VERSION_FOR_FORCE ()Lnet/swiftzer/semver/SemVer;
+	public final fun getMIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE ()Lnet/swiftzer/semver/SemVer;
+}
+
