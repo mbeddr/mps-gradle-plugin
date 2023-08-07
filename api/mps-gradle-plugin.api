@@ -204,7 +204,7 @@ public class de/itemis/mps/gradle/TestLanguages : de/itemis/mps/gradle/RunAntScr
 
 public class de/itemis/mps/gradle/downloadJBR/DownloadJbrConfiguration {
 	public field jbrVersion Ljava/lang/String;
-	public fun <init> ()V
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun getDistributionType ()Ljava/lang/String;
 	public final fun getDownloadDir ()Ljava/io/File;
 	public final fun getJbrVersion ()Ljava/lang/String;
@@ -214,8 +214,6 @@ public class de/itemis/mps/gradle/downloadJBR/DownloadJbrConfiguration {
 }
 
 public class de/itemis/mps/gradle/downloadJBR/DownloadJbrForPlatform : org/gradle/api/DefaultTask {
-	public field javaExecutable Ljava/io/File;
-	public field jbrDir Ljava/io/File;
 	public fun <init> ()V
 	public final fun getJavaExecutable ()Ljava/io/File;
 	public final fun getJbrDir ()Ljava/io/File;

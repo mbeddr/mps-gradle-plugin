@@ -449,8 +449,8 @@ to your build, you need to make sure that it is available in your dependency rep
 the scripts located in mbeddr/build.publish.jdk 
 
 For easy consumption and incremental build support the plugin creates a task `downloadJbr` which exposes the location of 
-the java executable via the `javaExecutable` property. See the tests in src/test/kotlin/JBRDownloadTest.kt for an example
-how to use it. 
+the java executable via the `javaExecutable` property. See
+[the tests](src/test/kotlin/test/de/itemis/mps/gradle/JBRDownloadTest.kt) for an example of how to use it. 
 
 ### Usage
 
@@ -493,8 +493,8 @@ downloadJbr {
   using wildcards like `*` or `+` in there for reproducible builds. 
 * `distributionType` - optional distribution type for the JBR to use. Will default to `jbr_jcef` if omitted. 
 * `downloadDir` - optional directory where the downloaded JBR is downloaded and extracted to. The plugin defaults to
-  `build/jbrDownload`
-  
+  `build/jbrDownload`. 
+
 ## Custom MPS Distribution
 
 Features that perform an action inside an MPS project, like the `modelcheck` or `generate-models` plugin, require 
@@ -540,4 +540,4 @@ tasks.getByName("resolveMpsForModelcheck").dependsOn(downloadAndExtractCustomMPS
 Since plugin version 1.10, the `environmentKind` parameter allows to choose between MPS or IDEA environment for
 generation or model check. The default is to use the IDEA environment because that was the case in earlier versions, but
 the MPS environment is lighter and likely to be more performant. On the other hand, the MPS environment does not load
-some plugins or extensions and may lead to different results.
+plugins (only extensions) and may lead to different results.

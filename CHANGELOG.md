@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.18
+
+### Changed
+
+- `extractJbr` task is no longer a `Sync` but will use platform-specific tools (`tar`) to make sure symlinks in the JBR
+  are extracted properly. Native libraries rely on symlinks and do not function unless properly extracted.
+
 ## 1.17
 
 ### Added
