@@ -66,7 +66,7 @@ open class BasePluginExtensions @Inject constructor(objectFactory: ObjectFactory
 }
 
 fun validateDefaultJvm(){
-    if (JavaVersion.current() != JavaVersion.VERSION_11) logger.error("MPS requires Java 11 but current JVM uses ${JavaVersion.current()}, starting MPS will most probably fail!")
+    if (JavaVersion.current() < JavaVersion.VERSION_11) logger.error("MPS requires at least Java 11 but current JVM uses ${JavaVersion.current()}, starting MPS will most probably fail!")
 }
 
 fun argsFromBaseExtension(extensions: BasePluginExtensions): CommandLineArgumentProvider =
