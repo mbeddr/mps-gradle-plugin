@@ -1,7 +1,10 @@
 package test.de.itemis.mps.gradle
 
+import de.itemis.mps.gradle.ErrorMessages
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert
 import org.junit.*
 import org.junit.rules.TemporaryFolder
 import java.io.File
@@ -20,9 +23,6 @@ class GenerateModelsTest {
     fun setup() {
         settingsFile = testProjectDir.newFile("settings.gradle.kts")
         buildFile = testProjectDir.newFile("build.gradle.kts")
-        cp = javaClass.classLoader.getResource(
-            "plugin-classpath.txt"
-        )!!.readText().lines().map { File(it) }
         mpsTestPrjLocation = testProjectDir.newFolder("mps-prj")
         ProjectHelper().extractTestProject("test-project", mpsTestPrjLocation)
     }
@@ -39,12 +39,6 @@ class GenerateModelsTest {
             """
             import java.net.URI
             import de.itemis.mps.gradle.EnvironmentKind
-            
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -74,7 +68,7 @@ class GenerateModelsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("generate")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":generate")?.outcome)
     }
@@ -89,11 +83,6 @@ class GenerateModelsTest {
         buildFile.writeText(
             """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -109,7 +98,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2019.3.3")
+                mps("com.jetbrains:mps:2019.3.7")
             }
             
             generate {
@@ -119,11 +108,13 @@ class GenerateModelsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("generate")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
+
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MPS_VERSION_NOT_SUPPORTED))
     }
     @Test
     fun `generate works with set MPS version and path`() {
@@ -133,14 +124,11 @@ class GenerateModelsTest {
         """.trimIndent()
         )
 
+        val mpsFolder = testProjectDir.newFolder("mps")
+
         buildFile.writeText(
             """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -159,19 +147,26 @@ class GenerateModelsTest {
                 mps("com.jetbrains:mps:2020.3.3")
             }
             
+            val resolveMps by tasks.registering(Sync::class) {
+                from({ project.zipTree(mps.singleFile) })
+                into("$mpsFolder")
+            }
+            
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsVersion = "2020.2.2"
-                mpsLocation = file(".")
+                mpsLocation = file("$mpsFolder")
             }
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
-            .withArguments()
-            .withPluginClasspath(cp)
+            .withArguments("resolveMps", "generate")
+            .withPluginClasspath()
             .build()
+
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":generate")?.outcome)
     }
 
     @Test
@@ -185,11 +180,6 @@ class GenerateModelsTest {
         buildFile.writeText(
             """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -216,11 +206,14 @@ class GenerateModelsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments()
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
+
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MPS_VERSION_NOT_SUPPORTED))
+
     }
     @Test
     fun `generate fails with only MPS version set`() {
@@ -233,11 +226,6 @@ class GenerateModelsTest {
         buildFile.writeText(
             """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -263,11 +251,12 @@ class GenerateModelsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments()
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MUST_SET_VERSION_AND_LOCATION))
     }
     @Test
     fun `generate fails with only MPS path set`() {
@@ -280,11 +269,6 @@ class GenerateModelsTest {
         buildFile.writeText(
             """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("generate-models")
@@ -310,10 +294,11 @@ class GenerateModelsTest {
         """.trimIndent()
         )
 
-        GradleRunner.create()
+        val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments()
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MUST_SET_CONFIG_OR_VERSION))
     }
 }
