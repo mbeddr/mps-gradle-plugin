@@ -125,25 +125,6 @@ publishing {
     }
 }
 
-tasks.register("createClasspathManifest") {
-    val outputDir = file("$buildDir/$name")
-
-    inputs.files(sourceSets.main.get().runtimeClasspath)
-        .withPropertyName("runtimeClasspath")
-        .withNormalizer(ClasspathNormalizer::class)
-    outputs.dir(outputDir)
-        .withPropertyName("outputDir")
-
-    doLast {
-        outputDir.mkdirs()
-        file("$outputDir/plugin-classpath.txt").writeText(sourceSets.main.get().runtimeClasspath.joinToString("\n"))
-    }
-}
-
-dependencies {
-    testRuntimeOnly(files(tasks["createClasspathManifest"]))
-}
-
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()

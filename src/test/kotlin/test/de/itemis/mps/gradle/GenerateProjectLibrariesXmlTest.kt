@@ -1,16 +1,12 @@
 package test.de.itemis.mps.gradle
-import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import kotlin.jvm.JvmField
 import java.io.File
-
 
 
 fun getExpectedLibContent(vars: List<Pair<String, String>>): String {
@@ -39,14 +35,11 @@ class GenerateProjectLibrariesXmlTest {
     val testProjectDir: TemporaryFolder = TemporaryFolder()
     private lateinit var settingsFile: File
     private lateinit var buildFile: File
-    private lateinit var cp: List<File>
 
     @Before
     fun setup() {
         settingsFile = testProjectDir.newFile("settings.gradle.kts")
         buildFile = testProjectDir.newFile("build.gradle.kts")
-        cp = javaClass.classLoader.getResource(
-                "plugin-classpath.txt")!!.readText().lines().map { File(it) }
     }
 
     @Test
@@ -63,10 +56,8 @@ class GenerateProjectLibrariesXmlTest {
         buildFile.writeText("""
             import de.itemis.mps.gradle.GenerateLibrariesXml
             
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
+            plugins {
+                id("de.itemis.mps.gradle.common")
             }
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
@@ -79,7 +70,7 @@ class GenerateProjectLibrariesXmlTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("generateLibs")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
 
         assertEquals(TaskOutcome.SUCCESS, result.task(":generateLibs")?.outcome)
@@ -107,10 +98,8 @@ class GenerateProjectLibrariesXmlTest {
         buildFile.writeText("""
             import de.itemis.mps.gradle.GenerateLibrariesXml
             
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
+            plugins {
+                id("de.itemis.mps.gradle.common")
             }
             
             tasks.register<GenerateLibrariesXml>("generateLibs") {
@@ -123,7 +112,7 @@ class GenerateProjectLibrariesXmlTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("generateLibs")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
 
         assertEquals(TaskOutcome.SUCCESS, result.task(":generateLibs")?.outcome)

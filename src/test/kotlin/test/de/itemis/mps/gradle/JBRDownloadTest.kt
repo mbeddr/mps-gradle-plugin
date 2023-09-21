@@ -18,14 +18,11 @@ class JBRDownloadTest {
     val testProjectDir: TemporaryFolder = TemporaryFolder()
     private lateinit var settingsFile: File
     private lateinit var buildFile: File
-    private lateinit var cp: List<File>
 
     @Before
     fun setup() {
         settingsFile = testProjectDir.newFile("settings.gradle.kts")
         buildFile = testProjectDir.newFile("build.gradle.kts")
-        cp = javaClass.classLoader.getResource(
-                "plugin-classpath.txt")!!.readText().lines().map { File(it) }
     }
 
     @Test
@@ -36,11 +33,6 @@ class JBRDownloadTest {
 
         buildFile.writeText("""
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
-            }
             
             plugins {
                 id("download-jbr")
@@ -62,7 +54,7 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("downloadJbr")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
         Assert.assertTrue(File(testProjectDir.root, "jbrdl").exists())
@@ -75,12 +67,7 @@ class JBRDownloadTest {
 
         buildFile.writeText("""
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
-            }
-            
+
             plugins {
                 id("download-jbr")
             }
@@ -100,7 +87,7 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("downloadJbr")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
         Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
@@ -114,11 +101,6 @@ class JBRDownloadTest {
 
         buildFile.writeText("""
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
-            }
             
             plugins {
                 id("download-jbr")
@@ -139,7 +121,7 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("downloadJbr")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
         Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
@@ -153,11 +135,6 @@ class JBRDownloadTest {
 
         buildFile.writeText("""
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
-            }
             
             plugins {
                 id("download-jbr")
@@ -179,7 +156,7 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("downloadJbr")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
         Assert.assertTrue(File(testProjectDir.root, "build/jbrDownload").exists())
@@ -193,11 +170,6 @@ class JBRDownloadTest {
 
         buildFile.writeText("""
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString() }))
-                }
-            }
             
             plugins {
                 id("download-jbr")
@@ -223,7 +195,7 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments("exec")
-                .withPluginClasspath(cp)
+                .withPluginClasspath()
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
     }

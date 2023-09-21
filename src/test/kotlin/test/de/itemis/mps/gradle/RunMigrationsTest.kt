@@ -17,17 +17,11 @@ class RunMigrationsTest {
     val testProjectDir: TemporaryFolder = TemporaryFolder()
     private lateinit var settingsFile: File
     private lateinit var buildFile: File
-    private lateinit var cp: List<File>
     private lateinit var mpsTestPrjLocation: File
     
     private fun commonGradleScriptPart():String {
         return """
             import java.net.URI
-            buildscript {
-                dependencies {
-                    "classpath"(files(${cp.map { """"${it.invariantSeparatorsPath}"""" }.joinToString()}))
-                }
-            }
             
             plugins {
                 id("run-migrations")
@@ -53,9 +47,6 @@ class RunMigrationsTest {
         """.trimIndent()
         )
         buildFile = testProjectDir.newFile("build.gradle.kts")
-        cp = javaClass.classLoader.getResource(
-            "plugin-classpath.txt"
-        )!!.readText().lines().map { File(it) }
         mpsTestPrjLocation = testProjectDir.newFolder("mps-prj")
         extractProject("test-project")
     }
@@ -82,7 +73,7 @@ class RunMigrationsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":runMigrations")?.outcome)
     }
@@ -108,7 +99,7 @@ class RunMigrationsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("The force migration flag is only supported for MPS version 2021.3.0 and higher."))
@@ -136,7 +127,7 @@ class RunMigrationsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .build()
 
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":runMigrations")?.outcome)
@@ -162,7 +153,7 @@ class RunMigrationsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("The path to the project doesn't exist:"))
@@ -185,7 +176,7 @@ class RunMigrationsTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("runMigrations")
-            .withPluginClasspath(cp)
+            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("Specified MPS location does not exist or is not a directory:"))
