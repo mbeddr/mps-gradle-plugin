@@ -51,7 +51,7 @@ class RunMigrationsTest {
         extractProject("test-project")
     }
 
-    private fun extractProject(name: String) = ProjectHelper().extractTestProject(name, mpsTestPrjLocation)
+    private fun extractProject(name: String) = extractTestProject(name, mpsTestPrjLocation)
 
     @Test
     fun `check run migrations works with MPS 2020_3`() {

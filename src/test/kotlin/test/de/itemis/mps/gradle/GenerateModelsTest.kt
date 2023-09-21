@@ -24,7 +24,7 @@ class GenerateModelsTest {
         settingsFile = testProjectDir.newFile("settings.gradle.kts")
         buildFile = testProjectDir.newFile("build.gradle.kts")
         mpsTestPrjLocation = testProjectDir.newFolder("mps-prj")
-        ProjectHelper().extractTestProject("test-project", mpsTestPrjLocation)
+        extractTestProject("test-project", mpsTestPrjLocation)
     }
 
     @Test

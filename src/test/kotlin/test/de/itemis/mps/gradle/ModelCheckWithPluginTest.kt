@@ -29,7 +29,7 @@ class ModelCheckWithPluginTest {
         junitFile = File(mpsTestPrjLocation, "junit.xml")
     }
 
-    private fun extractProject(name: String) = ProjectHelper().extractTestProject(name, mpsTestPrjLocation)
+    private fun extractProject(name: String) = extractTestProject(name, mpsTestPrjLocation)
 
     private fun buildScriptBoilerplate(mpsVersion: String) = """
             plugins {
