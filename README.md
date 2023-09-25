@@ -3,6 +3,41 @@
 Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
+**Table of Contents**
+
+<!-- TOC -->
+* [mps-gradle-plugin](#mps-gradle-plugin)
+* [Configuring the plugin repository](#configuring-the-plugin-repository)
+* [Custom tasks](#custom-tasks)
+  * [RunAntScript](#runantscript)
+    * [Usage](#usage-)
+    * [Providing Global Defaults For Class Path And Arguments](#providing-global-defaults-for-class-path-and-arguments)
+    * [Providing Global Defaults For The Java Executable](#providing-global-defaults-for-the-java-executable)
+    * [Incremental Builds](#incremental-builds)
+  * [CreateDmg](#createdmg)
+    * [Usage](#usage)
+    * [Operation](#operation)
+  * [BundleMacosJdk](#bundlemacosjdk)
+    * [Usage](#usage-1)
+    * [Operation](#operation-1)
+  * [GenerateLibrariesXml](#generatelibrariesxml)
+    * [Usage](#usage-2)
+    * [Operation](#operation-2)
+  * [`generate`](#generate)
+    * [Usage](#usage-3)
+  * [`checkModels`](#checkmodels)
+    * [Usage](#usage-4)
+    * [Additional Plugins](#additional-plugins)
+    * [Additional Plugins](#additional-plugins-)
+  * [Run migrations](#run-migrations)
+    * [Usage](#usage-5)
+  * [Download JetBrains Runtime](#download-jetbrains-runtime)
+    * [Usage](#usage-6)
+    * [Parameters](#parameters)
+  * [Custom MPS Distribution](#custom-mps-distribution)
+  * [MPS vs IDEA environment](#mps-vs-idea-environment)
+<!-- TOC -->
+
 # Configuring the plugin repository
 
 This plugin is not published to the Gradle plugin portal but to a public repository of itemis. To configure this
@@ -211,7 +246,7 @@ Each property represents an entry in `destination` (a project library),
 where the property name is the library name and the property value is
 the path to the library.
 
-## Generate
+## `generate`
 
 Generate a specific or all models in a project without the need for a MPS model.
 
@@ -279,12 +314,12 @@ Parameters:
 * `maxHeap` (since 1.15) - maximum heap size setting for the JVM that executes the generator. The value is a string
   understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
 
-## Model Check
+## `checkModels`
 
 Run the model check on a subset or all models in a project directly from gradle.
 
-This functionality currently runs all model checks (typesystem, structure, constrains, etc.) from gralde. By default if
-any of checks fails the complete build is failed. All messages (Info, Warning or Error) are reported through log4j to
+This functionality currently runs all model checks (typesystem, structure, constrains, etc.) from Gradle. By default, if
+any of checks fails, the complete build is failed. All messages (Info, Warning or Error) are reported through log4j to
 the command line.
 
 ### Usage
@@ -358,7 +393,7 @@ Parameters:
 
 ### Additional Plugins
 
-By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
+By default, only the minimum required set of plugins is loaded. This includes base language and some utilities like the
 HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location
 to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list:
 
@@ -378,27 +413,53 @@ modelcheck {
 Dependencies of the specified plugins are automatically loaded from the `pluginLocation` and the plugins directory of 
 MPS. If they are not found the build will fail.
 
-### Additional Plugins 
+## `MpsCheck` Task Type
 
-By default only the minimum required set of plugins are loaded. This includes base language and some utilities like the
-HTTP server from MPS. If your project requires additional plugins to be loaded this is done by setting plugin location 
-to the place where your jar files are placed and adding your plugin id and folder name to the `plugins` list: 
+This task improves over the `modelcheck` plugin described above and fixes some of its deficiencies.
 
-```
-apply plugin: 'modelcheck'
-...
+The `modelcheck` extension provided by the eponymous plugin can only be configured once per Gradle project. Checking
+multiple subprojects is not possible without resorting to tricks. In addition, the extension only has limited support
+for lazy configuration and does not support Gradle build cache.
 
-modelcheck {
-    pluginLocation.set(new File("path/to/my/plugins"))
-    plugins.set([new Plugin("com.mbeddr.core", "mbeddr.core")])
-    projectLocation.set(new File("./mps-prj"))
-    mpsConfig.set(configurations.mps)
+The `MpsCheck` task works similarly to the `checkmodels` task of `modelcheck` plugin but allows defining multiple
+instances of itself, supports lazy configuration and caching.
+
+### Usage
+
+```groovy
+import de.itemis.mps.gradle.tasks.MpsCheck
+
+plugins {
+    // Required in order to use the MpsCheck task
+    id("de.itemis.mps.gradle.common")
 }
 
+tasks.register('checkProject', MpsCheck) {
+    mpsHome = file("...") // MPS home directory
+    projectLocation = projectDir
+}
 ```
 
-Dependencies of the specified plugins are automatically loaded from the `pluginlocation` and the plugins directory of 
-MPS. If they are not found the the build will fail.
+Parameters:
+
+* `projectLocation` - the location of the project to check. Default is the Gradle project directory.
+* `models`, `modules`, `excludeModels`, `excludeModules` - regular expressions. Matching modules and models will be
+  included or excluded from checking.
+* `additionalModelcheckBackendClasspath` - any extra libraries that should be on the classpath of the modelcheck
+  backend.
+* `folderMacros` - path variables/macros that are necessary to open the project. Path macros are not considered part of
+  Gradle build cache key.
+* `varMacros` - non-path variables/macros that are necessary to open the project. Variable macros *are* considered part
+  of Gradle build cache key.
+* `junitFile` - the JUnit XML file to produce. Defaults to `$buildDir/TEST-${task.name}.xml`
+* `junitFormat` - the format of the JUnit XML file. Defaults to `module-and-model`.
+* `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
+* `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.
+* `pluginRoots` - directories containing additional plugins to load
+* `warningAsError` - whether to treat warnings as errors.
+* `ignoreFailures` (inherited from `VerificationTask`) - whether to fail the build if an error is found.
+
+Compatibility note: `MpsCheck` task currently extends `JavaExec` but this may change in the future. Do not rely on this.
 
 ## Run migrations
 

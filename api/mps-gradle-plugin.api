@@ -296,3 +296,23 @@ public final class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlu
 	public final fun getMIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE ()Lnet/swiftzer/semver/SemVer;
 }
 
+public abstract class de/itemis/mps/gradle/tasks/MpsCheck : org/gradle/api/tasks/JavaExec, org/gradle/api/tasks/VerificationTask {
+	public fun <init> ()V
+	public fun exec ()V
+	public final fun getAdditionalModelcheckBackendClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public final fun getExcludeModels ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getExcludeModules ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getJunitFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getJunitFormat ()Lorg/gradle/api/provider/Property;
+	public final fun getModels ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getModules ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getMpsHome ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
+	public final fun getPluginRoots ()Lorg/gradle/api/provider/SetProperty;
+	public final fun getProjectLocation ()Lorg/gradle/api/file/DirectoryProperty;
+	protected final fun getSources ()Lorg/gradle/api/provider/Provider;
+	public final fun getVarMacros ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getWarningAsError ()Lorg/gradle/api/provider/Property;
+}
+

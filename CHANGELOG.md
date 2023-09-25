@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.19
+
+### Added
+
+- `MpsCheck` task for running the model checker. In contrast to the `modelcheck` plugin there can be multiple instances
+  of the task, and the task is written with the current Gradle best practices (lazy properties, caching).
+
 ## 1.18
 
 ### Changed

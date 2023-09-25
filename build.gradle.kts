@@ -25,7 +25,7 @@ plugins {
 }
 
 val versionMajor = 1
-val versionMinor = 18
+val versionMinor = 19
 
 group = "de.itemis.mps"
 
@@ -59,9 +59,13 @@ dependencies {
     api("de.itemis.mps.gradle:git-based-versioning")
     implementation(kotlin("stdlib", version = kotlinVersion))
     implementation("net.swiftzer.semver:semver:1.1.2")
+    implementation("de.itemis.mps.build-backends:launcher:1.+")
     testImplementation("junit:junit:4.13.2")
 }
 
+tasks.test {
+    useJUnit()
+}
 
 gradlePlugin {
     plugins {
