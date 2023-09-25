@@ -135,3 +135,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.apiVersion = kotlinApiVersion
     kotlinOptions.allWarningsAsErrors = true
 }
+
+apiValidation {
+    ignoredClasses.add("de.itemis.mps.gradle.Common_gradle")
+}
