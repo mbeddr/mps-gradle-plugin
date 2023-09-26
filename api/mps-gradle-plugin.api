@@ -311,7 +311,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsCheck : org/gradle/api/tasks
 	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
 	public final fun getPluginRoots ()Lorg/gradle/api/provider/SetProperty;
 	public final fun getProjectLocation ()Lorg/gradle/api/file/DirectoryProperty;
-	protected final fun getSources ()Lorg/gradle/api/provider/Provider;
+	protected final fun getSources ()Lorg/gradle/api/file/FileTree;
 	public final fun getVarMacros ()Lorg/gradle/api/provider/MapProperty;
 	public final fun getWarningAsError ()Lorg/gradle/api/provider/Property;
 }

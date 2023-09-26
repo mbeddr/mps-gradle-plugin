@@ -18,8 +18,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     // as the launcher remains stateless.
     private val backendLauncher: MpsBackendLauncher = objectFactory.newInstance(MpsBackendLauncher::class)
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.NONE)
+    @get:Internal("covered by mpsVersion, initialModelcheckBackendClasspath()")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Input
@@ -67,16 +66,23 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         objectFactory.fileCollection().from(initialModelcheckBackendClasspath())
 
     @Suppress("unused")
-    @InputFiles
-    @SkipWhenEmpty
-    @PathSensitive(PathSensitivity.NONE)
-    protected val sources: Provider<FileCollection> = projectLocation.map {
-        it.asFileTree.matching {
-            exclude(project.layout.buildDirectory.get().asFile.relativeTo(projectLocation.get().asFile).path + "/**")
-            include("**/*.msd")
-            include("**/*.mpsr")
-            include("**/*.mps")
-        }
+    @get:InputFiles
+    @get:SkipWhenEmpty
+    @get:PathSensitive(PathSensitivity.NONE)
+    protected val sources: FileTree = projectLocation.asFileTree.matching {
+        exclude(project.layout.buildDirectory.get().asFile.relativeTo(projectLocation.get().asFile).path + "/**")
+        exclude("**/*_gen*/**")
+
+        include("**/*.msd")
+        include("**/*.mpsr")
+        include("**/*.mps")
+    }
+
+    @Suppress("unused")
+    @get:Classpath
+    protected val compiledClasses: FileTree = projectLocation.asFileTree.matching {
+        exclude(project.layout.buildDirectory.get().asFile.relativeTo(projectLocation.get().asFile).path + "/**")
+        include("**/classes_gen/*")
     }
 
     init {
