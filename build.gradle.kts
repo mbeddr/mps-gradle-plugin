@@ -12,7 +12,7 @@ buildscript {
 }
 
 val kotlinApiVersion by extra { "1.5" }
-val kotlinVersion by extra { "$kotlinApiVersion.31!!" }
+val kotlinVersion by extra { "$kotlinApiVersion.31" }
 
 
 plugins {
