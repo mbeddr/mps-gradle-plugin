@@ -492,9 +492,9 @@ Parameters:
 * `mpsLocation` - location where to place the MPS files.
 * `mpsVersion` - if you use a [custom distribution](#custom-mps-distribution) of MPS.
 * `projectLocation` - location of the project that should be migrated.
-* `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway (supported in 2021.3.0 and higher)
-* `haltOnPrecheckFailure` - ignores failed pre-checks (except the check for migrated dependecies) (supported in 2021.1 and higher) 
-* `haltOnDependencyError` - migrate even when non-migrated dependencies are discovered (supported in 2021.3.4 and 2023.2 and higher)
+* `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway. Supported in 2021.3.0 and higher.
+* `haltOnPrecheckFailure` - controls whether migration is aborted if pre-checks fail (except the check for migrated dependecies) Default: `true`. Supported in 2021.1 and higher. 
+* `haltOnDependencyError` - controls whether migration is aborted when non-migrated dependencies are discovered. Default: `true`. Supported in 2021.3.4 and 2023.2 and higher.
 * `maxHeap` (since 1.15) - maximum heap size setting for the JVM that executes the migrations. The value is a string
   understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
 
