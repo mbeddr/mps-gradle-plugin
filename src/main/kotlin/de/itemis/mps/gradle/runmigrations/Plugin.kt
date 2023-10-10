@@ -15,15 +15,19 @@ import javax.inject.Inject
 
 open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFactory) : BasePluginExtensions(of) {
     /**
-     * (Since MPS 2021.1) Whether to halt if a pre-check has failed. Note that the check for migrated dependencies
-     * cannot be skipped.
+     * (Since MPS 2021.1) Whether to halt if a pre-check has failed. Note that to ignore the check for migrated
+     * dependencies the [haltOnDependencyError] option must be set to `false` as well.
      */
     var haltOnPrecheckFailure: Boolean? = null
 
     /**
+     * (Since MPS 2021.3.4) Whether to halt when a non-migrated dependency is discovered.
+     */
+    var haltOnDependencyError: Boolean? = null
+
+    /**
      * (Since MPS 2021.3) Whether to force a migration even if the project directory contains `.allow-pending-migrations` file.
      */
-
     var force: Boolean? = null
 }
 
@@ -31,6 +35,7 @@ open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFacto
 open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
     companion object {
         val MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE = SemVer(2021, 1)
+        val MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR = SemVer(2021, 3, 4)
         val MIN_VERSION_FOR_FORCE = SemVer(2021, 3)
     }
 
@@ -55,6 +60,10 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
 
                 if (extension.haltOnPrecheckFailure != null && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) {
                     throw GradleException("The 'do not halt on pre-check failure' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE and higher.")
+                }
+
+                if (extension.haltOnDependencyError != null && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR) {
+                    throw GradleException("The 'do not halt on dependency error' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR and higher.")
                 }
 
                 val resolveMps: Task = if (extension.mpsConfig != null) {
@@ -84,8 +93,9 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                                 add("project" to projectLocation)
                                 add("mpsHome" to mpsLocation)
 
-                                if (extension.force != null) add("force" to extension.force!!)
-                                if (extension.haltOnPrecheckFailure != null) add("haltOnPrecheckFailure" to extension.haltOnPrecheckFailure!!)
+                                extension.force?.let { add("force" to it) }
+                                extension.haltOnPrecheckFailure?.let { add("haltOnPrecheckFailure" to it) }
+                                extension.haltOnDependencyError?.let { add("haltOnDependencyError" to it) }
 
                                 toTypedArray()
                             }
