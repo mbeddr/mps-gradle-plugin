@@ -2,6 +2,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.20
+
+### Added
+
+- `runMigrations` now supports `haltOnDependencyError` option. `false` will skip the check for non-migrated dependencies 
+  and run the migrations anyway. The default is `true`.
+- `junitReportAllErrors` properties in `modelcheck` extension and `MpsCheck` task. When `true`, all errors are reported
+  in the JUnit XML report, including the errors from models outside of the check scope. The default is `false`.
+
 ## 1.19
 
 ### Added

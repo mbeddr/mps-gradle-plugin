@@ -20,6 +20,7 @@ open class ModelCheckPluginExtensions(objectFactory: ObjectFactory) : BasePlugin
     var errorNoFail = false
     var junitFile: File? = null
     var junitFormat: String? = null
+    var junitReportAllErrors: Boolean = false
 }
 
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
@@ -73,6 +74,10 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                         if (extension.junitFormat != null) {
                             args.add("--result-format=${extension.junitFormat}")
+                        }
+
+                        if (extension.junitReportAllErrors) {
+                            args.add("--result-all-errors")
                         }
                         args
                     })

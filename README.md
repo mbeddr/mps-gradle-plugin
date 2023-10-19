@@ -379,10 +379,13 @@ Parameters:
   testcase for each model that was checked (s. `junitFormat`).
 * `junitFormat` - allows to change the format of the JUnit XML file, how the model checking errors will be reported. Possible options:
   * `model` (default) - generates one testcase for each model that was checked. If the model check reported any error for the model, 
-    the testcase will fail and the message of the model checking error will be reported. 
+    the testcase will fail and the message of the model checking error will be reported.
+  * `module-and-model` - generates one testcase per module and tested model. The report also contains module-level errors in contrast to 
+    the `model` format.
   * `message` - generates one testcase for each model check error. For uniqueness reasons, the name of the testcase will reflect the specific
     model check error and the name of the testclass will be constructed from the checked node ID and its containing root node. 
-    Full error message and the node URL will be reported in the testcase failure. Checked models will be mapped to testsuites with this option.     
+    Full error message and the node URL will be reported in the testcase failure. Checked models will be mapped to testsuites with this option.
+* `junitReportAllErrors` - whether to include in the JUnit XML file the errors from outside the check scope. Defaults to `false`.
 * `maxHeap` - maximum heap size setting for the JVM that executes the modelchecker. This is useful to limit the heap usage
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
   to be consumed by the container. The value is a string understood by the JVM command line argument `-Xmx` e.g. `3G` or `512M`.
@@ -454,6 +457,8 @@ Parameters:
   of Gradle build cache key.
 * `junitFile` - the JUnit XML file to produce. Defaults to `$buildDir/TEST-${task.name}.xml`
 * `junitFormat` - the format of the JUnit XML file. Defaults to `module-and-model`.
+* `junitReportAllErrors` - whether to include errors from outside the check scope in the JUnit XML file. Can be useful
+  when checking linters that report errors from a different model. Defaults to `false`.
 * `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
 * `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.
 * `pluginRoots` - directories containing additional plugins to load
