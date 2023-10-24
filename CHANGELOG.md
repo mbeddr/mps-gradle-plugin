@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.19.1
+
+### Fixed
+
+- `generate` and `checkmodels` tasks now support MPS 2022.2 and above by adding the necessary `--add-opens` JVM
+  arguments (using `mps-build-backends/launcher`).
+
 ## 1.19
 
 ### Added

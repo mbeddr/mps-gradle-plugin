@@ -24,23 +24,31 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 }
 
-val versionMajor = 1
-val versionMinor = 19
+val baseVersion = "1.19.1"
 
 group = "de.itemis.mps"
 
-var currentBranch:String? = ""
-currentBranch = GitBasedVersioning.getGitBranch()
+val currentBranch : String? = GitBasedVersioning.getGitBranch()
 
 version = if (!project.hasProperty("useSnapshot") &&
     (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
 ) {
-    GitBasedVersioning.getVersion(
-        // Publish releases from v1.x branch without v1.x prefix
-        if (currentBranch == "v1.x") "HEAD" else currentBranch,
-        versionMajor.toString(), versionMinor.toString())
+    val prefix = when (currentBranch) {
+        null, "", "v1.x", "HEAD", "master", "main" -> ""
+        else -> "$currentBranch."
+    }
+
+    val suffix = ".${GitBasedVersioning.getGitCommitCount()}.${GitBasedVersioning.getGitShortCommitHash()}"
+
+    prefix + baseVersion + suffix
 } else {
-    "$versionMajor.$versionMinor-SNAPSHOT"
+    "$baseVersion-SNAPSHOT"
+}
+
+tasks.register("printVersion") {
+    doLast {
+        println("Version: $version")
+    }
 }
 
 val mpsConfiguration = configurations.create("mps")
