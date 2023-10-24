@@ -279,8 +279,10 @@ public class de/itemis/mps/gradle/modelcheck/ModelcheckMpsProjectPlugin : org/gr
 public class de/itemis/mps/gradle/runmigrations/MigrationExecutorPluginExtensions : de/itemis/mps/gradle/BasePluginExtensions {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun getForce ()Ljava/lang/Boolean;
+	public final fun getHaltOnDependencyError ()Ljava/lang/Boolean;
 	public final fun getHaltOnPrecheckFailure ()Ljava/lang/Boolean;
 	public final fun setForce (Ljava/lang/Boolean;)V
+	public final fun setHaltOnDependencyError (Ljava/lang/Boolean;)V
 	public final fun setHaltOnPrecheckFailure (Ljava/lang/Boolean;)V
 }
 
@@ -293,6 +295,7 @@ public class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin : 
 
 public final class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin$Companion {
 	public final fun getMIN_VERSION_FOR_FORCE ()Lnet/swiftzer/semver/SemVer;
+	public final fun getMIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR ()Lnet/swiftzer/semver/SemVer;
 	public final fun getMIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE ()Lnet/swiftzer/semver/SemVer;
 }
 
@@ -300,6 +303,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsCheck : org/gradle/api/tasks
 	public fun <init> ()V
 	public fun exec ()V
 	public final fun getAdditionalModelcheckBackendClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	protected final fun getCompiledClasses ()Lorg/gradle/api/file/FileTree;
 	public final fun getExcludeModels ()Lorg/gradle/api/provider/ListProperty;
 	public final fun getExcludeModules ()Lorg/gradle/api/provider/ListProperty;
 	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
