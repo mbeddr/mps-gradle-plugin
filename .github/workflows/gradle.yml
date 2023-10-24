@@ -21,4 +21,16 @@ jobs:
         java-version: ${{ matrix.java }}
     - uses: gradle/gradle-build-action@v2
     - name: Build with Gradle
-      run: ./gradlew --info build
+      run: ./gradlew build
+    - name: Upload JUnit XMLs
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: junit-xmls
+        path: '**/build/test-results/**/TEST-*.xml'
+        retention-days: 7
+    - uses: mikepenz/action-junit-report@v4
+      if: success() || failure()
+      with:
+        report_paths: '**/build/test-results/**/TEST-*.xml'
+        require_tests: true
