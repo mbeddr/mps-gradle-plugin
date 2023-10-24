@@ -45,12 +45,6 @@ version = if (!project.hasProperty("useSnapshot") &&
     "$baseVersion-SNAPSHOT"
 }
 
-tasks.register("printVersion") {
-    doLast {
-        println("Version: $version")
-    }
-}
-
 val mpsConfiguration = configurations.create("mps")
 
 repositories {
