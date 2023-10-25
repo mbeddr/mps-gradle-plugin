@@ -1,10 +1,14 @@
 package de.itemis.mps.gradle.tasks
 
-import de.itemis.mps.gradle.launcher.MpsBackendLauncher
+import de.itemis.mps.gradle.launcher.MpsBackendBuilder
+import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.GradleException
 import org.gradle.api.file.*
 import org.gradle.api.logging.LogLevel
-import org.gradle.api.provider.*
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.MapProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -14,17 +18,13 @@ import java.io.File
 @CacheableTask
 abstract class MpsCheck : JavaExec(), VerificationTask {
 
-    // Having our own private launcher instance means we don't need to apply the launcher plugin. This works as long
-    // as the launcher remains stateless.
-    private val backendLauncher: MpsBackendLauncher = objectFactory.newInstance(MpsBackendLauncher::class)
-
     @get:Internal("covered by mpsVersion, initialModelcheckBackendClasspath()")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Input
     @get:Optional
     val mpsVersion: Property<String> = objectFactory.property<String>()
-        .convention(backendLauncher.mpsVersionFromMpsHome(mpsHome.asFile))
+        .convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
 
     @get:Internal("only modules and models matter, covered by #sources")
     val projectLocation: DirectoryProperty =
@@ -86,7 +86,9 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     }
 
     init {
-        backendLauncher.configureJavaForMpsVersion(this, mpsHome.map { it.asFile }, mpsVersion)
+        val backendBuilder: MpsBackendBuilder = project.objects.newInstance(MpsBackendBuilder::class)
+        backendBuilder.withMpsHomeDirectory(mpsHome).withMpsVersion(mpsVersion).configure(this)
+
         argumentProviders.add(CommandLineArgumentProvider {
             val result = mutableListOf<String>()
 

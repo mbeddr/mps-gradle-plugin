@@ -1,6 +1,7 @@
 package de.itemis.mps.gradle.generate
 
 import de.itemis.mps.gradle.*
+import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsBackendLauncher
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
@@ -66,8 +67,9 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                 }
 
                 generate.configure {
-                    val backendLauncher: MpsBackendLauncher = project.objects.newInstance(MpsBackendLauncher::class)
-                    backendLauncher.configureJavaForMpsVersion(this, mpsLocation, mpsVersion)
+                    val backendBuilder: MpsBackendBuilder = project.objects.newInstance(MpsBackendBuilder::class)
+                    backendBuilder.withMpsHome(mpsLocation).withMpsVersion(mpsVersion).configure(this)
+
                     dependsOn(fake)
 
                     argumentProviders.add(argsFromBaseExtension(extension))
