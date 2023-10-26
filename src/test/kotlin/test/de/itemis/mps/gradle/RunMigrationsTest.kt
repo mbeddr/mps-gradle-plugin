@@ -70,10 +70,8 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
+        val result = gradleRunner()
             .withArguments("runMigrations")
-            .withPluginClasspath()
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":runMigrations")?.outcome)
     }
@@ -96,10 +94,8 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
+        val result = gradleRunner()
             .withArguments("runMigrations")
-            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("The force migration flag is only supported for MPS version 2021.3.0 and higher."))
@@ -124,10 +120,8 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
+        val result = gradleRunner()
             .withArguments("runMigrations")
-            .withPluginClasspath()
             .build()
 
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":runMigrations")?.outcome)
@@ -150,10 +144,8 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
+        val result = gradleRunner()
             .withArguments("runMigrations")
-            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("The path to the project doesn't exist:"))
@@ -173,12 +165,14 @@ class RunMigrationsTest {
         """.trimIndent()
         )
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
+        val result = gradleRunner()
             .withArguments("runMigrations")
-            .withPluginClasspath()
             .buildAndFail()
 
         assertThat(result.output, containsString("Specified MPS location does not exist or is not a directory:"))
     }
+
+    private fun gradleRunner(): GradleRunner = GradleRunner.create()
+        .withProjectDir(testProjectDir.root)
+        .withPluginClasspath()
 }
