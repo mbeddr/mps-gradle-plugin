@@ -301,4 +301,48 @@ class GenerateModelsTest {
             .buildAndFail()
         MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MUST_SET_CONFIG_OR_VERSION))
     }
+
+    @Test
+    fun `explicit javaExec`() {
+        buildFile.writeText(
+            """
+                import de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform
+                
+                plugins {
+                    id("generate-models")
+                    id("download-jbr")
+                }
+                
+                downloadJbr {
+                    jbrVersion = "11_0_10-b1341.41"
+                }
+
+                generate {
+                    projectLocation = projectDir
+                    mpsLocation = file("build/mps")
+                    mpsVersion = "2020.3.3"
+                    javaExec = (tasks.getByName("downloadJbr") as DownloadJbrForPlatform).javaExecutable
+                }
+                
+                tasks.register("verify") {
+                    doLast {
+                        val generateLauncherPresent = (tasks.getByName("generate") as JavaExec).javaLauncher.isPresent
+                        println("generate.javaLauncher.isPresent: " + generateLauncherPresent)
+                    }
+                }
+            """.trimIndent()
+        )
+
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("verify")
+            .withPluginClasspath()
+            .build()
+
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":verify")?.outcome)
+
+        // When javaExec is explicitly set, the launcher should be absent
+        Assert.assertTrue("generate.javaLauncher should not be present",
+            result.output.contains("generate.javaLauncher.isPresent: false"))
+    }
 }

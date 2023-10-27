@@ -1,6 +1,10 @@
 package test.de.itemis.mps.gradle
 
 import de.itemis.mps.gradle.ErrorMessages
+import de.itemis.mps.gradle.downloadJBR.DownloadJbrConfiguration
+import de.itemis.mps.gradle.modelcheck.ModelCheckPluginExtensions
+import org.gradle.kotlin.dsl.configure
+import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers
@@ -31,6 +35,10 @@ class ModelCheckWithPluginTest {
 
     private fun extractProject(name: String) = extractTestProject(name, mpsTestPrjLocation)
 
+    private fun settingsBoilerplate() = """
+                rootProject.name = "hello-world"
+            """.trimIndent()
+
     private fun buildScriptBoilerplate(mpsVersion: String) = """
             plugins {
                 id("modelcheck")
@@ -49,14 +57,10 @@ class ModelCheckWithPluginTest {
     """.trimIndent() + "\n"
 
     @Test
-    fun `check model works with latest MPS`() {
+    fun `check model works with MPS 2020_3_3`() {
         extractProject("test-project")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2020.3.3") + """
@@ -78,14 +82,54 @@ class ModelCheckWithPluginTest {
     }
 
     @Test
+    fun `explicit javaExec`() {
+        buildFile.writeText(
+            """
+                import de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform
+                
+                plugins {
+                    id("modelcheck")
+                    id("download-jbr")
+                }
+                
+                downloadJbr {
+                    jbrVersion = "11_0_10-b1341.41"
+                }
+
+                modelcheck {
+                    projectLocation = projectDir
+                    mpsLocation = file("build/mps")
+                    mpsVersion = "2020.3.3"
+                    javaExec = (tasks.getByName("downloadJbr") as DownloadJbrForPlatform).javaExecutable
+                }
+                
+                tasks.register("verify") {
+                    doLast {
+                        val checkmodelsLauncherPresent = (tasks.getByName("checkmodels") as JavaExec).javaLauncher.isPresent
+                        println("checkmodels.javaLauncher.isPresent: " + checkmodelsLauncherPresent)
+                    }
+                }
+            """.trimIndent()
+        )
+
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("verify")
+            .withPluginClasspath()
+            .build()
+
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":verify")?.outcome)
+
+        // When javaExec is explicitly set, the launcher should be absent
+        Assert.assertTrue("checkmodels.javaLauncher should not be present",
+            result.output.contains("checkmodels.javaLauncher.isPresent: false"))
+    }
+
+    @Test
     fun `check model fails if errors are found`() {
         extractProject("test-project-with-errors")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2021.1.4") +
@@ -111,11 +155,7 @@ class ModelCheckWithPluginTest {
     fun `check model works with latest MPS and excluded models`() {
         extractProject("test-project-with-errors")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2021.1.4") +
@@ -142,11 +182,7 @@ class ModelCheckWithPluginTest {
     fun `check model fails with unsupported MPS`() {
         extractProject("test-project")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2019.3.7") +
@@ -172,11 +208,7 @@ class ModelCheckWithPluginTest {
     fun `check model works with set MPS version and path`() {
         extractProject("test-project")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2020.3.3") +
@@ -201,11 +233,7 @@ class ModelCheckWithPluginTest {
     fun `check model fails with set MPS invalid version and path`() {
         extractProject("test-project")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2020.3.3") +
@@ -230,11 +258,7 @@ class ModelCheckWithPluginTest {
     fun `check model fails with only MPS version set`() {
         extractProject("test-project")
 
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2020.3.3") +
@@ -257,11 +281,7 @@ class ModelCheckWithPluginTest {
     }
     @Test
     fun `check model fails with only MPS path set`() {
-        settingsFile.writeText(
-            """
-            rootProject.name = "hello-world"
-        """.trimIndent()
-        )
+        settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
             buildScriptBoilerplate("2020.3.3") +

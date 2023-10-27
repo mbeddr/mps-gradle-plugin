@@ -83,10 +83,13 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                         }
                     })
 
-                    if (extension.javaExec != null)
+                    if (extension.javaExec != null) {
+                        javaLauncher.set(null)
                         executable(extension.javaExec!!)
-                    else
+                    } else {
                         validateDefaultJvm()
+                    }
+
                     group = "build"
                     description = "Generates models in the project"
                     classpath(fileTree(File(mpsLocation, "/lib")).include("**/*.jar"))

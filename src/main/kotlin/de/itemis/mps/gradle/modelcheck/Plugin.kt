@@ -84,10 +84,12 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                         args
                     })
 
-                    if (extension.javaExec != null)
+                    if (extension.javaExec != null) {
+                        javaLauncher.set(null)
                         executable(extension.javaExec!!)
-                    else
+                    } else {
                         validateDefaultJvm()
+                    }
 
                     group = "test"
                     description = "Check models in the project"
