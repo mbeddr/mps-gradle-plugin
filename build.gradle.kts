@@ -24,7 +24,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 }
 
-val baseVersion = "1.19.3"
+val baseVersion = "1.20.0"
 
 group = "de.itemis.mps"
 
