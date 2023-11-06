@@ -61,6 +61,9 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     @get:Input
     val junitFormat: Property<String> = objectFactory.property<String>().convention("module-and-model")
 
+    @get:Input
+    val parallel: Property<Boolean> = objectFactory.property<Boolean>().convention(false)
+
     @get:Internal("covered by classpath")
     val additionalModelcheckBackendClasspath: ConfigurableFileCollection =
         objectFactory.fileCollection().from(initialModelcheckBackendClasspath())
@@ -122,6 +125,10 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
 
             if (junitFormat.isPresent) {
                 result.add("--result-format=${junitFormat.get()}")
+            }
+
+            if (parallel.get()) {
+                result.add("--parallel")
             }
 
             val effectiveLogLevel = logging.level ?: project.logging.level ?: project.gradle.startParameter.logLevel
