@@ -259,6 +259,7 @@ public class de/itemis/mps/gradle/modelcheck/ModelCheckPluginExtensions : de/ite
 	public final fun getJunitFormat ()Ljava/lang/String;
 	public final fun getModels ()Ljava/util/List;
 	public final fun getModules ()Ljava/util/List;
+	public final fun getParallel ()Z
 	public final fun getWarningAsError ()Z
 	public final fun setErrorNoFail (Z)V
 	public final fun setExcludeModels (Ljava/util/List;)V
@@ -267,6 +268,7 @@ public class de/itemis/mps/gradle/modelcheck/ModelCheckPluginExtensions : de/ite
 	public final fun setJunitFormat (Ljava/lang/String;)V
 	public final fun setModels (Ljava/util/List;)V
 	public final fun setModules (Ljava/util/List;)V
+	public final fun setParallel (Z)V
 	public final fun setWarningAsError (Z)V
 }
 
@@ -313,6 +315,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsCheck : org/gradle/api/tasks
 	public final fun getModules ()Lorg/gradle/api/provider/ListProperty;
 	public final fun getMpsHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
+	public final fun getParallel ()Lorg/gradle/api/provider/Property;
 	public final fun getPluginRoots ()Lorg/gradle/api/provider/SetProperty;
 	public final fun getProjectLocation ()Lorg/gradle/api/file/DirectoryProperty;
 	protected final fun getSources ()Lorg/gradle/api/file/FileTree;
