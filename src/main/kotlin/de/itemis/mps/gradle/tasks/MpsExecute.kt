@@ -24,11 +24,9 @@ abstract class MpsExecute : JavaExec() {
     abstract val mpsHome: DirectoryProperty
 
     @get:Internal
-    @get:Optional
     abstract val mpsVersion: Property<String>
 
     @get:Internal
-    @get:Optional
     abstract val projectLocation: DirectoryProperty
 
     @get:Classpath

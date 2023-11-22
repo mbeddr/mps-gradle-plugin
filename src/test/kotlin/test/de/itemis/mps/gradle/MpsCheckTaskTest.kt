@@ -1,8 +1,6 @@
 package test.de.itemis.mps.gradle
 
-import de.itemis.mps.gradle.tasks.MpsCheckErrors
-import org.gradle.api.GradleException
-import org.gradle.api.invocation.Gradle
+import de.itemis.mps.gradle.ErrorMessages
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers.containsString
@@ -67,7 +65,7 @@ class MpsCheckTaskTest {
         val result = gradleRunner().withArguments("checkProject").buildAndFail()
 
         Assert.assertEquals(TaskOutcome.FAILED, result.task(":checkProject")?.outcome)
-        assertThat(result.output, containsString(MpsCheckErrors.noMpsProjectIn(testProjectDir.root.canonicalFile)))
+        assertThat(result.output, containsString(ErrorMessages.noMpsProjectIn(testProjectDir.root.canonicalFile)))
     }
 
     @Test
