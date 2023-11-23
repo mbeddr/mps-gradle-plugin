@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle.tasks
 
+import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.GradleException
@@ -13,7 +14,6 @@ import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.CommandLineArgumentProvider
-import java.io.File
 
 @CacheableTask
 abstract class MpsCheck : JavaExec(), VerificationTask {
@@ -150,7 +150,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     override fun exec() {
         val projectLocationAsFile = projectLocation.get().asFile
         if (!projectLocationAsFile.resolve(".mps").isDirectory) {
-            throw GradleException(MpsCheckErrors.noMpsProjectIn(projectLocationAsFile))
+            throw GradleException(ErrorMessages.noMpsProjectIn(projectLocationAsFile))
         }
 
         super.exec()
@@ -168,8 +168,4 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         include("plugins/mps-httpsupport/**/*.jar")
         include("plugins/git4idea/**/*.jar")
     }
-}
-
-internal object MpsCheckErrors {
-    fun noMpsProjectIn(dir: File): String = "Directory does not contain an MPS project: " + dir
 }

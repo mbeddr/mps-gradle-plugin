@@ -6,7 +6,12 @@ package de.itemis.mps.gradle
  */
 
 val modelcheckBackend by configurations.creating
+val executeBackend by configurations.creating
 
 modelcheckBackend.defaultDependencies {
     add(dependencies.create("de.itemis.mps.build-backends:modelcheck:${MPS_BUILD_BACKENDS_VERSION}"))
+}
+
+executeBackend.defaultDependencies {
+    add(dependencies.create("de.itemis.mps.build-backends:execute:${MPS_BUILD_BACKENDS_VERSION}"))
 }
