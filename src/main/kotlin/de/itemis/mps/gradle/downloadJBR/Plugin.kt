@@ -95,12 +95,14 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
         // required for running tests. While a little bit larger than jbr_nomod it should cause the least
         // surprises when using it as a default.
         // see https://github.com/mbeddr/build.publish.jdk/commit/10bbf7d177336179ca189fc8bb4c1262029c69da
-        val distributionType = if(extension.distributionType == null &&
-            Regex("""11_0_[0-9][^0-9]""").find(version) != null) {
-            "jbr"
-        } else {
-            "jbr_jcef"
-        }
+        val distributionType =
+                if (extension.distributionType != null) {
+                    extension.distributionType
+                } else if (Regex("""11_0_[0-9][^0-9]""").find(version) != null) {
+                    "jbr"
+                } else {
+                    "jbr_jcef"
+                }
 
         val cpuArch = when(System.getProperty ("os.arch")) {
             "aarch64" -> "aarch64"
