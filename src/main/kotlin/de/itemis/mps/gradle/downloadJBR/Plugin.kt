@@ -48,7 +48,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
 
                         if (downloadDir.listFiles { _, name -> name.startsWith("jbr_") || name.startsWith("jbr-") }!!.any()) {
                             exec {
-                                commandLine("sh", "-c", "mv jbr_* jbr")
+                                commandLine("sh", "-c", "mv jbr* jbr")
                                 workingDir = downloadDir
                             }
                         }
