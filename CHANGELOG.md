@@ -2,11 +2,20 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.22
+
+### Added
+
+- `MpsGenerate` custom task to run the MPS make. In contrast to the `generate` plugin there can be multiple instances
+  of the task, and the task is written with the current Gradle best practices (lazy properties, up-to-date checking).
+  In order to properly support up-to-date checking and caching, task outputs have to be specified (see
+  [Incremental build](https://docs.gradle.org/current/userguide/incremental_build.html) in the Gradle documentation).
+
 ## 1.21.2
 
 ### Fixed
 
-- `downloadJbr` handles jbr versions with dashes in their name
+- `downloadJbr` handles JBR versions with dashes in their name
 
 ## 1.21.1
 

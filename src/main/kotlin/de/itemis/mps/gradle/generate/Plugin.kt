@@ -3,11 +3,13 @@ package de.itemis.mps.gradle.generate
 import de.itemis.mps.gradle.*
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsBackendLauncher
+import org.apache.tools.ant.taskdefs.Java
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
 import org.gradle.jvm.toolchain.JavaLauncher
