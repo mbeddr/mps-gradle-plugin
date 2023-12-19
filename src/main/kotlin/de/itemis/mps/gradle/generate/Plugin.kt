@@ -10,6 +10,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
+import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
@@ -84,7 +85,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     })
 
                     if (extension.javaExec != null) {
-                        javaLauncher.set(null)
+                        javaLauncher.set(null as JavaLauncher?)
                         executable(extension.javaExec!!)
                     } else {
                         validateDefaultJvm()

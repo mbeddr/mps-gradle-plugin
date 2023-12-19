@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle.tasks
 
+import de.itemis.mps.gradle.BackendConfigurations
 import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
@@ -141,7 +142,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
 
         group = LifecycleBasePlugin.VERIFICATION_GROUP
 
-        classpath(project.configurations.named("modelcheckBackend"))
+        classpath(project.configurations.named(BackendConfigurations.MODELCHECK_BACKEND_CONFIGURATION_NAME))
         classpath(additionalModelcheckBackendClasspath)
 
         mainClass.set("de.itemis.mps.gradle.modelcheck.MainKt")

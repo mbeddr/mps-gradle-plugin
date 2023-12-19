@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle.tasks
 
+import de.itemis.mps.gradle.BackendConfigurations
 import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
@@ -86,7 +87,7 @@ abstract class MpsExecute : JavaExec() {
         description = "Execute specified method from a generated class to modify the MPS project"
         group = "execute"
 
-        classpath(project.configurations.named("executeBackend"))
+        classpath(project.configurations.named(BackendConfigurations.EXECUTE_BACKEND_CONFIGURATION_NAME))
         classpath(additionalExecuteBackendClasspath)
 
         mainClass.set("de.itemis.mps.gradle.execute.MainKt")

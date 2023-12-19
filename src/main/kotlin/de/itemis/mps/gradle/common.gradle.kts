@@ -5,8 +5,8 @@ package de.itemis.mps.gradle
  * ([RunAntScript], [BuildLanguages], etc.) onto the classpath.
  */
 
-val modelcheckBackend by configurations.creating
-val executeBackend by configurations.creating
+val modelcheckBackend = configurations.create(BackendConfigurations.MODELCHECK_BACKEND_CONFIGURATION_NAME)
+val executeBackend = configurations.create(BackendConfigurations.EXECUTE_BACKEND_CONFIGURATION_NAME)
 
 modelcheckBackend.defaultDependencies {
     add(dependencies.create("de.itemis.mps.build-backends:modelcheck:${MPS_BUILD_BACKENDS_VERSION}"))
