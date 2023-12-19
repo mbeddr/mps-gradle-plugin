@@ -79,10 +79,6 @@ gradlePlugin {
             id = "modelcheck"
             implementationClass = "de.itemis.mps.gradle.modelcheck.ModelcheckMpsProjectPlugin"
         }
-        register("execute") {
-            id = "execute"
-            implementationClass = "de.itemis.mps.gradle.execute.ExecuteMpsProjectPlugin"
-        }
         register("migrations-executor") {
             id = "run-migrations"
             implementationClass = "de.itemis.mps.gradle.runmigrations.RunMigrationsMpsProjectPlugin"
