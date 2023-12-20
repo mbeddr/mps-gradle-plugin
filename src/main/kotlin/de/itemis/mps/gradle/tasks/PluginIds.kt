@@ -18,6 +18,10 @@ import javax.xml.parsers.DocumentBuilderFactory
 internal val logger = LoggerFactory.getLogger("de.itemis.mps.gradle.tasks.PluginIds")!!
 
 internal fun findPluginsRecursively(root: File): List<Plugin> = mutableListOf<Plugin>().apply {
+    if (!root.isDirectory) {
+        logger.warn("Plugin root is not a directory: $root")
+    }
+
     Files.walkFileTree(root.toPath(), object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             val dirAsFile = dir.toFile()
