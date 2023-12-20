@@ -5,6 +5,7 @@ import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.GradleException
+import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -19,6 +20,7 @@ import org.gradle.work.DisableCachingByDefault
 
 
 @DisableCachingByDefault(because = "calls arbitrary user code")
+@Incubating
 abstract class MpsExecute : JavaExec() {
 
     @get:Internal

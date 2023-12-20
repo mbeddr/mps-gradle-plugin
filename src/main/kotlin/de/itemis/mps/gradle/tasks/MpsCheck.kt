@@ -5,6 +5,7 @@ import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.GradleException
+import org.gradle.api.Incubating
 import org.gradle.api.file.*
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
@@ -17,6 +18,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.CommandLineArgumentProvider
 
 @CacheableTask
+@Incubating
 abstract class MpsCheck : JavaExec(), VerificationTask {
 
     @get:Internal("covered by mpsVersion, initialModelcheckBackendClasspath()")

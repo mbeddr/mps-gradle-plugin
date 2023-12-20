@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   In order to properly support up-to-date checking and caching, task outputs have to be specified (see
   [Incremental build](https://docs.gradle.org/current/userguide/incremental_build.html) in the Gradle documentation).
 
+### Changed
+
+- `MpsCheck` and `MpsExecute` (together with `MpsGenerate`) marked as incubating. They may experience some breaking
+  changes in future releases.
+
 ## 1.21.2
 
 ### Fixed
