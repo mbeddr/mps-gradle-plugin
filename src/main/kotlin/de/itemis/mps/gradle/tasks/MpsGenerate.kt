@@ -3,6 +3,7 @@ package de.itemis.mps.gradle.tasks
 import de.itemis.mps.gradle.BackendConfigurations
 import de.itemis.mps.gradle.EnvironmentKind
 import de.itemis.mps.gradle.ErrorMessages
+import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.GradleException
@@ -131,7 +132,7 @@ abstract class MpsGenerate : JavaExec() {
             result
         })
 
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        group = TaskGroups.GENERATION
 
         classpath(project.configurations.named(BackendConfigurations.GENERATE_BACKEND_CONFIGURATION_NAME))
         classpath(additionalGenerateBackendClasspath)
