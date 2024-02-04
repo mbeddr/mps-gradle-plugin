@@ -359,3 +359,21 @@ public abstract class de/itemis/mps/gradle/tasks/MpsGenerate : org/gradle/api/ta
 	public final fun getVarMacros ()Lorg/gradle/api/provider/MapProperty;
 }
 
+public abstract class de/itemis/mps/gradle/tasks/MpsMigrate : org/gradle/api/DefaultTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/provider/ProviderFactory;)V
+	public final fun execute ()V
+	protected final fun getAllProjectFiles ()Lorg/gradle/api/provider/Provider;
+	public final fun getAntJvmArgs ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getHaltOnDependencyError ()Lorg/gradle/api/provider/Property;
+	public final fun getHaltOnPrecheckFailure ()Lorg/gradle/api/provider/Property;
+	public final fun getJavaExecutable ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getJavaLauncher ()Lorg/gradle/api/provider/Property;
+	public final fun getJvmArgs ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getMaxHeapSize ()Lorg/gradle/api/provider/Property;
+	public final fun getMpsHome ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
+	public final fun getPluginRoots ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public final fun getProjectDirectories ()Lorg/gradle/api/file/ConfigurableFileCollection;
+}
+

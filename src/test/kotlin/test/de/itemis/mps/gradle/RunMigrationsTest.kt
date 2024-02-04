@@ -5,6 +5,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -170,6 +171,43 @@ class RunMigrationsTest {
             .buildAndFail()
 
         assertThat(result.output, containsString("Specified MPS location does not exist or is not a directory:"))
+    }
+
+    @Test
+    fun `MpsMigrate task works`() {
+        buildFile.writeText(
+            """
+                import de.itemis.mps.gradle.tasks.MpsMigrate
+
+                plugins {
+                    id("de.itemis.mps.gradle.common")
+                }
+
+                repositories {
+                    mavenCentral()
+                    maven("https://artifacts.itemis.cloud/repository/maven-mps")
+                }
+
+                val mps = configurations.create("mps")
+                dependencies {
+                    mps("com.jetbrains:mps:2021.3.2")
+                }
+
+                val resolveMps by tasks.registering(Sync::class) {
+                    from(Callable { zipTree(mps.singleFile) })
+                    into(layout.buildDirectory.dir("mps"))
+                }
+
+                val migrate by tasks.registering(MpsMigrate::class) {
+                    projectDirectories.from("$mpsTestPrjLocation")
+                    mpsHome.set(layout.dir(resolveMps.map { it.destinationDir }))
+                }
+            """.trimIndent()
+        )
+
+        val result = gradleRunner().withArguments("migrate").build()
+
+        assertEquals(TaskOutcome.SUCCESS, result.task(":migrate")?.outcome)
     }
 
     private fun gradleRunner(): GradleRunner = GradleRunner.create()

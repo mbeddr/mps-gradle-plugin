@@ -2,6 +2,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.23.0
+
+### Added
+
+- `MpsMigrate` task for migrating a project (or projects), similar to the `runMigrations` extension.
+
 ## 1.22.2
 
 ### Fixed

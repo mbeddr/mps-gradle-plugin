@@ -546,6 +546,41 @@ Parameters:
 
 Compatibility note: `MpsGenerate` task currently extends `JavaExec` but this may change in the future. Do not rely on this.
 
+## `MpsMigrate` Task Type
+
+Migrates the specified projects.
+
+### Usage
+
+```groovy
+import de.itemis.mps.gradle.tasks.MpsMigrate
+
+plugins {
+    // Required in order to use the task
+    id("de.itemis.mps.gradle.common")
+}
+
+tasks.register('migrate', MpsMigrate) {
+    mpsHome = mpsHomeDir
+
+    // MpsMigrate task can migrate multiple projects at once
+    projectDirectories.from(projectDir)
+
+    ...
+}
+```
+
+Parameters:
+
+* `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
+* `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.
+* `haltOnPrecheckFailure` - fail if the migration pre-check (e.g. broken references) fails.
+* `haltOnDependencyError` - fail if non-migrated dependencies are found.
+* `projectDirectories` - project directories to migrate.
+* `folderMacros` - path variables/macros that are necessary to open the project. Path macros are not considered part of
+  Gradle build cache key.
+* `pluginRoots` - directories that will be searched (recursively) for additional plugins to load.
+
 ## Run migrations
 
 Run all pending migrations in the project.
