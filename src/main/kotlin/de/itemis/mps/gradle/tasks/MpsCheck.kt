@@ -77,7 +77,8 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     @get:SkipWhenEmpty
     @get:PathSensitive(PathSensitivity.NONE)
     protected val sources: FileTree = projectLocation.asFileTree.matching {
-        exclude(project.layout.buildDirectory.get().asFile.relativeTo(projectLocation.get().asFile).path + "/**")
+        exclude(project.layout.buildDirectory.get().asFile.toRelativeString(projectLocation.get().asFile))
+        exclude("**/*_gen*")
         exclude("**/*_gen*/**")
 
         include("**/*.msd")
@@ -88,8 +89,8 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     @Suppress("unused")
     @get:Classpath
     protected val compiledClasses: FileTree = projectLocation.asFileTree.matching {
-        exclude(project.layout.buildDirectory.get().asFile.relativeTo(projectLocation.get().asFile).path + "/**")
-        include("**/classes_gen/*")
+        exclude(project.layout.buildDirectory.get().asFile.toRelativeString(projectLocation.get().asFile))
+        include("**/classes_gen/**")
     }
 
     init {
