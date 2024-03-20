@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.23.1
+
+### Fixed
+
+- `MpsMigrate` and `runMigrations` tasks will clean their temporary directory (where MPS caches and the generated Ant
+  script are located) before each run. This helps avoid complaints by MPS that files have been modified externally.
+
 ## 1.23.0
 
 ### Added

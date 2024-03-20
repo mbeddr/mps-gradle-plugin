@@ -84,6 +84,9 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                             throw GradleException("Specified MPS location does not exist or is not a directory: $mpsLocation")
                         }
 
+                        // Clean temporary dir to help avoid strange errors
+                        temporaryDir.listFiles()?.forEach { it.deleteRecursively() }
+
                         val buildFile = temporaryDir.resolve("build.xml")
                         buildFile.printWriter().use {
                             MarkupBuilder(it).withGroovyBuilder {

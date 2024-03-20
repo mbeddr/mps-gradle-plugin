@@ -85,6 +85,10 @@ abstract class MpsMigrate @Inject constructor(
 
     @TaskAction
     fun execute() {
+        // When MPS detects that files have changed externally then instead of updating the VFS cache it complains.
+        // Cleaning temporary directory helps avoid this.
+        cleanTemporaryDir()
+
         val buildFile = temporaryDir.resolve("build.xml")
         writeBuildFile(buildFile)
 
@@ -103,6 +107,10 @@ abstract class MpsMigrate @Inject constructor(
             }
             jvmArgs(antJvmArgs.get())
         }
+    }
+
+    private fun cleanTemporaryDir() {
+        temporaryDir.listFiles()?.forEach { it.deleteRecursively() }
     }
 
     private fun writeBuildFile(buildFile: File) {
