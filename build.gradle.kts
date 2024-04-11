@@ -11,8 +11,8 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra { "1.5" }
-val kotlinVersion by extra { "$kotlinApiVersion.31" }
+val kotlinApiVersion by extra { "1.7" }
+val kotlinVersion by extra { "$kotlinApiVersion.10" }
 
 
 plugins {
@@ -20,7 +20,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "1.7.10"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 }
 
