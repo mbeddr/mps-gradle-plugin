@@ -128,6 +128,22 @@ publishing {
                 fromResolutionResult()
             }
         }
+        pom {
+            name.set("mps-gradle-plugin")
+            description.set("Miscellaneous tasks that were found useful when building MPS-based projects with Gradle.")
+            url.set("https://github.com/mbeddr/mps-gradle-plugin")
+            licenses {
+                license {
+                    name.set("The Apache License, Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+            }
+            scm {
+                connection.set("scm:git:git://github.com/mbeddr/mps-gradle-plugin.git")
+                developerConnection.set("scm:git:ssh://github.com/mbeddr/mps-gradle-plugin.git")
+                url.set("https://github.com/mbeddr/mps-gradle-plugin")
+            }
+        }
     }
 }
 
