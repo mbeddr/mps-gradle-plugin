@@ -1,6 +1,7 @@
 package de.itemis.mps.gradle.runmigrations
 
 import de.itemis.mps.gradle.BasePluginExtensions
+import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.getMPSVersion
 import de.itemis.mps.gradle.runAnt
 import groovy.xml.MarkupBuilder
@@ -43,17 +44,18 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.run {
-            val extension = extensions.create("runMigrations", MigrationExecutorPluginExtensions::class.java)
+            val extensionName = "runMigrations"
+            val extension = extensions.create(extensionName, MigrationExecutorPluginExtensions::class.java)
+
             tasks.register("runMigrations")
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val projectLocation = extension.projectLocation ?: throw GradleException("No project path set")
                 if (!file(projectLocation).exists()) {
                     throw GradleException("The path to the project doesn't exist: $projectLocation")
                 }
 
-                val mpsVersion = extension.getMPSVersion()
+                val mpsVersion = extension.getMPSVersion(extensionName)
                 val parsedMPSVersion = SemVer.parse(mpsVersion)
 
                 if (extension.force != null && parsedMPSVersion < MIN_VERSION_FOR_FORCE) {
@@ -68,13 +70,16 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                     throw GradleException("The 'do not halt on dependency error' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR and higher.")
                 }
 
+                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val resolveMps: Task = if (extension.mpsConfig != null) {
                     tasks.create("resolveMpsForMigrations", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
-                } else {
+                } else if (extension.mpsLocation != null) {
                     tasks.create("resolveMpsForMigrations")
+                } else {
+                    throw GradleException(ErrorMessages.mustSetConfigOrLocation(extensionName))
                 }
 
                 tasks.named("runMigrations") {

@@ -89,26 +89,26 @@ fun argsFromBaseExtension(extensions: BasePluginExtensions): CommandLineArgument
         result
     }
 
-fun BasePluginExtensions.getMPSVersion(): String {
-    /*
-    If the user supplies a MPS config we use this one to resolve MPS and get the version. For other scenarios the user
-    can supply mpsLocation and mpsVersion then we do not resolve anything and the users build script is responsible for
-    resolving a compatible MPS into th mpsLocation before the
-     */
-    if(mpsConfig != null) {
-        return mpsConfig!!
-            .resolvedConfiguration
-            .firstLevelModuleDependencies.find { it.moduleGroup == "com.jetbrains" && it.moduleName == "mps" }
-            ?.moduleVersion ?: throw GradleException("MPS configuration doesn't contain MPS")
+@Deprecated("Use getMPSVersion(extensionName)", replaceWith = ReplaceWith("getMPSVersion(this.javaClass.name)"))
+fun BasePluginExtensions.getMPSVersion(): String = getMPSVersion(this.javaClass.name)
+
+/**
+ * [extensionName]: extension name, for diagnostics.
+ */
+fun BasePluginExtensions.getMPSVersion(extensionName: String): String {
+    // If the user supplies explicit mpsVersion, we use it.
+    if (mpsVersion != null) return mpsVersion!!
+
+    val mpsConfig = mpsConfig
+    if (mpsConfig != null) {
+        // If the user supplies a configuration, we use it to detect MPS version.
+        return mpsConfig.resolvedConfiguration.firstLevelModuleDependencies
+            .find { it.moduleGroup == "com.jetbrains" && it.moduleName == "mps" }
+            ?.moduleVersion
+            ?: throw GradleException(ErrorMessages.couldNotDetermineMpsVersionFromConfiguration(mpsConfig)
+        )
     }
 
-    if(mpsVersion != null) {
-        if(mpsLocation == null) {
-            throw GradleException(ErrorMessages.MUST_SET_VERSION_AND_LOCATION)
-        }
-        return mpsVersion!!
-    }
-
-    throw GradleException(ErrorMessages.MUST_SET_CONFIG_OR_VERSION)
-
+    //  Otherwise, the version has to be provided explicitly.
+    throw GradleException(ErrorMessages.mustSetVersionWhenNoMpsConfiguration(extensionName))
 }

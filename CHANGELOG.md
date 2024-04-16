@@ -2,6 +2,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.24.0
+
+### Changed
+
+- Extensions (`generate`, `modelcheck`, `runMigrations`) will use `mpsVersion` if specified, instead of relying on
+  auto-detection logic. This makes it possible to use extensions with a non-standard MPS dependency (such as a
+  pre-release).
+- Setting `mpsVersion` but not `mpsLocation` was not supported previously but is supported now. The default location
+  (`$buildDir/mps`) will be used and `mpsConfig` will be unpacked there. At least one of `mpsLocation` and `mpsConfig`
+  must still be specified.
+- Extension-related error messages now include the name of the extension.
+
 ## 1.23.1
 
 ### Fixed

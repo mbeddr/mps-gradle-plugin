@@ -30,13 +30,12 @@ open class ModelCheckPluginExtensions(objectFactory: ObjectFactory) : BasePlugin
 open class ModelcheckMpsProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
-            val extension = extensions.create("modelcheck", ModelCheckPluginExtensions::class.java)
+            val extensionName = "modelcheck"
+            val extension = extensions.create(extensionName, ModelCheckPluginExtensions::class.java)
             val checkmodels = tasks.register("checkmodels", JavaExec::class.java)
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
-
-                val mpsVersion = extension.getMPSVersion()
+                val mpsVersion = extension.getMPSVersion(extensionName)
 
                 val genConfig = extension.backendConfig ?: createDetachedBackendConfig(project)
 
@@ -44,13 +43,16 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
+                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForModelcheck", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
-                } else {
+                } else if (extension.mpsLocation != null) {
                     tasks.register("resolveMpsForModelcheck")
+                } else {
+                    throw GradleException(ErrorMessages.mustSetConfigOrLocation(extensionName))
                 }
 
                 checkmodels.configure {

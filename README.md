@@ -279,10 +279,11 @@ dependencies {
 ```
 
 Parameters:
-* `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
-  Custom plugins are supported via the `pluginLocation` parameter.
-* `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
+* `mpsConfig` - the configuration used to resolve MPS. Custom plugins are supported via the `pluginLocation` parameter.
+* `mpsLocation` - optional location where to place the MPS files if `mpsConfig` is specified, or where to take them from
+  otherwise.
+* `mpsVersion` - optionally overrides automated version detection from `mpsConfig`. Required if you use
+  a [custom distribution](#Custom MPS Distribution) of MPS.
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -348,10 +349,11 @@ modelcheck {
 ```
 
 Parameters:
-* `mpsConfig` - the configuration used to resolve MPS. Currently only vanilla MPS is supported and no custom RCPs.
-  Custom plugins are supported via the `pluginLocation` parameter.
-* `mpsLocation` - optional location where to place the MPS files.
-* `mpsVersion` - optional if you use a [custom distribution](#Custom MPS Distribution) of MPS
+* `mpsConfig` - the configuration used to resolve MPS. Custom plugins are supported via the `pluginLocation` parameter.
+* `mpsLocation` - optional location where to place the MPS files if `mpsConfig` is specified, or where to take them from
+  otherwise.
+* `mpsVersion` - optionally overrides automated version detection from `mpsConfig`. Required if you use
+  a [custom distribution](#Custom MPS Distribution) of MPS.
 * `javaExec` - optional `java` executable to use.
 * `pluginLocation` - location where to load the plugins from. Structure needs to be a flat folder structure similar to the
   `plugins` directory inside of the MPS installation.
@@ -607,9 +609,11 @@ runMigrations {
 ```
 
 Parameters:
-* `mpsConfig` - configuration used to resolve MPS.
-* `mpsLocation` - location where to place the MPS files.
-* `mpsVersion` - if you use a [custom distribution](#custom-mps-distribution) of MPS.
+* `mpsConfig` - the configuration used to resolve MPS.
+* `mpsLocation` - optional location where to place the MPS files if `mpsConfig` is specified, or where to take them from
+  otherwise.
+* `mpsVersion` - optionally overrides automated version detection from `mpsConfig`. Required if you use
+  a [custom distribution](#Custom MPS Distribution) of MPS.
 * `projectLocation` - location of the project that should be migrated.
 * `force` - ignores the marker files for projects which allow pending migrations, migrate them anyway. Supported in 2021.3.0 and higher.
 * `haltOnPrecheckFailure` - controls whether migration is aborted if pre-checks fail (except the check for migrated dependecies) Default: `true`. Supported in 2021.1 and higher. 
@@ -681,17 +685,19 @@ downloadJbr {
 ## Custom MPS Distribution
 
 Features that perform an action inside an MPS project, like the `modelcheck` or `generate-models` plugin, require 
-an MPS available to them. While for vanilla MPS it is enough to pass in a  reference to the MPS dependency via the
-`mpsConfig` property this doesn't work for custom distributions of MPS. A custom distribution of MPS is also called 
-a MPS RCP. If you like to use your own MPS distribution with preinstalled plugins and your own versioning scheme 
-then this is possible but requires additional steps in the build script. 
+an MPS available to them. While for vanilla MPS it is enough to pass in a reference to the MPS dependency via the
+`mpsConfig` property, this doesn't work for custom distributions of MPS. A custom distribution of MPS is also called 
+an MPS RCP. If you like to use your own MPS distribution with preinstalled plugins and your own versioning scheme 
+then this is possible but requires additional steps in the build script.
 
-When you are using a custom distribution of MPS you can no longer use the `mpsConfig` property and rely on 
-the plugin resolving it. The plugin needs to be configured with the properties `mpsVersion` and `mpsLocation`
-being set and no value set for `mpsConfig`. If you set `mpsVersion` but also set `mpsConfig` then `mpsConfig` 
-will take precedence over `mpsVersion` and the plugin will resolve that configuration into `mpsLocation`. 
+When you are using a custom distribution of MPS you can still use the `mpsConfig` property and rely on 
+the plugin resolving it. However, you may need to configure explicit `mpsVersion` for the plugin. You can also use a
+custom `mpsLocation` with no value set for `mpsConfig`. In this case you _must_ configure `mpsVersion` as well.
 
-`mpsVersion` needs to be set to the exact MPS version your custom distribution is based on e.g. if you build a
+If you set `mpsVersion` but also set `mpsConfig` then `mpsVersion` will take precedence over the version of the
+dependency in the configuration. The plugin will resolve the specified configuration into `mpsLocation`. 
+
+`mpsVersion` needs to be set to the exact MPS version your custom distribution is based on. For example, if you build an
 RCP with MPS 2020.3.3 you need to set this property to `2020.3.3`. `mpsLocation` needs to point to the location
 where you extracted your custom MPS distribution into e.g. `$buildDir/myAwesomeMPS` if you extracted into that location. 
 

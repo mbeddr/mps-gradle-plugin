@@ -29,13 +29,13 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.run {
-            val extension = extensions.create("generate", GeneratePluginExtensions::class.java)
+            val extensionName = "generate"
+            val extension = extensions.create(extensionName, GeneratePluginExtensions::class.java)
             val generate = tasks.register("generate", JavaExec::class.java)
             val fake = tasks.register("fakeBuildNumber", FakeBuildNumberTask::class.java)
 
             afterEvaluate {
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
-                val mpsVersion = extension.getMPSVersion()
+                val mpsVersion = extension.getMPSVersion(extensionName)
 
                 val genConfig = extension.backendConfig ?: createDetachedBackendConfig(project)
 
@@ -43,13 +43,16 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
+                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
                 val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForGeneration", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
-                } else {
+                } else if (extension.mpsLocation != null) {
                     tasks.register("resolveMpsForGeneration")
+                } else {
+                    throw GradleException(ErrorMessages.mustSetConfigOrLocation(extensionName))
                 }
 
                 /*

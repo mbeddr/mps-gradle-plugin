@@ -1,6 +1,7 @@
 package test.de.itemis.mps.gradle
 
 import de.itemis.mps.gradle.ErrorMessages
+import de.itemis.mps.gradle.generate.GeneratePluginExtensions
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers
@@ -256,7 +257,7 @@ class GenerateModelsTest {
             .withArguments()
             .withPluginClasspath()
             .buildAndFail()
-        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MUST_SET_VERSION_AND_LOCATION))
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.mustSetConfigOrLocation("generate")))
     }
     @Test
     fun `generate fails with only MPS path set`() {
@@ -299,7 +300,7 @@ class GenerateModelsTest {
             .withArguments()
             .withPluginClasspath()
             .buildAndFail()
-        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.MUST_SET_CONFIG_OR_VERSION))
+        MatcherAssert.assertThat(result.output, CoreMatchers.containsString(ErrorMessages.mustSetVersionWhenNoMpsConfiguration("generate")))
     }
 
     @Test

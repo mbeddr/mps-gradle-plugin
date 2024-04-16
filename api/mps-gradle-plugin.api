@@ -62,6 +62,7 @@ public final class de/itemis/mps/gradle/CommonKt {
 	public static final field MPS_SUPPORT_MSG Ljava/lang/String;
 	public static final fun argsFromBaseExtension (Lde/itemis/mps/gradle/BasePluginExtensions;)Lorg/gradle/process/CommandLineArgumentProvider;
 	public static final fun getMPSVersion (Lde/itemis/mps/gradle/BasePluginExtensions;)Ljava/lang/String;
+	public static final fun getMPSVersion (Lde/itemis/mps/gradle/BasePluginExtensions;Ljava/lang/String;)Ljava/lang/String;
 	public static final fun validateDefaultJvm ()V
 }
 
