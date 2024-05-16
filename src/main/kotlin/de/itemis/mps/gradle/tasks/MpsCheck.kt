@@ -153,11 +153,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     }
 
     override fun exec() {
-        val projectLocationAsFile = projectLocation.get().asFile
-        if (!projectLocationAsFile.resolve(".mps").isDirectory) {
-            throw GradleException(ErrorMessages.noMpsProjectIn(projectLocationAsFile))
-        }
-
+        checkProjectLocation(projectLocation)
         super.exec()
     }
 

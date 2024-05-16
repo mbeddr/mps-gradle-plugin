@@ -2,11 +2,9 @@ package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.BackendConfigurations
 import de.itemis.mps.gradle.EnvironmentKind
-import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import org.gradle.api.GradleException
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -21,7 +19,6 @@ import org.gradle.kotlin.dsl.listProperty
 import org.gradle.kotlin.dsl.mapProperty
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.property
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.CommandLineArgumentProvider
 
 @CacheableTask
@@ -141,10 +138,7 @@ abstract class MpsGenerate : JavaExec() {
     }
 
     override fun exec() {
-        val projectLocationAsFile = projectLocation.get().asFile
-        if (!projectLocationAsFile.resolve(".mps").isDirectory) {
-            throw GradleException(ErrorMessages.noMpsProjectIn(projectLocationAsFile))
-        }
+        checkProjectLocation(projectLocation)
 
         super.exec()
     }

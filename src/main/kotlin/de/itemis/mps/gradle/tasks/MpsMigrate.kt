@@ -97,6 +97,10 @@ abstract class MpsMigrate @Inject constructor(
             include("lib/*.jar")
         }
 
+        for(dir in projectDirectories) {
+            checkProjectLocation(dir)
+        }
+
         project.javaexec {
             mainClass.set("org.apache.tools.ant.launch.Launcher")
             workingDir = temporaryDir
