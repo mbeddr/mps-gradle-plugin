@@ -113,10 +113,7 @@ abstract class MpsGenerate : JavaExec() {
             result.addAll(excludeModels.get().map { "--exclude-model=$it" })
             result.addAll(excludeModules.get().map { "--exclude-module=$it" })
 
-            val effectiveLogLevel = logging.level ?: project.logging.level ?: project.gradle.startParameter.logLevel
-            if (effectiveLogLevel <= LogLevel.INFO) {
-                result.add("--log-level=info")
-            }
+            addLogLevel(result)
 
             if (!strictMode.get()) {
                 result.add("--no-strict-mode")

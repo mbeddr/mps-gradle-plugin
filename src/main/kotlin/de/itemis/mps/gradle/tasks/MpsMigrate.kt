@@ -138,10 +138,7 @@ abstract class MpsMigrate @Inject constructor(
 
                         if (mpsVersion.get() >= "2022.3") { add("jnaLibraryPath" to "lib/jna/${computeJnaArch()}") }
 
-                        val effectiveLogLevel = logging.level ?: project.logging.level ?: project.gradle.startParameter.logLevel
-                        if (effectiveLogLevel <= LogLevel.INFO) {
-                            add("loglevel" to "info")
-                        }
+                        addIfInfoLogLevel(this, "loglevel" to "info")
 
                         toTypedArray()
                     }

@@ -79,10 +79,7 @@ abstract class MpsExecute : JavaExec() {
                 add("--method=${method.get()}")
                 methodArguments.get().forEach { add("--arg=$it") }
 
-                val effectiveLogLevel = logging.level ?: project.logging.level ?: project.gradle.startParameter.logLevel
-                if (effectiveLogLevel <= LogLevel.INFO) {
-                    add("--log-level=info")
-                }
+                addLogLevel(this)
             }
         }
 

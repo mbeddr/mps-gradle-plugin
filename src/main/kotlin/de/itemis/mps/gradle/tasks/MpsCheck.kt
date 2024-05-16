@@ -136,10 +136,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
                 result.add("--parallel")
             }
 
-            val effectiveLogLevel = logging.level ?: project.logging.level ?: project.gradle.startParameter.logLevel
-            if (effectiveLogLevel <= LogLevel.INFO) {
-                result.add("--log-level=info")
-            }
+            addLogLevel(result)
 
             result
         })
