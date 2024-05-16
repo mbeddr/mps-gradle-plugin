@@ -102,8 +102,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
 
             result.add("--project=${projectLocation.get().asFile}")
 
-            pluginRoots.get().flatMap { findPluginsRecursively(it.asFile) }
-                .mapTo(result) { "--plugin=${it.id}::${it.path}" }
+            addPluginRoots(result, pluginRoots.get())
             folderMacros.get().mapTo(result) { "--macro=${it.key}::${it.value.asFile}" }
             varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }
 

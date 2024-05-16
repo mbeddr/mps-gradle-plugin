@@ -15,7 +15,7 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 const val MPS_SUPPORT_MSG = ErrorMessages.MPS_VERSION_NOT_SUPPORTED
 
-const val MPS_BUILD_BACKENDS_VERSION = "[1.7,2.0)"
+const val MPS_BUILD_BACKENDS_VERSION = "[1.15,2.0)" // 1.15 required for --plugin-root support.
 
 data class Plugin(
         var id: String,

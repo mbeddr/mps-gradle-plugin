@@ -101,7 +101,7 @@ abstract class MpsGenerate : JavaExec() {
 
             result.add("--project=${projectLocation.get().asFile}")
 
-            pluginRoots.flatMap { findPluginsRecursively(it) }.mapTo(result) { "--plugin=${it.id}::${it.path}" }
+            addPluginRoots(result, pluginRoots)
 
             folderMacros.get().mapTo(result) { "--macro=${it.key}::${it.value.asFile}" }
             varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }

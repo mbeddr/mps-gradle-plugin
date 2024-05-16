@@ -67,11 +67,7 @@ abstract class MpsExecute : JavaExec() {
             mutableListOf<String>().apply {
                 add("--project=${projectLocation.get().asFile}")
 
-                pluginRoots.get().forEach {
-                    findPluginsRecursively(it.asFile).forEach {
-                        add("--plugin=${it.id}::${it.path}")
-                    }
-                }
+                addPluginRoots(this, pluginRoots.get())
                 macros.get().forEach { add("--macro=${it.key}::${it.value}") }
 
                 add("--module=${module.get()}")

@@ -82,6 +82,7 @@ class MpsCheckTaskTest {
                 mpsHome.set(layout.dir(resolveMps.map { it.destinationDir }))
                 projectLocation.set(file("mps-prj"))
                 junitFile.set(layout.buildDirectory.file("output.xml"))
+                pluginRoots.add(layout.dir(resolveMps.map { File(it.destinationDir, "plugins/mps-console") }))
             }
         """.trimIndent())
 
