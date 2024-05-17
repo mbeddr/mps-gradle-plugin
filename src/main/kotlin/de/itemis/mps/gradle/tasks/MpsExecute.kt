@@ -68,7 +68,7 @@ abstract class MpsExecute : JavaExec() {
                 add("--project=${projectLocation.get().asFile}")
 
                 addPluginRoots(this, pluginRoots.get())
-                macros.get().forEach { add("--macro=${it.key}::${it.value}") }
+                addVarMacros(this, macros)
 
                 add("--module=${module.get()}")
                 add("--class=${className.get()}")

@@ -102,9 +102,8 @@ abstract class MpsGenerate : JavaExec() {
             result.add("--project=${projectLocation.get().asFile}")
 
             addPluginRoots(result, pluginRoots)
-
-            folderMacros.get().mapTo(result) { "--macro=${it.key}::${it.value.asFile}" }
-            varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }
+            addFolderMacros(result, folderMacros)
+            addVarMacros(result, varMacros)
 
             result.add("--environment=${environmentKind.get()}")
 

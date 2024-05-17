@@ -103,8 +103,8 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
             result.add("--project=${projectLocation.get().asFile}")
 
             addPluginRoots(result, pluginRoots.get())
-            folderMacros.get().mapTo(result) { "--macro=${it.key}::${it.value.asFile}" }
-            varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }
+            addFolderMacros(result, folderMacros)
+            addVarMacros(result, varMacros)
 
             // Only a limited subset of checkers is registered in MPS environment, IDEA environment is necessary for
             // proper checking.
