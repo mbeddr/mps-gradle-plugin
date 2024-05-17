@@ -378,3 +378,15 @@ public abstract class de/itemis/mps/gradle/tasks/MpsMigrate : org/gradle/api/Def
 	public final fun getProjectDirectories ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
+public class de/itemis/mps/gradle/tasks/Remigrate : org/gradle/api/tasks/JavaExec {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/provider/ProviderFactory;)V
+	public fun exec ()V
+	public final fun getAdditionalClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	protected final fun getAllProjectFiles ()Lorg/gradle/api/provider/Provider;
+	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getMpsHome ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
+	public final fun getPluginRoots ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public final fun getProjectDirectories ()Lorg/gradle/api/file/ConfigurableFileCollection;
+}
+

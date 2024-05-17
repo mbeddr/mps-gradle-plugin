@@ -20,3 +20,10 @@ generateBackend.defaultDependencies {
 executeBackend.defaultDependencies {
     add(dependencies.create("de.itemis.mps.build-backends:execute:${MPS_BUILD_BACKENDS_VERSION}"))
 }
+
+configurations.create(BackendConfigurations.REMIGRATE_BACKEND_CONFIGURATION_NAME) {
+    isCanBeConsumed = false
+    defaultDependencies {
+        add(project.dependencies.create("de.itemis.mps.build-backends:remigrate:[0,2)"))
+    }
+}
