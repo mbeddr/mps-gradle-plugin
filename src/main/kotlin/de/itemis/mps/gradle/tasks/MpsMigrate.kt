@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle.tasks
 
+import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import de.itemis.mps.gradle.runAnt
 import groovy.xml.MarkupBuilder
@@ -24,7 +25,7 @@ import org.gradle.platform.Architecture
 import java.io.File
 import javax.inject.Inject
 
-@UntrackedTask(because = "May migrate the project, too difficult to track")
+@UntrackedTask(because = "Operates 'in place'")
 abstract class MpsMigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
@@ -57,6 +58,7 @@ abstract class MpsMigrate @Inject constructor(
     val projectDirectories: ConfigurableFileCollection = objectFactory.fileCollection()
 
     @get:InputFiles
+    @get:IgnoreEmptyDirectories
     @get:SkipWhenEmpty
     protected val allProjectFiles = providerFactory.provider { projectDirectories.flatMap { objectFactory.fileTree().from(it) } }
 
@@ -82,6 +84,10 @@ abstract class MpsMigrate @Inject constructor(
 
     @get:Classpath
     val pluginRoots: ConfigurableFileCollection = objectFactory.fileCollection()
+
+    init {
+        group = TaskGroups.MIGRATION
+    }
 
     @TaskAction
     fun execute() {
