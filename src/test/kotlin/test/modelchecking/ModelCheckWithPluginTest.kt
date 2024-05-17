@@ -1,7 +1,6 @@
-package test.de.itemis.mps.gradle
+package test.modelchecking
 
 import de.itemis.mps.gradle.ErrorMessages
-import de.itemis.mps.gradle.modelcheck.ModelCheckPluginExtensions
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers
@@ -11,6 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import support.extractTestProject
 import java.io.File
 
 class ModelCheckWithPluginTest {

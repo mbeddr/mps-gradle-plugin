@@ -1,4 +1,4 @@
-package test.de.itemis.mps.gradle
+package test.others
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Assert.assertEquals
@@ -121,4 +121,3 @@ class GenerateProjectLibrariesXmlTest {
         assertEquals(getExpectedLibContent(listOf(Pair("mps.ex", "my/awesome/override"))),libs.readText())
     }
 }
-

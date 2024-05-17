@@ -1,4 +1,4 @@
-package test.de.itemis.mps.gradle
+package test.others
 
 import de.itemis.mps.gradle.tasks.readPluginId
 import org.junit.Assert.assertEquals

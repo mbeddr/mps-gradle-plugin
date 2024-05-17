@@ -1,4 +1,4 @@
-package test.de.itemis.mps.gradle
+package test.modelgeneration
 
 import de.itemis.mps.gradle.ErrorMessages
 import org.gradle.testkit.runner.GradleRunner
@@ -9,7 +9,7 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import java.io.File
+import support.extractTestProject
 
 class MpsGenerateTaskTest {
     @Rule

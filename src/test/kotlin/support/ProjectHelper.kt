@@ -1,4 +1,4 @@
-package test.de.itemis.mps.gradle
+package support
 
 import org.gradle.api.GradleException
 import java.io.File

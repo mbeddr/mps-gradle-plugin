@@ -1,13 +1,13 @@
-package test.de.itemis.mps.gradle
+package test.modelgeneration
 
 import de.itemis.mps.gradle.ErrorMessages
-import de.itemis.mps.gradle.generate.GeneratePluginExtensions
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.*
 import org.junit.rules.TemporaryFolder
+import support.extractTestProject
 import java.io.File
 
 class GenerateModelsTest {

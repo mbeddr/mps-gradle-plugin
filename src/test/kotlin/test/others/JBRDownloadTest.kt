@@ -1,4 +1,4 @@
-package test.de.itemis.mps.gradle
+package test.others
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
