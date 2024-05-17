@@ -2,6 +2,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.25.1
+
+### Fixed
+
+- `Remigrate`: change classpath construction to fix Kotlin library incompatibilities with latest MPS.
+
 ## 1.25.0
 
 ### Added

@@ -78,8 +78,10 @@ open class Remigrate @Inject constructor(
 
         group = TaskGroups.MIGRATION
 
-        classpath(backendConfig)
+        // Additional classpath goes before backend config in order to fix problem with Kotlin version mismatch of
+        // backend vs IDEA.
         classpath(additionalClasspath)
+        classpath(backendConfig)
 
         mainClass.set("de.itemis.mps.gradle.remigrate.MainKt")
     }
