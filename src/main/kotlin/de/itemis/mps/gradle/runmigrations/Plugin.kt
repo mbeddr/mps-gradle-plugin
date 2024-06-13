@@ -131,6 +131,10 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                                                 "arg"("value" to "-Xmx${extension.maxHeap}")
                                             }
 
+                                            if (extension.debug) {
+                                                "arg"("value" to "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005")
+                                            }
+
                                             "arg"("value" to "--add-opens=java.base/java.io=ALL-UNNAMED")
                                             "arg"("value" to "--add-opens=java.base/java.lang=ALL-UNNAMED")
                                             "arg"("value" to "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED")

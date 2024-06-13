@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.25.2
+
+### Fixed
+
+- `runMigrations`: existing `debug` parameter is used to start migration process in debug mode (suspended and listening 
+  on port 5005).
+
 ## 1.25.1
 
 ### Fixed
