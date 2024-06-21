@@ -7,10 +7,12 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.FileSystemLocation
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.LoggingManager
 import org.gradle.api.provider.Provider
+import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
 
-internal fun Task.addLogLevel(args: MutableCollection<String>) = addIfInfoLogLevel(args, "--log-level=info")
 
 /**
  * A weird overload, usable for building a map of Ant task attributes, as well as a list of command line backend
@@ -30,18 +32,30 @@ internal fun checkProjectLocation(projectLocation: File) {
     }
 }
 
-internal fun addPluginRoots(result: MutableCollection<String>, pluginRoots: FileCollection) {
+internal fun MpsTask.backendArguments(): CommandLineArgumentProvider = CommandLineArgumentProvider {
+    val result = mutableListOf<String>()
+
+    addLogLevel(result)
+    addPluginRoots(result, pluginRoots)
+    addFolderMacros(result, folderMacros)
+
+    result
+}
+
+private fun Task.addLogLevel(args: MutableCollection<String>) = addIfInfoLogLevel(args, "--log-level=info")
+
+private fun addPluginRoots(result: MutableCollection<String>, pluginRoots: FileCollection) {
     pluginRoots.mapTo(result) { "--plugin-root=$it" }
 }
 
-internal fun addPluginRoots(result: MutableCollection<String>, pluginRoots: Iterable<FileSystemLocation>) {
-    pluginRoots.mapTo(result) { "--plugin-root=$it" }
-}
-
-internal fun addFolderMacros(result: MutableCollection<String>, folderMacros: Provider<Map<String, Directory>>) {
+private fun addFolderMacros(result: MutableCollection<String>, folderMacros: Provider<Map<String, Directory>>) {
     folderMacros.get().mapTo(result) { "--macro=${it.key}::${it.value.asFile}" }
 }
 
-internal fun addVarMacros(result: MutableCollection<String>, varMacros: Provider<Map<String, String>>) {
+internal fun addVarMacros(result: MutableCollection<String>, varMacros: Provider<Map<String, String>>, task: Task, propertyName: String = "varMacros") {
+    if (result.isNotEmpty()) {
+        task.logger.error("Task '${task.path}' defines '$propertyName' which are not supported and will be removed in a later release." +
+                " All macros have to point to directories and have to use the folderMacros property instead.")
+    }
     varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }
 }

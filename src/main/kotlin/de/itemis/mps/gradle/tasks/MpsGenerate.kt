@@ -4,13 +4,10 @@ import de.itemis.mps.gradle.BackendConfigurations
 import de.itemis.mps.gradle.EnvironmentKind
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
-import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -23,30 +20,17 @@ import org.gradle.process.CommandLineArgumentProvider
 
 @CacheableTask
 @Incubating
-abstract class MpsGenerate : JavaExec() {
-
-    @get:Internal("covered by mpsVersion, initialGenerateBackendClasspath()")
-    val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
-
-    @get:Input
-    @get:Optional
-    val mpsVersion: Property<String> = objectFactory.property<String>()
-        .convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
+abstract class MpsGenerate : MpsTask, JavaExec() {
 
     @get:Internal("only modules and models matter, covered by #sources")
     val projectLocation: DirectoryProperty =
         objectFactory.directoryProperty().convention(project.layout.projectDirectory)
 
-    @get:Classpath
-    val pluginRoots: ConfigurableFileCollection = objectFactory.fileCollection()
-
-    @get:Internal("Folder macros are ignored for the purposes of up-to-date checks and caching")
-    val folderMacros: MapProperty<String, Directory> = objectFactory.mapProperty()
-
     @get:Input
     val environmentKind: Property<EnvironmentKind> = objectFactory.property<EnvironmentKind>()
         .convention(EnvironmentKind.MPS)
 
+    @Deprecated("All macros should point to directories, property will be removed in a later release")
     @get:Input
     val varMacros: MapProperty<String, String> = objectFactory.mapProperty()
 
@@ -96,23 +80,19 @@ abstract class MpsGenerate : JavaExec() {
         val backendBuilder: MpsBackendBuilder = project.objects.newInstance(MpsBackendBuilder::class)
         backendBuilder.withMpsHomeDirectory(mpsHome).withMpsVersion(mpsVersion).configure(this)
 
+        argumentProviders.add(backendArguments())
         argumentProviders.add(CommandLineArgumentProvider {
             val result = mutableListOf<String>()
+            @Suppress("DEPRECATION")
+            addVarMacros(result, varMacros, this)
 
             result.add("--project=${projectLocation.get().asFile}")
-
-            addPluginRoots(result, pluginRoots)
-            addFolderMacros(result, folderMacros)
-            addVarMacros(result, varMacros)
-
             result.add("--environment=${environmentKind.get()}")
 
             result.addAll(models.get().map { "--model=$it" })
             result.addAll(modules.get().map { "--module=$it" })
             result.addAll(excludeModels.get().map { "--exclude-model=$it" })
             result.addAll(excludeModules.get().map { "--exclude-module=$it" })
-
-            addLogLevel(result)
 
             if (!strictMode.get()) {
                 result.add("--no-strict-mode")

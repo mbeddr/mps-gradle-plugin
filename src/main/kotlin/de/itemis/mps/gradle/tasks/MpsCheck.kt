@@ -1,45 +1,25 @@
 package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.BackendConfigurations
-import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
-import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import org.gradle.api.GradleException
 import org.gradle.api.Incubating
 import org.gradle.api.file.*
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.CommandLineArgumentProvider
 
 @CacheableTask
 @Incubating
-abstract class MpsCheck : JavaExec(), VerificationTask {
-
-    @get:Internal("covered by mpsVersion, initialModelcheckBackendClasspath()")
-    val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
-
-    @get:Input
-    @get:Optional
-    val mpsVersion: Property<String> = objectFactory.property<String>()
-        .convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
-
+abstract class MpsCheck : JavaExec(), MpsTask, VerificationTask {
     @get:Internal("only modules and models matter, covered by #sources")
     val projectLocation: DirectoryProperty =
         objectFactory.directoryProperty().convention(project.layout.projectDirectory)
 
-    @get:Classpath
-    val pluginRoots: SetProperty<Directory> = objectFactory.setProperty()
-
-    @get:Internal("Folder macros are ignored for the purposes of up-to-date checks and caching")
-    val folderMacros: MapProperty<String, Directory> = objectFactory.mapProperty()
-
+    @Deprecated("All macros should point to directories, property will be removed in a later release")
     @get:Input
     val varMacros: MapProperty<String, String> = objectFactory.mapProperty()
 
@@ -97,14 +77,13 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         val backendBuilder: MpsBackendBuilder = project.objects.newInstance(MpsBackendBuilder::class)
         backendBuilder.withMpsHomeDirectory(mpsHome).withMpsVersion(mpsVersion).configure(this)
 
+        argumentProviders.add(backendArguments())
         argumentProviders.add(CommandLineArgumentProvider {
             val result = mutableListOf<String>()
+            @Suppress("DEPRECATION")
+            addVarMacros(result, varMacros, this)
 
             result.add("--project=${projectLocation.get().asFile}")
-
-            addPluginRoots(result, pluginRoots.get())
-            addFolderMacros(result, folderMacros)
-            addVarMacros(result, varMacros)
 
             // Only a limited subset of checkers is registered in MPS environment, IDEA environment is necessary for
             // proper checking.
@@ -134,8 +113,6 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
             if (parallel.get()) {
                 result.add("--parallel")
             }
-
-            addLogLevel(result)
 
             result
         })

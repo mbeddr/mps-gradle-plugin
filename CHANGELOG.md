@@ -2,6 +2,22 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.26.0
+
+### Changed
+
+- All MPS tasks now implement `MpsTask` interface which defines common properties. As a result, some tasks were
+  affected:
+  - `MpsCheck`: `pluginRoots` type was changed from `SetProperty<Directory>` to `ConfigurableFileCollection` because
+    the latter is easier to work with from Gradle. **This is a breaking change.**
+  - `MpsExecute`: `folderMacros` are now supported and will be passed to MPS.
+
+### Deprecated
+
+- `MpsCheck`, `MpsGenerate`, `MpsExecute`: `varMacros` (or `macros` in case of `MpsExecute`) are now deprecated and will 
+  be removed in a later release. Only folder macros (pointing to an existing directory) are supported by MPS, any
+  non-folder macros would not have worked properly anyway.
+
 ## 1.25.2
 
 ### Fixed

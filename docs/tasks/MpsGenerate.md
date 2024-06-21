@@ -34,11 +34,10 @@ Parameters:
   backend.
 * `folderMacros` - path variables/macros that are necessary to open the project. Path macros are not considered part of
   Gradle build cache key.
-* `varMacros` - non-path variables/macros that are necessary to open the project. Variable macros *are* considered part
-  of Gradle build cache key.
+* `varMacros` - Deprecated and will be removed (only folder macros are supported by MPS).
 * `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
 * `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.
-* `pluginRoots` - directories with additional plugins to load.
+* `pluginRoots` - directories that will be searched (recursively) for additional plugins to load.
 * `environmentKind` - the environment to use for generation (`MPS` or `IDEA`). MPS environment is used by default,
   matching the standard `<generate>` Ant task. IDEA environment can be used when generating screenshots.
   See [MPS vs IDEA environment](../notes/mps-vs-idea-environment.md).
