@@ -1,19 +1,14 @@
 package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.BackendConfigurations
-import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import org.gradle.api.GradleException
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.work.DisableCachingByDefault
@@ -21,20 +16,11 @@ import org.gradle.work.DisableCachingByDefault
 
 @DisableCachingByDefault(because = "calls arbitrary user code")
 @Incubating
-abstract class MpsExecute : JavaExec() {
-
-    @get:Internal
-    abstract val mpsHome: DirectoryProperty
-
-    @get:Internal
-    abstract val mpsVersion: Property<String>
-
+abstract class MpsExecute : MpsTask, JavaExec() {
     @get:Internal
     abstract val projectLocation: DirectoryProperty
 
-    @get:Classpath
-    abstract val pluginRoots: SetProperty<Directory>
-
+    @Deprecated("Use [folderMacros].")
     @get:Internal
     abstract val macros: MapProperty<String, String>
 
@@ -63,19 +49,18 @@ abstract class MpsExecute : JavaExec() {
             .withMpsVersion(mpsVersion)
             .configure(this)
 
+        argumentProviders.add(backendArguments())
         argumentProviders.add {
             mutableListOf<String>().apply {
-                add("--project=${projectLocation.get().asFile}")
+                @Suppress("DEPRECATION")
+                addVarMacros(this, macros, this@MpsExecute, "macros")
 
-                addPluginRoots(this, pluginRoots.get())
-                addVarMacros(this, macros)
+                add("--project=${projectLocation.get().asFile}")
 
                 add("--module=${module.get()}")
                 add("--class=${className.get()}")
                 add("--method=${method.get()}")
                 methodArguments.get().forEach { add("--arg=$it") }
-
-                addLogLevel(this)
             }
         }
 

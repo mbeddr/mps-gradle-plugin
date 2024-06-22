@@ -29,15 +29,7 @@ import javax.inject.Inject
 abstract class MpsMigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
-) : DefaultTask() {
-
-    @get:Internal
-    val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
-
-    @get:Input
-    @get:Optional
-    val mpsVersion: Property<String> = objectFactory.property<String>()
-        .convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
+) : MpsTask, DefaultTask() {
 
     /**
      * (Since MPS 2021.1) Whether to halt if a pre-check has failed. Note that to ignore the check for migrated
@@ -78,12 +70,6 @@ abstract class MpsMigrate @Inject constructor(
     @get:Input
     @get:Optional
     val maxHeapSize: Property<String> = objectFactory.property()
-
-    @get:Internal("Folder macros are ignored for the purposes of up-to-date checks and caching")
-    val folderMacros: MapProperty<String, Directory> = objectFactory.mapProperty()
-
-    @get:Classpath
-    val pluginRoots: ConfigurableFileCollection = objectFactory.fileCollection()
 
     init {
         group = TaskGroups.MIGRATION
@@ -150,6 +136,7 @@ abstract class MpsMigrate @Inject constructor(
                     }
 
                     val folderMacrosValue = folderMacros.get()
+
                     val allLibraries = projectDirectories
                         .flatMap { readLibraries(it, folderMacrosValue::get) }
                         .toSortedSet()

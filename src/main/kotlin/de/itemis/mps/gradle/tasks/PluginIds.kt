@@ -15,7 +15,7 @@ import java.util.jar.JarFile
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
-internal val logger = LoggerFactory.getLogger("de.itemis.mps.gradle.tasks.PluginIds")!!
+private val logger = LoggerFactory.getLogger("de.itemis.mps.gradle.tasks.PluginIds")!!
 
 internal fun findPluginsRecursively(root: File): List<Plugin> = mutableListOf<Plugin>().apply {
     if (!root.isDirectory) {

@@ -34,14 +34,13 @@ Parameters:
   backend.
 * `folderMacros` - path variables/macros that are necessary to open the project. Path macros are not considered part of
   Gradle build cache key.
-* `varMacros` - non-path variables/macros that are necessary to open the project. Variable macros *are* considered part
-  of Gradle build cache key.
+* `varMacros` - Deprecated and will be removed (only folder macros are supported by MPS).
 * `junitFile` - the JUnit XML file to produce. Defaults to `$buildDir/TEST-${task.name}.xml`
 * `junitFormat` - the format of the JUnit XML file. Defaults to `module-and-model`.
 * `parallel` (since 1.20) - runs model checker in parallel mode. Supported in MPS 2021.3.4. Default is `false`.
 * `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
 * `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.
-* `pluginRoots` - directories containing additional plugins to load
+* `pluginRoots` - directories that will be searched (recursively) for additional plugins to load.
 * `warningAsError` - whether to treat warnings as errors.
 * `ignoreFailures` (inherited from `VerificationTask`) - whether to fail the build if an error is found.
 
