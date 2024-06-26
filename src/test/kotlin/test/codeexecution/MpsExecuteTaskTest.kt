@@ -37,10 +37,10 @@ class MpsExecuteTaskTest {
 
     private fun buildScriptBoilerplate(mpsVersion: String) = """
         import de.itemis.mps.gradle.tasks.MpsExecute
+        import de.itemis.mps.gradle.tasks.MpsGenerate
 
         plugins {
             id("de.itemis.mps.gradle.common")
-            id("generate-models")
         }
         
         repositories {
@@ -59,24 +59,24 @@ class MpsExecuteTaskTest {
             into(layout.buildDirectory.dir("mps"))
         }
         
-        generate {
-            projectLocation = file("${mpsTestProjectPath.canonicalPath}")
-            mpsConfig = mps
-        }
-        
-        val generate by tasks.existing {
-            dependsOn(resolveMps)
+        val resolvedMpsHome = resolveMps.map { it.destinationDir }
+
+        val generate by tasks.registering(MpsGenerate::class) {
+            mpsHome.set(layout.dir(resolvedMpsHome))
+            projectLocation.set(file("${mpsTestProjectPath.canonicalPath}"))
+
             doFirst {
-                println(layout.buildDirectory.dir("mps").get().asFile.listFiles()?.toList())
+                println(resolvedMpsHome.get().listFiles()?.toList())
             }
         }
         
         val execute by tasks.registering(MpsExecute::class) {
             dependsOn(generate)
-            mpsHome.set(layout.buildDirectory.dir("mps"))
+            mpsHome.set(layout.dir(resolvedMpsHome))
             projectLocation.set(file("${mpsTestProjectPath.canonicalPath}"))
+
             doFirst {
-                println(resolveMps.map { it.destinationDir }.get())
+                println(resolvedMpsHome.get())
             }
         }
     """.trimIndent() + "\n"
