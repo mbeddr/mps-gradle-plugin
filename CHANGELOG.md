@@ -2,6 +2,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.26.0
+
+### Changed
+
+- Upgraded to Gradle 8.8. The plugin may not work with earlier Gradle versions.
+
 ## 1.25.2
 
 ### Fixed

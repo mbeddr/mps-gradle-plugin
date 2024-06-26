@@ -43,7 +43,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+                val mpsLocation = extension.mpsLocation ?: layout.buildDirectory.dir("mps").get().asFile
                 val resolveMps = if (extension.mpsConfig != null) {
                     tasks.register("resolveMpsForModelcheck", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })

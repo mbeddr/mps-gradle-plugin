@@ -29,7 +29,8 @@ plugins {
 }
 ```
 
-Use a fully specified version such as `1.0.123` or Gradle dependency locking for better build reproducibility.
+Use a more precisely specified version such as `1.26.0.+` or Gradle dependency locking for better build
+reproducibility.
 
 ## Reference
 

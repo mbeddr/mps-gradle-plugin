@@ -70,8 +70,12 @@ open class Remigrate @Inject constructor(
             addPluginRoots(result, pluginRoots)
             addLogLevel(result)
             addFolderMacros(result, folderMacros)
-            result.add("--plugin=de.itemis.mps.buildbackends.remigrate::" +
-                    backendConfig.get().files(backendConfig.get().dependencies.first()).first())
+
+            val pluginFile = backendConfig.get().resolvedConfiguration.firstLevelModuleDependencies
+                .flatMap { it.moduleArtifacts.map { it.file } }
+                .single()
+
+            result.add("--plugin=de.itemis.mps.buildbackends.remigrate::" + pluginFile)
 
             result
         })

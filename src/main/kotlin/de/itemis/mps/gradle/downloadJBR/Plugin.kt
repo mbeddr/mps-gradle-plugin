@@ -64,7 +64,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                             into(extension.downloadDirProperty)
                             includeEmptyDirs = false
                             eachFile {
-                                mode = mode or Integer.parseInt("600", 8)
+                                permissions { user { write = true } }
                             }
                             filesMatching("jbr_*/**") {
                                 path = path.replace("jbr_(.*?)/(.*)".toRegex(), "jbr/$2")

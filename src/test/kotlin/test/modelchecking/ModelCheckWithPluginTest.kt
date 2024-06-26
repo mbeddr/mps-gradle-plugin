@@ -40,7 +40,7 @@ class ModelCheckWithPluginTest {
             plugins {
                 id("modelcheck")
             }
-            
+
             repositories {
                 mavenCentral()
                 maven("https://artifacts.itemis.cloud/repository/maven-mps")
@@ -93,17 +93,25 @@ class ModelCheckWithPluginTest {
                     jbrVersion = "17.0.6-b469.82"
                 }
 
+                repositories {
+                    mavenCentral()
+                    maven("https://artifacts.itemis.cloud/repository/maven-mps")
+                }
+
                 modelcheck {
                     projectLocation = projectDir
                     mpsLocation = file("build/mps")
                     mpsVersion = "2022.2.2"
-                    javaExec = (tasks.getByName("downloadJbr") as DownloadJbrForPlatform).javaExecutable
+                    javaExec = tasks.getByName<DownloadJbrForPlatform>("downloadJbr").javaExecutable
                 }
                 
                 tasks.register("verify") {
+                    dependsOn("downloadJbr")
                     doLast {
-                        val checkmodelsLauncherPresent = (tasks.getByName("checkmodels") as JavaExec).javaLauncher.isPresent
-                        println("checkmodels.javaLauncher.isPresent: " + checkmodelsLauncherPresent)
+                        val launcherMatches =
+                            tasks.getByName<JavaExec>("checkmodels").javaLauncher.get().executablePath.asFile ==
+                            tasks.getByName<DownloadJbrForPlatform>("downloadJbr").javaExecutable
+                        println("javaLauncher matches: " + launcherMatches)
                     }
                 }
             """.trimIndent()
@@ -111,15 +119,15 @@ class ModelCheckWithPluginTest {
 
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
-            .withArguments("verify")
+            .withArguments("--stacktrace", "verify")
             .withPluginClasspath()
             .build()
 
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":verify")?.outcome)
 
-        // When javaExec is explicitly set, the launcher should be absent
-        Assert.assertTrue("checkmodels.javaLauncher should not be present",
-            result.output.contains("checkmodels.javaLauncher.isPresent: false"))
+        // When javaExec is explicitly set, the launcher should match the downloaded executable
+        Assert.assertTrue("javaLauncher should match explicitly set executable",
+            result.output.contains("javaLauncher matches: true"))
     }
 
     @Test

@@ -61,7 +61,7 @@ open class RunAntScript : DefaultTask() {
         }
 
         if(logging.level != null && logging.level != LogLevel.LIFECYCLE && !allArgs.any { it.startsWith("-Dmps.ant.log=") }) {
-            allArgs += "-Dmps.ant.log=${logging.level.toString().toLowerCase(Locale.ENGLISH)}"
+            allArgs += "-Dmps.ant.log=${logging.level.toString().lowercase()}"
         }
 
         if (incremental) {

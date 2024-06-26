@@ -70,7 +70,7 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                     throw GradleException("The 'do not halt on dependency error' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR and higher.")
                 }
 
-                val mpsLocation = extension.mpsLocation ?: File(project.buildDir, "mps")
+                val mpsLocation = extension.mpsLocation ?: layout.buildDirectory.dir("mps").get().asFile
                 val resolveMps: Task = if (extension.mpsConfig != null) {
                     tasks.create("resolveMpsForMigrations", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
