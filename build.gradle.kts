@@ -159,3 +159,7 @@ tasks.withType<KotlinCompile> {
 apiValidation {
     ignoredClasses.add("de.itemis.mps.gradle.Common_gradle")
 }
+
+tasks.test {
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() * 2 / 3).coerceAtLeast(1)
+}
