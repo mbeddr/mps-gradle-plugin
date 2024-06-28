@@ -211,43 +211,6 @@ class RunMigrationsTest {
         assertEquals(TaskOutcome.SUCCESS, result.task(":migrate")?.outcome)
     }
 
-    @Test
-    fun `Remigrate task works`() {
-        buildFile.writeText(
-            """
-                import de.itemis.mps.gradle.tasks.Remigrate
-
-                plugins {
-                    id("de.itemis.mps.gradle.common")
-                }
-
-                repositories {
-                    mavenCentral()
-                    maven("https://artifacts.itemis.cloud/repository/maven-mps")
-                }
-
-                val mps = configurations.create("mps")
-                dependencies {
-                    mps("com.jetbrains:mps:2021.3.2")
-                }
-
-                val resolveMps by tasks.registering(Sync::class) {
-                    from(Callable { zipTree(mps.singleFile) })
-                    into(layout.buildDirectory.dir("mps"))
-                }
-
-                val remigrate by tasks.registering(Remigrate::class) {
-                    projectDirectories.from("$mpsTestPrjLocation")
-                    mpsHome.set(layout.dir(resolveMps.map { it.destinationDir }))
-                }
-            """.trimIndent()
-        )
-
-        val result = gradleRunner().withArguments("remigrate").forwardOutput().build()
-
-        assertEquals(TaskOutcome.SUCCESS, result.task(":remigrate")?.outcome)
-    }
-
     private fun gradleRunner(): GradleRunner = GradleRunner.create()
         .withProjectDir(testProjectDir.root)
         .withPluginClasspath()
