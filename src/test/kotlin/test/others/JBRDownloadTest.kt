@@ -2,6 +2,8 @@ package test.others
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -198,5 +200,51 @@ class JBRDownloadTest {
                 .withPluginClasspath()
                 .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
+    }
+
+    @Test
+    fun `executed downloaded java using JavaLauncher`() {
+        settingsFile.writeText("""
+            rootProject.name = "hello-world"
+        """.trimIndent())
+
+        buildFile.writeText("""
+            import java.net.URI
+            import de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform
+            
+            plugins {
+                id("download-jbr")
+            }
+            
+            repositories {
+                mavenCentral()
+                maven {
+                    url = URI("https://artifacts.itemis.cloud/repository/maven-mps")
+                }
+            }
+            
+            downloadJbr {
+                jbrVersion = "$JBR_VERSION"
+            }
+            
+            val downloadJbrTask = tasks.named("downloadJbr", DownloadJbrForPlatform::class)
+            
+            tasks.register<JavaExec>("exec") {
+                dependsOn(downloadJbrTask)
+                javaLauncher.set(downloadJbrTask.flatMap { it.javaLauncher })
+                jvmArgs("--version")
+
+                // Main class will be ignored due to --version but has to be provided
+                mainClass.set("ignored")
+            }
+        """.trimIndent())
+
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("exec")
+            .withPluginClasspath()
+            .build()
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
+        assertThat(result.output, containsString("OpenJDK Runtime Environment JBR"))
     }
 }
