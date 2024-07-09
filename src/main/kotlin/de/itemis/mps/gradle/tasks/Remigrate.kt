@@ -12,10 +12,12 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
+import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.mapProperty
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.kotlin.dsl.property
+import org.gradle.kotlin.dsl.setProperty
 import org.gradle.process.CommandLineArgumentProvider
 import javax.inject.Inject
 
@@ -52,6 +54,12 @@ open class Remigrate @Inject constructor(
     val additionalClasspath: ConfigurableFileCollection =
         objectFactory.fileCollection().from(initialBackendClasspath())
 
+    @get:Input
+    val excludedModuleMigrations: SetProperty<ExcludedModuleMigration> = objectFactory.setProperty()
+
+    fun excludeModuleMigration(language: String, version: Int) {
+        excludedModuleMigrations.add(ExcludedModuleMigration(language, version))
+    }
 
     init {
         val backendBuilder: MpsBackendBuilder = project.objects.newInstance(MpsBackendBuilder::class)
@@ -75,7 +83,10 @@ open class Remigrate @Inject constructor(
                 .flatMap { it.moduleArtifacts.map { it.file } }
                 .single()
 
-            result.add("--plugin=de.itemis.mps.buildbackends.remigrate::" + pluginFile)
+            result.add("--plugin=de.itemis.mps.buildbackends.remigrate::$pluginFile")
+
+            result.addAll(
+                excludedModuleMigrations.get().map { "--exclude-module-migration=${it.language}:${it.version}" })
 
             result
         })

@@ -304,6 +304,19 @@ public final class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlu
 	public final fun getMIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE ()Lnet/swiftzer/semver/SemVer;
 }
 
+public final class de/itemis/mps/gradle/tasks/ExcludedModuleMigration {
+	public fun <init> (Ljava/lang/String;I)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun copy (Ljava/lang/String;I)Lde/itemis/mps/gradle/tasks/ExcludedModuleMigration;
+	public static synthetic fun copy$default (Lde/itemis/mps/gradle/tasks/ExcludedModuleMigration;Ljava/lang/String;IILjava/lang/Object;)Lde/itemis/mps/gradle/tasks/ExcludedModuleMigration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLanguage ()Ljava/lang/String;
+	public final fun getVersion ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract class de/itemis/mps/gradle/tasks/MpsCheck : org/gradle/api/tasks/JavaExec, org/gradle/api/tasks/VerificationTask {
 	public fun <init> ()V
 	public fun exec ()V
@@ -382,9 +395,11 @@ public abstract class de/itemis/mps/gradle/tasks/MpsMigrate : org/gradle/api/Def
 
 public class de/itemis/mps/gradle/tasks/Remigrate : org/gradle/api/tasks/JavaExec {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/provider/ProviderFactory;)V
+	public final fun excludeModuleMigration (Ljava/lang/String;I)V
 	public fun exec ()V
 	public final fun getAdditionalClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	protected final fun getAllProjectFiles ()Lorg/gradle/api/provider/Provider;
+	public final fun getExcludedModuleMigrations ()Lorg/gradle/api/provider/SetProperty;
 	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
 	public final fun getMpsHome ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getMpsVersion ()Lorg/gradle/api/provider/Property;
