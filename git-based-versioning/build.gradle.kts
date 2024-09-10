@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.itemis.mps.gradle"
-version = "1.0"
+version = "1.1.0"
 
 dependencies {
     implementation(gradleApi())

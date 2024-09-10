@@ -86,7 +86,7 @@ class GitBasedVersioning {
     static String getVersion(String branch, String major, String minor, String bugfix = "", int count) {
         def hash = getGitShortCommitHash()
         def baseVersion = bugfix.isEmpty() ? "$major.$minor.$count.$hash" : "$major.$minor.$bugfix.$count.$hash"
-        if (branch == 'master' || branch == 'HEAD' /*this happens in detached head situations*/) {
+        if (branch == 'master' || branch == 'main' || branch == 'HEAD' /*this happens in detached head situations*/) {
             return baseVersion
         }
 
