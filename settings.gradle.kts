@@ -1,5 +1,10 @@
 pluginManagement {
     includeBuild("git-based-versioning")
+
+    val kotlinVersion: String by settings
+    plugins {
+        kotlin("jvm") version "$kotlinVersion"
+    }
 }
 
 plugins {

@@ -11,16 +11,15 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra { "1.7" }
-val kotlinVersion by extra { "$kotlinApiVersion.10" }
-
+val kotlinApiVersion: String by project
+val kotlinVersion: String by project
 
 plugins {
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm")
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 }
 
