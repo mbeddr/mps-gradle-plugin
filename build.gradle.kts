@@ -17,7 +17,7 @@ val kotlinVersion: String by project
 plugins {
     groovy
     `java-gradle-plugin`
-    `kotlin-dsl`
+    `kotlin-dsl` version "4.5.0"
     `maven-publish`
     kotlin("jvm")
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
