@@ -59,7 +59,7 @@ dependencyLocking {
 dependencies {
     api("de.itemis.mps.gradle:git-based-versioning")
     implementation(kotlin("stdlib", version = kotlinVersion))
-    implementation("net.swiftzer.semver:semver:1.1.2")
+    implementation("net.swiftzer.semver:semver:2.0.0")
     implementation("de.itemis.mps.build-backends:launcher:2.5.+")
     testImplementation("junit:junit:4.13.2")
 }
