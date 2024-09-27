@@ -20,7 +20,7 @@ plugins {
     `kotlin-dsl` version "4.5.0"
     `maven-publish`
     kotlin("jvm")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.14.0"
 }
 
 val baseVersion = "1.28.0"
