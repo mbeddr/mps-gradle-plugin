@@ -76,6 +76,18 @@ abstract class Itemis(val bs: ScriptHandler) {
     fun itemisNexus() = "https://artifacts.itemis.cloud/repository/maven-mps/"
 }
 
+project.configurations.create("mps") {
+    description = "The MPS dependencies configuration"
+}
+
+project.configurations.create("languageLibs") {
+    description = "The language dependencies configuration"
+}
+
+project.configurations.create("antLib") {
+    description = "The JUnit dependencies configuration"
+}
+
 /*
 extensions.create<Itemis>("itemis",buildscript)
 
