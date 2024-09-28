@@ -121,6 +121,13 @@ tasks.named("clean") {
     dependsOn("cleanMPS")
 }
 
+extensions.create<GitHubAuth>("githubAuth", project)
+
+abstract class GitHubAuth(val _project: Project) {
+    val user = _project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR")
+    val token = _project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN")
+}
+
 /*
 extensions.create<Itemis>("itemis",buildscript)
 
