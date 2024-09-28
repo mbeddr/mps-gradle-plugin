@@ -46,6 +46,18 @@ abstract class CI(val _project: Project) {
     fun isCI() = _project.extra["ciBuild"]
     
     fun buildNumber() = System.getenv("GITHUB_RUN_NUMBER").toIntOrNull() ?: System.getenv("BUILD_NUMBER").toInt()
+    
+    fun registerDependencyRepositories(repositories: ArrayList<String>) {
+        for (repoUrl in repositories) {
+            _project.repositories.maven {
+                url = _project.uri(repoUrl)
+                credentials {   
+                    username = (_project.extensions.getByName("githubAuth") as GitHubAuth).user
+                    password = (_project.extensions.getByName("githubAuth") as GitHubAuth).token
+                }
+            }
+        }
+    }
 }
 
 extensions.create<JDK>("jdk", project)
@@ -126,8 +138,8 @@ tasks.named("clean") {
 extensions.create<GitHubAuth>("githubAuth", project)
 
 abstract class GitHubAuth(val _project: Project) {
-    val user = _project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR")
-    val token = _project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN")
+    val user:String = (_project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR")).toString()
+    val token:String = (_project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN")).toString()
 }
 
 /*
