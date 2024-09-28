@@ -5,6 +5,10 @@ package de.itemis.mps.gradle
  * ([RunAntScript], [BuildLanguages], etc.) onto the classpath.
  */
 
+plugins { 
+    id("base")
+}
+
 val modelcheckBackend = configurations.create(BackendConfigurations.MODELCHECK_BACKEND_CONFIGURATION_NAME)
 val generateBackend = configurations.create(BackendConfigurations.GENERATE_BACKEND_CONFIGURATION_NAME)
 val executeBackend = configurations.create(BackendConfigurations.EXECUTE_BACKEND_CONFIGURATION_NAME)
@@ -106,6 +110,17 @@ if (project.extra["skipResolveMps"].toString().toBoolean()) {
     }
 }
 
+tasks.register<Delete>("cleanMps") {
+    delete(fileTree(mapOf(
+        "dir" to projectDir,
+        "include" to listOf("**/classes_gen/**", "**/source_gen/**", "**/source_gen.caches/**", "tmp/**")
+    )))
+}
+
+tasks.named("clean") {
+    dependsOn("cleanMPS")
+}
+
 /*
 extensions.create<Itemis>("itemis",buildscript)
 
@@ -115,8 +130,7 @@ abstract class Itemis(val bs: ScriptHandler) {
             apply {  maven("https://artifacts.itemis.cloud/repository/maven-mps/") }
         }
         return 
-    }
-    
-    
+    }  
 }
+ */
 
