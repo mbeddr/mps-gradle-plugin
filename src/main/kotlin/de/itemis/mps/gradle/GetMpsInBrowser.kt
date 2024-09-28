@@ -12,25 +12,24 @@ open class GetMpsInBrowser : DefaultTask() {
 
     @Input
     var version: String? = null
-
-    private fun getMajorPart(): String {
-        val split = version?.split(".")
-        return if (split?.size == 2) {
-            version!!
-        } else {
-            split?.take(2)?.joinToString(".") ?: ""
-        }
+    
+    private fun getMajorMinorPart(): String {
+        val mpsVersion = MPSVersion.parse(version!!)
+       return "${mpsVersion.version.major}.${mpsVersion.version.minor}"
     }
 
     private fun getDownloadUrl(): URI {
-        val major = getMajorPart()
+        val majorMinor = getMajorMinorPart()
         return when {
-            Os.isFamily(Os.FAMILY_WINDOWS) -> URI("https://download.jetbrains.com/mps/$major/MPS-$version.exe")
-            Os.isFamily(Os.FAMILY_MAC) -> URI("https://download.jetbrains.com/mps/$major/MPS-$version-macos-jdk-bundled.dmg")
-            Os.isFamily(Os.FAMILY_UNIX) -> URI("https://download.jetbrains.com/mps/$major/MPS-$version.tar.gz")
+            Os.isFamily(Os.FAMILY_WINDOWS) -> URI("https://download.jetbrains.com/mps/$majorMinor/MPS-$version.exe")
+            Os.isFamily(Os.FAMILY_MAC) -> {
+                val suffix = if(Os.isArch("aarch64")) "-aarch64" else ""
+                URI("https://download.jetbrains.com/mps/$majorMinor/MPS-$version-macos${suffix}.dmg")
+            }
+            Os.isFamily(Os.FAMILY_UNIX) -> URI("https://download.jetbrains.com/mps/$majorMinor/MPS-$version.tar.gz")
             else -> {
                 println("Warning: could not determine OS, downloading generic distribution")
-                URI("http://download.jetbrains.com/mps/$major/MPS-$version.zip")
+                URI("http://download.jetbrains.com/mps/$majorMinor/MPS-$version.zip")
             }
         }
     }
