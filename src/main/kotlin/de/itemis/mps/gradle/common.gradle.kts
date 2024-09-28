@@ -88,6 +88,24 @@ project.configurations.create("antLib") {
     description = "The JUnit dependencies configuration"
 }
 
+project.extra["skipResolveMps"] = project.hasProperty("mpsHomeDir")
+project.extra["mpsHomeDir"] = rootProject.file(project.findProperty("mpsHomeDir") ?: "${layout.buildDirectory.toString()}/mps")
+
+if (project.extra["skipResolveMps"].toString().toBoolean()) {
+    tasks.register("resolveMps") {
+        doLast {
+            logger.info("MPS resolution skipped")
+            logger.info("MPS home: " + (project.extra["mpsHomeDir"] as File).absolutePath)
+        }
+    }
+} else {
+    tasks.register<Sync>("resolveMps") {
+        dependsOn(configurations.getByName("mps"))
+        from(configurations.getByName("mps").resolve().map { zipTree(it) })
+        project.extra["mpsHomeDir"]?.let { into(it) }
+    }
+}
+
 /*
 extensions.create<Itemis>("itemis",buildscript)
 
