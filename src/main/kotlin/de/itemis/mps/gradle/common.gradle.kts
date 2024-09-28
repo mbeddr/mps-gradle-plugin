@@ -138,8 +138,8 @@ tasks.named("clean") {
 extensions.create<GitHubAuth>("githubAuth", project)
 
 abstract class GitHubAuth(val _project: Project) {
-    val user:String = (_project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR")).toString()
-    val token:String = (_project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN")).toString()
+    val user:String? = (_project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR"))?.toString()
+    val token:String? = (_project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN"))?.toString()
 }
 
 extensions.create<Directories>("directories",project)
