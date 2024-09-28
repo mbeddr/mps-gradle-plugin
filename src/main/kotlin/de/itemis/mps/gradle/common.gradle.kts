@@ -44,6 +44,8 @@ abstract class CI(val _project: Project) {
     }
     
     fun isCI() = _project.extra["ciBuild"]
+    
+    fun buildNumber() = System.getenv("GITHUB_RUN_NUMBER").toIntOrNull() ?: System.getenv("BUILD_NUMBER").toInt()
 }
 
 extensions.create<JDK>("jdk", project)
