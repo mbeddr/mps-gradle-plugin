@@ -94,15 +94,15 @@ abstract class Itemis(val bs: ScriptHandler) {
     fun itemisNexus() = "https://artifacts.itemis.cloud/repository/maven-mps/"
 }
 
-project.configurations.create("mps") {
+project.configurations.create("common_mps") {
     description = "The MPS dependencies configuration"
 }
 
-project.configurations.create("languageLibs") {
+project.configurations.create("common_languageLibs") {
     description = "The language dependencies configuration"
 }
 
-project.configurations.create("antLib") {
+project.configurations.create("common_antLib") {
     description = "The JUnit dependencies configuration"
 }
 
@@ -110,21 +110,23 @@ project.extra["skipResolveMps"] = project.hasProperty("mpsHomeDir")
 project.extra["mpsHomeDir"] = rootProject.file(project.findProperty("mpsHomeDir") ?: "${layout.buildDirectory.toString()}/mps")
 
 if (project.extra["skipResolveMps"].toString().toBoolean()) {
-    tasks.register("resolveMps") {
+    tasks.register("commonResolveMps") {
         doLast {
             logger.info("MPS resolution skipped")
             logger.info("MPS home: " + (project.extra["mpsHomeDir"] as File).absolutePath)
         }
     }
 } else {
-    tasks.register<Sync>("resolveMps") {
+    tasks.register<Sync>("commonResolveMps") {
         dependsOn(configurations.getByName("mps"))
+        dependsOn(configurations.getByName("common_mps"))
         from(configurations.getByName("mps").resolve().map { zipTree(it) })
+        from(configurations.getByName("common_mps").resolve().map { zipTree(it) })
         project.extra["mpsHomeDir"]?.let { into(it) }
     }
 }
 
-tasks.register<Delete>("cleanMps") {
+tasks.register<Delete>("commonCleanMps") {
     delete(fileTree(mapOf(
         "dir" to projectDir,
         "include" to listOf("**/classes_gen/**", "**/source_gen/**", "**/source_gen.caches/**", "tmp/**")
