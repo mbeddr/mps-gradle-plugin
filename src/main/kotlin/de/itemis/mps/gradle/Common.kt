@@ -112,3 +112,28 @@ fun BasePluginExtensions.getMPSVersion(extensionName: String): String {
     //  Otherwise, the version has to be provided explicitly.
     throw GradleException(ErrorMessages.mustSetVersionWhenNoMpsConfiguration(extensionName))
 }
+
+class MPSVersion(
+    var major: String,
+    var minor: String,
+    var releaseType: String? = null) {
+
+    private fun appendOpt(str: String?, pre: String): String {
+        return if (!str.isNullOrEmpty()) "${pre}${str}" else ""
+    }
+    
+    private fun substringBefore(text: String, substring: String):String? {
+        val i: Int = text.indexOf(substring)
+        if (i == -1) return null
+        return text.substring(0, i)
+    }
+    
+    fun minorMainPart(): String {
+        val value = substringBefore(minor, ".")
+        return value ?: minor
+    }
+
+    override fun toString(): String {
+        return major + appendOpt(minor, ".") + appendOpt(releaseType, "-")
+    }
+}

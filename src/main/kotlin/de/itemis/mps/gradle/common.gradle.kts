@@ -41,3 +41,31 @@ abstract class CI(val _project: Project) {
     
     fun isCI() = _project.extra["ciBuild"]
 }
+
+extensions.create<Jdk>("java", project)
+
+abstract class Java(val _project: Project) {
+    fun determineCI() {
+        if(System.getenv("CI").toBoolean()) {
+            _project.extra["ciBuild"] = true
+        } else{
+            _project.extra["ciBuild"] = _project.hasProperty("teamcity")
+        }
+    }
+
+    fun isCI() = _project.extra["ciBuild"]
+}
+
+extensions.create<Itemis>("itemis",buildscript)
+
+abstract class Itemis(val bs: ScriptHandler) {
+    fun nexus() {
+        bs.repositories {
+            apply {  maven("https://artifacts.itemis.cloud/repository/maven-mps/") }
+        }
+        return 
+    }
+    
+    
+}
+
