@@ -142,16 +142,12 @@ abstract class GitHubAuth(val _project: Project) {
     val token:String = (_project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN")).toString()
 }
 
-/*
-extensions.create<Itemis>("itemis",buildscript)
+extensions.create<Directories>("directories",project)
 
-abstract class Itemis(val bs: ScriptHandler) {
-    fun nexus() {
-        bs.repositories {
-            apply {  maven("https://artifacts.itemis.cloud/repository/maven-mps/") }
-        }
-        return 
-    }  
+abstract class Directories(val _project: Project) {
+    fun artifactsDir() :File = _project.file("${_project.layout.projectDirectory}/artifacts")
+        
+    fun scriptFile(name:String):File = _project.file("${_project.layout.projectDirectory}/scripts/$name")
+    
+    fun jnLibraryPath():File = File(_project.extra["mpsHomeDir"].toString(), "lib/jna/${System.getProperty("os.arch")}")
 }
- */
-
