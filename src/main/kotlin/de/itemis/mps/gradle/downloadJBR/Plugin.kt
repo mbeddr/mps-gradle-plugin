@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 open class DownloadJbrConfiguration @Inject constructor(objects: ObjectFactory) {
     lateinit var jbrVersion: String
+    var defaultJavaExecutable = false
     var distributionType : String? = null
     internal val downloadDirProperty: DirectoryProperty = objects.directoryProperty()
 
@@ -84,6 +85,9 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                     else "jbr"
                 ))
                 javaExecutableProperty.set(jbrDirProperty.file(if (Os.isFamily(Os.FAMILY_WINDOWS)) "bin/java.exe" else "bin/java"))
+                if(extension.defaultJavaExecutable) {
+                    project.setProperty("itemis.mps.gradle.ant.defaultJavaExecutable",javaExecutableProperty.asFile)
+                }
             }
         }
     }
