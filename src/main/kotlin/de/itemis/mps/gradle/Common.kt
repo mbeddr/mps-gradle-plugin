@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle
 
+import net.swiftzer.semver.SemVer
 import org.apache.log4j.Logger
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
@@ -113,118 +114,19 @@ fun BasePluginExtensions.getMPSVersion(extensionName: String): String {
     throw GradleException(ErrorMessages.mustSetVersionWhenNoMpsConfiguration(extensionName))
 }
 
-class MPSVersion(
-    var major: String,
-    var minor: String,
-    var releaseType: String? = null) {
+class MPSVersion private constructor(val version: SemVer) {
     
     companion object {
-        val MPS_2017_1 =   MPSVersion("2017","1")
-        val MPS_2017_1_1 = MPSVersion("2017","1.1")
-        val MPS_2017_1_2 = MPSVersion("2017","1.2")
-        val MPS_2017_1_3 = MPSVersion("2017","1.3")
-        val MPS_2017_2 =   MPSVersion("2017","2")
-        val MPS_2017_2_1 = MPSVersion("2017","2.1")
-        val MPS_2017_2_2 = MPSVersion("2017","2.2")
-        val MPS_2017_2_3 = MPSVersion("2017","2.3")
-        val MPS_2017_3_ =  MPSVersion("2017","3")
-        val MPS_2017_3_1 = MPSVersion("2017","3.1")
-        val MPS_2017_3_2 = MPSVersion("2017","3.2")
-        val MPS_2017_3_3 = MPSVersion("2017","3.3")
-        val MPS_2017_3_4 = MPSVersion("2017","3.4")
-        val MPS_2017_3_5 = MPSVersion("2017","3.5")
-        val MPS_2017_3_6 = MPSVersion("2017","3.6")
-
-        val MPS_2018_1_ =  MPSVersion("2018","1")
-        val MPS_2018_1_1 = MPSVersion("2018","1.1")
-        val MPS_2018_1_2 = MPSVersion("2018","1.2")
-        val MPS_2018_1_3 = MPSVersion("2018","1.3")
-        val MPS_2018_1_4 = MPSVersion("2018","1.4")
-        val MPS_2018_1_5 = MPSVersion("2018","1.5")
-        val MPS_2018_1_6 = MPSVersion("2018","1.6")
-        val MPS_2018_2_ =  MPSVersion("2018","2")
-        val MPS_2018_2_1 = MPSVersion("2018","2.1")
-        val MPS_2018_2_2 = MPSVersion("2018","2.2")
-        val MPS_2018_2_3 = MPSVersion("2018","2.3")
-        val MPS_2018_2_4 = MPSVersion("2018","2.4")
-        val MPS_2018_2_5 = MPSVersion("2018","2.5")
-        val MPS_2018_2_6 = MPSVersion("2018","2.6")
-        val MPS_2018_3_ =  MPSVersion("2018","3")
-        val MPS_2018_3_1 = MPSVersion("2018","3.1")
-        val MPS_2018_3_2 = MPSVersion("2018","3.2")
-        val MPS_2018_3_3 = MPSVersion("2018","3.3")
-        val MPS_2018_3_4 = MPSVersion("2018","3.4")
-        val MPS_2018_3_5 = MPSVersion("2018","3.5")
-        val MPS_2018_3_6 = MPSVersion("2018","3.6")
-        val MPS_2018_3_7 = MPSVersion("2018","3.7")
-
-        val MPS_2019_1_ =  MPSVersion("2019","1")
-        val MPS_2019_1_1 = MPSVersion("2019","1.1")
-        val MPS_2019_1_2 = MPSVersion("2019","1.2")
-        val MPS_2019_1_3 = MPSVersion("2019","1.3")
-        val MPS_2019_1_4 = MPSVersion("2019","1.4")
-        val MPS_2019_1_5 = MPSVersion("2019","1.5")
-        val MPS_2019_1_6 = MPSVersion("2019","1.6")
-        val MPS_2019_2_ =  MPSVersion("2019","2")
-        val MPS_2019_2_1 = MPSVersion("2019","2.1")
-        val MPS_2019_2_2 = MPSVersion("2019","2.2")
-        val MPS_2019_2_3 = MPSVersion("2019","2.3")
-        val MPS_2019_2_4 = MPSVersion("2019","2.4")
-
-        val MPS_2020_1 =   MPSVersion("2020","1")
-        val MPS_2020_1_1 = MPSVersion("2020","1.1")
-        val MPS_2020_1_2 = MPSVersion("2020","1.2")
-        val MPS_2020_1_3 = MPSVersion("2020","1.3")
-        val MPS_2020_1_4 = MPSVersion("2020","1.4")
-        val MPS_2020_1_5 = MPSVersion("2020","1.5")
-        val MPS_2020_1_6 = MPSVersion("2020","1.6")
-        val MPS_2020_1_7 = MPSVersion("2020","1.7")
-        val MPS_2020_2 =   MPSVersion("2020","2")
-        val MPS_2020_2_1 = MPSVersion("2020","2.1")
-        val MPS_2020_2_2 = MPSVersion("2020","2.2")
-        val MPS_2020_2_3 = MPSVersion("2020","2.3")
-        val MPS_2020_3 =   MPSVersion("2020","3")
-        val MPS_2020_3_1 = MPSVersion("2020","3.1")
-        val MPS_2020_3_2 = MPSVersion("2020","3.2")
-        val MPS_2020_3_3 = MPSVersion("2020","3.3")
-        val MPS_2020_3_4 = MPSVersion("2020","3.4")
-        val MPS_2020_3_5 = MPSVersion("2020","3.5")
-        val MPS_2020_3_6 = MPSVersion("2020","3.6")
-
-        val MPS_2021_1 =   MPSVersion("2021","1")
-        val MPS_2021_1_1 = MPSVersion("2021","1.1")
-        val MPS_2021_1_2 = MPSVersion("2021","1.2")
-        val MPS_2021_1_3 = MPSVersion("2021","1.3")
-        val MPS_2021_1_4 = MPSVersion("2021","1.4")
-        val MPS_2021_2 =   MPSVersion("2021","2")
-        val MPS_2021_2_1 = MPSVersion("2021","2.1")
-        val MPS_2021_2_2 = MPSVersion("2021","2.2")
-        val MPS_2021_2_3 = MPSVersion("2021","2.3")
-        val MPS_2021_2_4 = MPSVersion("2021","2.4")
-        val MPS_2021_2_5 = MPSVersion("2021","2.5")
-        val MPS_2021_2_6 = MPSVersion("2021","2.6")
-        val MPS_2021_3 =   MPSVersion("2021","3")
-        val MPS_2021_3_1 = MPSVersion("2021","3.1")
-        val MPS_2021_3_2 = MPSVersion("2021","3.2")
-        val MPS_2021_3_3 = MPSVersion("2021","3.3")
-        val MPS_2021_3_4 = MPSVersion("2021","3.4")
-        val MPS_2021_3_5 = MPSVersion("2021","3.5")
-
-        val MPS_2022_2 =   MPSVersion("2022","2")
-        val MPS_2022_2_1 = MPSVersion("2022","2.1")
-        val MPS_2022_2_2 = MPSVersion("2022","2.2")
-        val MPS_2022_2_3 = MPSVersion("2022","2.3")
-        val MPS_2022_3 =   MPSVersion("2022","3")
-        val MPS_2022_3_1 = MPSVersion("2022","3.1")
-        val MPS_2022_3_2 = MPSVersion("2022","3.2")
-
-        val MPS_2023_2 =   MPSVersion("2023","2")
-        val MPS_2023_2_1 = MPSVersion("2023","2.1")
-        val MPS_2023_2_2 = MPSVersion("2023","2.2")
-        val MPS_2023_3 =   MPSVersion("2023","3")
-        val MPS_2023_3_1 = MPSVersion("2023","3.1")
-
-        val MPS_2024_1 =   MPSVersion("2024","1")
+        
+        fun parse(str: String):MPSVersion {
+            var semVersion = SemVer.parseOrNull(str)
+            if (semVersion == null) {
+                val insertIndex = str.indexOf("-")
+                val newStr =  if(insertIndex != -1) str.substring(0,insertIndex)+ ".0" + str.substring(insertIndex) else "$str.0"
+                semVersion = SemVer.parse(newStr)
+            }
+            return MPSVersion(semVersion)
+        }
     }
 
     private fun appendOpt(str: String?, pre: String): String {
@@ -236,15 +138,10 @@ class MPSVersion(
         if (i == -1) return null
         return text.substring(0, i)
     }
-    
-    fun minorMainPart(): String {
-        val value = substringBefore(minor, ".")
-        return value ?: minor
-    }
 
     override fun toString(): String {
-        return major + appendOpt(minor, ".") + appendOpt(releaseType, "-")
+        return version.toString()
     }
     
-    fun toMavenSnapshot() = "$major.${minorMainPart()}-SNAPSHOT"
+    fun toMavenSnapshot() = "${version.major}.${version.minor}-SNAPSHOT"
 }
