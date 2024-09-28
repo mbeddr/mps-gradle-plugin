@@ -72,6 +72,14 @@ abstract class JDK(val _project: Project) {
 extensions.create<Itemis>("itemis",buildscript)
 
 abstract class Itemis(val bs: ScriptHandler) {
+    fun mbeddrGitHub() = "https://maven.pkg.github.com/mbeddr/*"
+    fun itemisNexus() = "https://artifacts.itemis.cloud/repository/maven-mps/"
+}
+
+/*
+extensions.create<Itemis>("itemis",buildscript)
+
+abstract class Itemis(val bs: ScriptHandler) {
     fun nexus() {
         bs.repositories {
             apply {  maven("https://artifacts.itemis.cloud/repository/maven-mps/") }
