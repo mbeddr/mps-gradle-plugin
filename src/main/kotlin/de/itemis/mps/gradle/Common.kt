@@ -136,4 +136,6 @@ class MPSVersion(
     override fun toString(): String {
         return major + appendOpt(minor, ".") + appendOpt(releaseType, "-")
     }
+    
+    fun toMavenSnapshot() = "$major.${minorMainPart()}-SNAPSHOT"
 }
