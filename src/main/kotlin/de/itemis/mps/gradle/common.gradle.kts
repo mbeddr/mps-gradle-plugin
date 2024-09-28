@@ -42,18 +42,31 @@ abstract class CI(val _project: Project) {
     fun isCI() = _project.extra["ciBuild"]
 }
 
-extensions.create<Jdk>("java", project)
+extensions.create<JDK>("jdk", project)
 
-abstract class Java(val _project: Project) {
-    fun determineCI() {
-        if(System.getenv("CI").toBoolean()) {
-            _project.extra["ciBuild"] = true
-        } else{
-            _project.extra["ciBuild"] = _project.hasProperty("teamcity")
+abstract class JDK(val _project: Project) {
+    fun determine(javaVersion: JavaVersion) {
+        if (_project.extra.has("java${javaVersion}_home")) {
+            _project.extra["jdk_home"] = _project.extra.get("java${javaVersion}_home")
+        } else if (System.getenv("JB_JAVA${javaVersion}_HOME") != null) {
+            _project.extra["jdk_home"] = System.getenv("JB_JAVA${javaVersion}_HOME")
+        } else {
+            if (JavaVersion.current() != javaVersion) {
+                throw GradleException("This build script requires Java ${javaVersion} but you are currently using ${JavaVersion.current()}.\nWhat you can do:\n"
+                        + "  * Use project property java${javaVersion}_home to point to the Java ${javaVersion} JDK.\n"
+                        + "  * Use environment variable JB_JAVA${javaVersion}_HOME to point to the Java ${javaVersion} JDK\n"
+                        + "  * Run Gradle using Java ${javaVersion}")
+            }
+            _project.extra["jdk_home"] = System.getProperty("java.home")
         }
-    }
 
-    fun isCI() = _project.extra["ciBuild"]
+        val jdk_home = _project.extra["jdk_home"]
+        // Check JDK location
+        if (!File(jdk_home.toString(), "lib").exists()) {
+            throw GradleException("Unable to locate JDK home folder. Detected folder is: ${jdk_home}")
+        }
+        _project.logger.info("Using JDK at ${jdk_home}")
+    }
 }
 
 extensions.create<Itemis>("itemis",buildscript)
