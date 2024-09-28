@@ -27,3 +27,17 @@ configurations.create(BackendConfigurations.REMIGRATE_BACKEND_CONFIGURATION_NAME
         add(project.dependencies.create("de.itemis.mps.build-backends:remigrate:[0,2)"))
     }
 }
+
+extensions.create<CI>("ci", project)
+
+abstract class CI(val _project: Project) {
+    fun determineCI() {
+        if(System.getenv("CI").toBoolean()) {
+            _project.extra["ciBuild"] = true
+        } else{
+            _project.extra["ciBuild"] = _project.hasProperty("teamcity")
+        }
+    }
+    
+    fun isCI() = _project.extra["ciBuild"]
+}
