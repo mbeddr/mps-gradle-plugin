@@ -35,6 +35,7 @@ configurations.create(BackendConfigurations.REMIGRATE_BACKEND_CONFIGURATION_NAME
 extensions.create<CI>("ci", project)
 
 abstract class CI(val _project: Project) {
+    @Suppress("unused")
     fun determineCI() {
         if(System.getenv("CI").toBoolean()) {
             _project.extra["ciBuild"] = true
@@ -42,11 +43,14 @@ abstract class CI(val _project: Project) {
             _project.extra["ciBuild"] = _project.hasProperty("teamcity")
         }
     }
-    
+
+    @Suppress("unused")
     fun isCI() = _project.extra["ciBuild"]
-    
+
+    @Suppress("unused")
     fun buildNumber() = System.getenv("GITHUB_RUN_NUMBER").toIntOrNull() ?: System.getenv("BUILD_NUMBER").toInt()
-    
+
+    @Suppress("unused")
     fun registerDependencyRepositories(repositories: ArrayList<String>) {
         for (repoUrl in repositories) {
             _project.repositories.maven {
@@ -63,6 +67,7 @@ abstract class CI(val _project: Project) {
 extensions.create<JDK>("jdk", project)
 
 abstract class JDK(val _project: Project) {
+    @Suppress("unused")
     fun determine(javaVersion: JavaVersion) {
         if (_project.extra.has("java${javaVersion}_home")) {
             _project.extra["jdk_home"] = _project.extra.get("java${javaVersion}_home")
@@ -87,10 +92,13 @@ abstract class JDK(val _project: Project) {
     }
 }
 
-extensions.create<Itemis>("itemis",buildscript)
+extensions.create<Itemis>("itemis")
 
-abstract class Itemis(val bs: ScriptHandler) {
+abstract class Itemis() {
+    @Suppress("unused")
     fun mbeddrGitHub() = "https://maven.pkg.github.com/mbeddr/*"
+
+    @Suppress("unused")
     fun itemisNexus() = "https://artifacts.itemis.cloud/repository/maven-mps/"
 }
 
@@ -139,7 +147,7 @@ tasks.named("clean") {
 
 extensions.create<GitHubAuth>("githubAuth", project)
 
-abstract class GitHubAuth(val _project: Project) {
+abstract class GitHubAuth(_project: Project) {
     val user:String? = (_project.findProperty("github_username") ?: System.getenv("GITHUB_ACTOR"))?.toString()
     val token:String? = (_project.findProperty("github_token") ?: System.getenv("GITHUB_TOKEN"))?.toString()
 }
@@ -147,9 +155,12 @@ abstract class GitHubAuth(val _project: Project) {
 extensions.create<Directories>("directories",project)
 
 abstract class Directories(val _project: Project) {
+    @Suppress("unused")
     fun artifactsDir() :File = _project.file("${_project.layout.projectDirectory}/artifacts")
-        
+
+    @Suppress("unused")
     fun scriptFile(name:String):File = _project.file("${_project.layout.projectDirectory}/scripts/$name")
-    
+
+    @Suppress("unused")
     fun jnLibraryPath():File = File(_project.extra["mpsHomeDir"].toString(), "lib/jna/${System.getProperty("os.arch")}")
 }
