@@ -6,6 +6,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.kotlin.dsl.extra
 import java.io.File
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ open class DownloadJbrConfiguration @Inject constructor(objects: ObjectFactory) 
     var distributionType : String? = null
     internal val downloadDirProperty: DirectoryProperty = objects.directoryProperty()
 
+    @Suppress("unused")
     var downloadDir: File?
         get() = downloadDirProperty.get().asFile
         set(value) {
@@ -22,6 +24,7 @@ open class DownloadJbrConfiguration @Inject constructor(objects: ObjectFactory) 
         }
 }
 
+@Suppress("unused")
 open class DownloadJbrProjectPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
@@ -86,7 +89,7 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                 ))
                 javaExecutableProperty.set(jbrDirProperty.file(if (Os.isFamily(Os.FAMILY_WINDOWS)) "bin/java.exe" else "bin/java"))
                 if(extension.defaultJavaExecutable) {
-                    project.setProperty("itemis.mps.gradle.ant.defaultJavaExecutable",javaExecutableProperty.asFile)
+                    project.extra["itemis.mps.gradle.ant.defaultJavaExecutable"] = javaExecutableProperty.asFile
                 }
             }
         }

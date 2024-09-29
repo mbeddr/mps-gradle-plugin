@@ -126,10 +126,15 @@ if (project.extra["skipResolveMps"].toString().toBoolean()) {
     }
 } else {
     tasks.register<Sync>("commonResolveMps") {
-        dependsOn(configurations.getByName("mps"))
-        dependsOn(configurations.getByName("common_mps"))
-        from(configurations.getByName("mps").resolve().map { zipTree(it) })
-        from(configurations.getByName("common_mps").resolve().map { zipTree(it) })
+        if(configurations.findByName("mps")!= null) {
+            dependsOn(configurations.getByName("mps"))
+            from(configurations.getByName("mps").resolve().map { zipTree(it) })
+        }
+        if(configurations.findByName("common_mps")!= null) {
+            dependsOn(configurations.getByName("common_mps"))
+            from(configurations.getByName("common_mps").resolve().map { zipTree(it) })
+        }
+        
         project.extra["mpsHomeDir"]?.let { into(it) }
     }
 }
