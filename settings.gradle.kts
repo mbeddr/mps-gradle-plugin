@@ -1,5 +1,15 @@
 pluginManagement {
     includeBuild("git-based-versioning")
+
+    val kotlinVersion: String by settings
+    val kotlinDSLVersion: String by settings
+    val binaryCompatibilityValidator: String by settings
+    
+    plugins {
+        kotlin("jvm") version kotlinVersion
+        `kotlin-dsl` version kotlinDSLVersion
+        id("org.jetbrains.kotlinx.binary-compatibility-validator") version binaryCompatibilityValidator
+    }
 }
 
 plugins {

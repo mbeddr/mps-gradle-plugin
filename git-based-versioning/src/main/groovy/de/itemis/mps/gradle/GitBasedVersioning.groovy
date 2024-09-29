@@ -75,17 +75,18 @@ class GitBasedVersioning {
         getVersion(branch, major, minor, getGitCommitCount())
     }
 
-    static String getVersionWithCount(String major, String minor, int count) {
+    static String getVersionWithCount(String major, String minor, Integer count) {
         getVersion(getGitBranch(), major, minor, count)
     }
 
-    static String getVersionWithBugfixAndCount(String major, String minor, String bugfix, int count) {
+    static String getVersionWithBugfixAndCount(String major, String minor, String bugfix, Integer count) {
         getVersion(getGitBranch(), major, minor, bugfix, count)
     }
 
-    static String getVersion(String branch, String major, String minor, String bugfix = "", int count) {
+    static String getVersion(String branch, String major, String minor, String bugfix = "", Integer count) {
         def hash = getGitShortCommitHash()
-        def baseVersion = bugfix.isEmpty() ? "$major.$minor.$count.$hash" : "$major.$minor.$bugfix.$count.$hash"
+        def countStr = count != null ? ".$count": ""
+        def baseVersion = bugfix.isEmpty() ? "$major.$minor${countStr}.$hash" : "$major.$minor.$bugfix${countStr}.$hash"
         if (branch == 'master' || branch == 'main' || branch == 'HEAD' /*this happens in detached head situations*/) {
             return baseVersion
         }
@@ -100,12 +101,12 @@ class GitBasedVersioning {
      * @param minor
      * @return
      */
-    static String getVersionWithoutMaintenancePrefix(String major, String minor) {
+    static String getVersionWithoutMaintenancePrefix(String major, String minor, Integer count = null) {
         def branch = getGitBranch()
         if (branch.startsWith("maintenance") || branch.startsWith("mps")) {
-            getVersion("HEAD", major, minor)
+            getVersion("HEAD", major, minor, count != null? count: getGitCommitCount())
         } else {
-            getVersion(major, minor)
+            getVersion(getGitBranch(), major, minor, count != null? count: getGitCommitCount())
         }
     }
 }

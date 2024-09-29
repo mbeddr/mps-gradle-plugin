@@ -30,31 +30,32 @@ public class de/itemis/mps/gradle/BuildLanguages : de/itemis/mps/gradle/RunAntSc
 	public fun <init> ()V
 }
 
-public class de/itemis/mps/gradle/BundleMacosJdk : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
-	public static synthetic field __$stMC Z
-	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+public class de/itemis/mps/gradle/BundleMacosJdk : org/gradle/api/DefaultTask {
+	public field jdk Ljava/io/File;
+	public field outputFile Ljava/io/File;
+	public field rcpArtifact Ljava/io/File;
 	public fun <init> ()V
-	public fun build ()Ljava/lang/Object;
-	public fun getJdk ()Ljava/io/File;
-	public fun getJdkDirname ()Ljava/lang/String;
-	public fun getMetaClass ()Lgroovy/lang/MetaClass;
-	public fun getOutputFile ()Ljava/io/File;
-	public fun getRcpArtifact ()Ljava/io/File;
-	public fun setJdk (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setJdkDependency (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setJdkDirname (Ljava/lang/String;)Ljava/lang/Object;
-	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
-	public fun setOutputFile (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setRcpArtifact (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun build ()V
+	public final fun getJdk ()Ljava/io/File;
+	public final fun getJdkDirname ()Ljava/lang/String;
+	public final fun getOutputFile ()Ljava/io/File;
+	public final fun getRcpArtifact ()Ljava/io/File;
+	public final fun setJdk (Ljava/io/File;)V
+	public final fun setJdkDependency (Ljava/lang/Object;)V
+	public final fun setJdkDirname (Ljava/lang/String;)V
+	public final fun setOutputFile (Ljava/io/File;)V
+	public final fun setOutputFile (Ljava/lang/Object;)V
+	public final fun setRcpArtifact (Ljava/io/File;)V
 }
 
-public class de/itemis/mps/gradle/BundledScripts : groovy/lang/GroovyObject {
-	public static synthetic field __$stMC Z
-	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+public final class de/itemis/mps/gradle/BundledScripts {
+	public static final field Companion Lde/itemis/mps/gradle/BundledScripts$Companion;
 	public fun <init> ()V
-	public static fun extractScriptsToDir (Ljava/io/File;[Ljava/lang/String;)V
-	public fun getMetaClass ()Lgroovy/lang/MetaClass;
-	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
+	public static final fun extractScriptsToDir (Ljava/io/File;[Ljava/lang/String;)V
+}
+
+public final class de/itemis/mps/gradle/BundledScripts$Companion {
+	public final fun extractScriptsToDir (Ljava/io/File;[Ljava/lang/String;)V
 }
 
 public final class de/itemis/mps/gradle/CommonKt {
@@ -72,28 +73,44 @@ public final class de/itemis/mps/gradle/CommonPlugin : org/gradle/api/Plugin {
 	public fun apply (Lorg/gradle/api/Project;)V
 }
 
-public class de/itemis/mps/gradle/CreateDmg : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
-	public static synthetic field __$stMC Z
-	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+public abstract class de/itemis/mps/gradle/Common_gradle$CI {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun buildNumber ()I
+	public final fun determineCI ()V
+	public final fun get_project ()Lorg/gradle/api/Project;
+	public final fun isCI ()Ljava/lang/Object;
+	public final fun registerDependencyRepositories (Ljava/util/ArrayList;)V
+}
+
+public abstract class de/itemis/mps/gradle/Common_gradle$Directories {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun artifactsDir ()Ljava/io/File;
+	public final fun get_project ()Lorg/gradle/api/Project;
+	public final fun jnLibraryPath ()Ljava/io/File;
+	public final fun scriptFile (Ljava/lang/String;)Ljava/io/File;
+}
+
+public abstract class de/itemis/mps/gradle/Common_gradle$GitHubAuth {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun getToken ()Ljava/lang/String;
+	public final fun getUser ()Ljava/lang/String;
+}
+
+public abstract class de/itemis/mps/gradle/Common_gradle$Itemis {
 	public fun <init> ()V
-	public fun build ()Ljava/lang/Object;
-	public fun getBackgroundImage ()Ljava/io/File;
-	public fun getDmgFile ()Ljava/io/File;
-	public fun getJdk ()Ljava/io/File;
-	public fun getMetaClass ()Lgroovy/lang/MetaClass;
-	public fun getRcpArtifact ()Ljava/io/File;
-	public fun getSignIdentity ()Ljava/lang/String;
-	public fun getSignKeyChain ()Ljava/io/File;
-	public fun getSignKeyChainPassword ()Ljava/lang/String;
-	public fun setBackgroundImage (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setDmgFile (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setJdk (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setJdkDependency (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
-	public fun setRcpArtifact (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setSignIdentity (Ljava/lang/String;)V
-	public fun setSignKeyChain (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun setSignKeyChainPassword (Ljava/lang/String;)V
+	public final fun itemisNexus ()Ljava/lang/String;
+	public final fun mbeddrGitHub ()Ljava/lang/String;
+}
+
+public abstract class de/itemis/mps/gradle/Common_gradle$JDK {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun determine (Lorg/gradle/api/JavaVersion;)V
+	public final fun get_project ()Lorg/gradle/api/Project;
+}
+
+public final class de/itemis/mps/gradle/Common_gradle$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final synthetic fun execute (Ljava/lang/Object;)V
 }
 
 public final class de/itemis/mps/gradle/EnvironmentKind : java/lang/Enum {
@@ -118,15 +135,23 @@ public class de/itemis/mps/gradle/GenerateLibrariesXml : org/gradle/api/DefaultT
 	public fun setOverrides (Ljava/lang/Object;)V
 }
 
-public class de/itemis/mps/gradle/GetMpsInBrowser : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
-	public static synthetic field __$stMC Z
-	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+public class de/itemis/mps/gradle/GetMpsInBrowser : org/gradle/api/DefaultTask {
 	public fun <init> ()V
-	public fun build ()Ljava/lang/Object;
-	public fun getMetaClass ()Lgroovy/lang/MetaClass;
-	public fun getVersion ()Ljava/lang/String;
-	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
-	public fun setVersion (Ljava/lang/String;)Ljava/lang/Object;
+	public final fun build ()V
+	public final fun getVersion ()Ljava/lang/String;
+	public final fun setVersion (Ljava/lang/String;)V
+}
+
+public final class de/itemis/mps/gradle/MPSVersion {
+	public static final field Companion Lde/itemis/mps/gradle/MPSVersion$Companion;
+	public synthetic fun <init> (Lnet/swiftzer/semver/SemVer;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getVersion ()Lnet/swiftzer/semver/SemVer;
+	public final fun toMavenSnapshot ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class de/itemis/mps/gradle/MPSVersion$Companion {
+	public final fun parse (Ljava/lang/String;)Lde/itemis/mps/gradle/MPSVersion;
 }
 
 public final class de/itemis/mps/gradle/Macro {
@@ -159,14 +184,10 @@ public final class de/itemis/mps/gradle/Plugin {
 	public fun toString ()Ljava/lang/String;
 }
 
-public class de/itemis/mps/gradle/Pom : groovy/lang/GroovyObject {
-	public static synthetic field __$stMC Z
-	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
+public final class de/itemis/mps/gradle/Pom {
 	public fun <init> ()V
-	public fun getMetaClass ()Lgroovy/lang/MetaClass;
-	public fun setMetaClass (Lgroovy/lang/MetaClass;)V
-	public fun withDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)Ljava/lang/Object;
-	public fun withProvidedDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)Ljava/lang/Object;
+	public final fun withDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)V
+	public final fun withProvidedDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)V
 }
 
 public class de/itemis/mps/gradle/RunAntScript : org/gradle/api/DefaultTask {
@@ -197,12 +218,43 @@ public class de/itemis/mps/gradle/TestLanguages : de/itemis/mps/gradle/RunAntScr
 	public fun <init> ()V
 }
 
+public class de/itemis/mps/gradle/de/itemis/mps/gradle/CreateDmg : org/gradle/api/DefaultTask {
+	public field backgroundImage Ljava/io/File;
+	public field dmgFile Ljava/io/File;
+	public field jdk Ljava/io/File;
+	public field rcpArtifact Ljava/io/File;
+	public fun <init> ()V
+	public final fun build ()V
+	public final fun getBackgroundImage ()Ljava/io/File;
+	public final fun getDmgFile ()Ljava/io/File;
+	public final fun getJdk ()Ljava/io/File;
+	public final fun getRcpArtifact ()Ljava/io/File;
+	public final fun getSignIdentity ()Ljava/lang/String;
+	public final fun getSignKeyChain ()Ljava/io/File;
+	public final fun getSignKeyChainPassword ()Ljava/lang/String;
+	public final fun setBackgroundImage (Ljava/io/File;)V
+	public final fun setBackgroundImage (Ljava/lang/Object;)V
+	public final fun setDmgFile (Ljava/io/File;)V
+	public final fun setDmgFile (Ljava/lang/Object;)V
+	public final fun setJdk (Ljava/io/File;)V
+	public final fun setJdk (Ljava/lang/Object;)V
+	public final fun setJdkDependency (Ljava/lang/Object;)V
+	public final fun setRcpArtifact (Ljava/io/File;)V
+	public final fun setRcpArtifact (Ljava/lang/Object;)V
+	public final fun setSignIdentity (Ljava/lang/String;)V
+	public final fun setSignKeyChain (Ljava/io/File;)V
+	public final fun setSignKeyChain (Ljava/lang/Object;)V
+	public final fun setSignKeyChainPassword (Ljava/lang/String;)V
+}
+
 public class de/itemis/mps/gradle/downloadJBR/DownloadJbrConfiguration {
 	public field jbrVersion Ljava/lang/String;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getDefaultJavaExecutable ()Z
 	public final fun getDistributionType ()Ljava/lang/String;
 	public final fun getDownloadDir ()Ljava/io/File;
 	public final fun getJbrVersion ()Ljava/lang/String;
+	public final fun setDefaultJavaExecutable (Z)V
 	public final fun setDistributionType (Ljava/lang/String;)V
 	public final fun setDownloadDir (Ljava/io/File;)V
 	public final fun setJbrVersion (Ljava/lang/String;)V

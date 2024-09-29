@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle
 
+import net.swiftzer.semver.SemVer
 import org.apache.log4j.Logger
 import org.gradle.api.GradleException
 import org.gradle.api.JavaVersion
@@ -111,4 +112,36 @@ fun BasePluginExtensions.getMPSVersion(extensionName: String): String {
 
     //  Otherwise, the version has to be provided explicitly.
     throw GradleException(ErrorMessages.mustSetVersionWhenNoMpsConfiguration(extensionName))
+}
+
+class MPSVersion private constructor(val version: SemVer) {
+    
+    companion object {
+        
+        fun parse(str: String):MPSVersion {
+            var semVersion = SemVer.parseOrNull(str)
+            if (semVersion == null) {
+                val insertIndex = str.indexOf("-")
+                val newStr =  if(insertIndex != -1) str.substring(0,insertIndex)+ ".0" + str.substring(insertIndex) else "$str.0"
+                semVersion = SemVer.parse(newStr)
+            }
+            return MPSVersion(semVersion)
+        }
+    }
+
+    private fun appendOpt(str: String?, pre: String): String {
+        return if (!str.isNullOrEmpty()) "${pre}${str}" else ""
+    }
+    
+    private fun substringBefore(text: String, substring: String):String? {
+        val i: Int = text.indexOf(substring)
+        if (i == -1) return null
+        return text.substring(0, i)
+    }
+
+    override fun toString(): String {
+        return version.toString()
+    }
+    
+    fun toMavenSnapshot() = "${version.major}.${version.minor}-SNAPSHOT"
 }

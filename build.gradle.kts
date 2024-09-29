@@ -11,20 +11,19 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra { "1.7" }
-val kotlinVersion by extra { "$kotlinApiVersion.10" }
-
+val kotlinApiVersion: String by project
+val kotlinVersion: String by project
 
 plugins {
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.7.10"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    kotlin("jvm")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
-val baseVersion = "1.28.0"
+val baseVersion = "1.29.0"
 
 group = "de.itemis.mps"
 
@@ -60,8 +59,8 @@ dependencyLocking {
 dependencies {
     api("de.itemis.mps.gradle:git-based-versioning")
     implementation(kotlin("stdlib", version = kotlinVersion))
-    implementation("net.swiftzer.semver:semver:1.1.2")
-    implementation("de.itemis.mps.build-backends:launcher:2.4.0.+")
+    implementation("net.swiftzer.semver:semver:2.0.0")
+    implementation("de.itemis.mps.build-backends:launcher:2.5.+")
     testImplementation("junit:junit:4.13.2")
 }
 

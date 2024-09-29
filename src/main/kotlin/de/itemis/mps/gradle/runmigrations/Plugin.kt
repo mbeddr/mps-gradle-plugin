@@ -1,8 +1,7 @@
 package de.itemis.mps.gradle.runmigrations
 
-import de.itemis.mps.gradle.BasePluginExtensions
+import de.itemis.mps.gradle.*
 import de.itemis.mps.gradle.ErrorMessages
-import de.itemis.mps.gradle.getMPSVersion
 import de.itemis.mps.gradle.runAnt
 import groovy.xml.MarkupBuilder
 import net.swiftzer.semver.SemVer
@@ -56,17 +55,17 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                 }
 
                 val mpsVersion = extension.getMPSVersion(extensionName)
-                val parsedMPSVersion = SemVer.parse(mpsVersion)
+                val parsedMPSVersion:MPSVersion = MPSVersion.parse(mpsVersion)
 
-                if (extension.force != null && parsedMPSVersion < MIN_VERSION_FOR_FORCE) {
+                if (extension.force != null && parsedMPSVersion.version < MIN_VERSION_FOR_FORCE) {
                     throw GradleException("The force migration flag is only supported for MPS version $MIN_VERSION_FOR_FORCE and higher.")
                 }
 
-                if (extension.haltOnPrecheckFailure != null && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) {
+                if (extension.haltOnPrecheckFailure != null && parsedMPSVersion.version < MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE) {
                     throw GradleException("The 'do not halt on pre-check failure' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE and higher.")
                 }
 
-                if (extension.haltOnDependencyError != null && parsedMPSVersion < MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR) {
+                if (extension.haltOnDependencyError != null && parsedMPSVersion.version < MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR) {
                     throw GradleException("The 'do not halt on dependency error' option is only supported for MPS version $MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR and higher.")
                 }
 
