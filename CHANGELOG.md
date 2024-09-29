@@ -2,6 +2,27 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.29.0
+
+### Changed
+
+- Upgraded to Gradle 8.10.2 and Kotlin to 1.9.24.
+
+### Added
+
+- A few new helper functions are now available through extensions when applying `de.itemis.mps.gradle.common`:
+  - `ci` (determineCI(), isCI(), buildNumber(), registerDependencyRepositories())
+  - `jdk` (determine(JavaVersion))
+  - `itemis` (mbeddrGitHub(), itemisNexus())
+  - `githubAuth` (user, token)
+  - `directories` (artifactsDir(), scriptFile(String), jnLibraryPath())
+- `de.itemis.mps.gradle.common` creates configurations for MPS (`common_mps`), language dependencies (`common_languageLibs`) and the ant lib (common_antLib) automatically. Tasks `commonCleanMps` and `commonResolveMps` are also created when you apply `de.itemis.mps.gradle.common`.
+- The plugin `downloadJbr` has a new flag `defaultJavaExecutable` to set the downloaded JBR as the default Java executable.
+
+### Fixed
+
+- The `GetMpsInBrowser` task works again for all platforms including Mac Apple Silicon.
+
 ## 1.28.0
 
 ### Added

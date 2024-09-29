@@ -134,7 +134,7 @@ tasks.register<Delete>("commonCleanMps") {
 }
 
 tasks.named("clean") {
-    dependsOn("cleanMPS")
+    dependsOn("commonCleanMPS")
 }
 
 extensions.create<GitHubAuth>("githubAuth", project)

@@ -30,6 +30,7 @@ repositories {
 
 downloadJbr {
     jbrVersion = "11_0_6-b520.66"
+    defaultJavaExecutable.set(true) // optional
 }
 ```
 
@@ -45,6 +46,7 @@ repositories {
 
 downloadJbr {
     jbrVersion = '11_0_6-b520.66'
+    defaultJavaExecutable.set(true) // optional
 }
 ```
 
@@ -52,6 +54,7 @@ downloadJbr {
 
 * `jbrVersion` - version of the JBR to download. While this supports maven version selectors we highly recommend not
   using wildcards like `*` or `+` in there for reproducible builds.
+* `defaultJavaExecutable` - set the downloaded JBR as the default Java executable
 * `distributionType` - optional distribution type for the JBR to use. Will default to `jbr_jcef` if omitted.
 * `downloadDir` - optional directory where the downloaded JBR is downloaded and extracted to. The plugin defaults to
   `build/jbrDownload`. 
