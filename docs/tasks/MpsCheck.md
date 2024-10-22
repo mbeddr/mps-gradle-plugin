@@ -37,7 +37,15 @@ Parameters:
 * `varMacros` - non-path variables/macros that are necessary to open the project. Variable macros *are* considered part
   of Gradle build cache key.
 * `junitFile` - the JUnit XML file to produce. Defaults to `$buildDir/TEST-${task.name}.xml`
-* `junitFormat` - the format of the JUnit XML file. Defaults to `module-and-model`.
+* `junitFormat` - specifies how errors are reported in the JUnit XML file. Possible options:
+  * `model` (default, deprecated) - generates one test case for each model that was checked. If the model check reported
+    any error for the model, the test case will contain a failure with the error message.
+  * `module-and-model` (preferred) - generates one test case for each module and model that was checked. If the model
+    check reported any error for the model or module, the test case will contain a failure with the error message.
+  * `message` - generates one testcase for each model check error. For uniqueness reasons, the name of the testcase will
+    reflect the specific model check error and the name of the test class will be constructed from the checked node ID
+    and its containing root node. Full error message and the node URL will be reported in the testcase failure. Checked
+    models will be mapped to test suites with this option.
 * `parallel` (since 1.20) - runs model checker in parallel mode. Supported in MPS 2021.3.4. Default is `false`.
 * `mpsHome` - the home directory of the MPS distribution (or RCP) to use for testing.
 * `mpsVersion` - the MPS version, such as "2021.3". Autodetected by reading `$mpsHome/build.properties` by default.

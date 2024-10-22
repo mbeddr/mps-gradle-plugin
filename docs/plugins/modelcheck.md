@@ -61,12 +61,15 @@ Parameters:
   the build.
 * `junitFile` - allows storing the results of the model check as a JUnit XML file. By default, the file will contain one
   testcase for each model that was checked (s. `junitFormat`).
-* `junitFormat` - allows to change the format of the JUnit XML file, how the model checking errors will be reported. Possible options:
-  * `model` (default) - generates one testcase for each model that was checked. If the model check reported any error for the model,
-    the testcase will fail and the message of the model checking error will be reported.
-  * `message` - generates one testcase for each model check error. For uniqueness reasons, the name of the testcase will reflect the specific
-    model check error and the name of the test class will be constructed from the checked node ID and its containing root node.
-    Full error message and the node URL will be reported in the testcase failure. Checked models will be mapped to test suites with this option.
+* `junitFormat` - specifies how errors are reported in the JUnit XML file. Possible options:
+  * `model` (default, deprecated) - generates one test case for each model that was checked. If the model check reported
+    any error for the model, the test case will contain a failure with the error message.
+  * `module-and-model` (preferred) - generates one test case for each module and model that was checked. If the model
+    check reported any error for the model or module, the test case will contain a failure with the error message.
+  * `message` - generates one testcase for each model check error. For uniqueness reasons, the name of the testcase will
+    reflect the specific model check error and the name of the test class will be constructed from the checked node ID
+    and its containing root node. Full error message and the node URL will be reported in the testcase failure. Checked
+    models will be mapped to test suites with this option.
 * `parallel` (since 1.20) - runs model checker in parallel mode. Supported in MPS 2021.3.4. Default is `false`.
 * `maxHeap` - maximum heap size setting for the JVM that executes the model checker. This is useful to limit the heap usage
   in scenarios like containerized build agents where the OS reported memory limit is not the maximum
