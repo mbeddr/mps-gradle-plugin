@@ -1,28 +1,24 @@
 package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.BackendConfigurations
-import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import org.gradle.api.GradleException
 import org.gradle.api.Incubating
 import org.gradle.api.file.*
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
-import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.CommandLineArgumentProvider
 
 @CacheableTask
 @Incubating
 abstract class MpsCheck : JavaExec(), VerificationTask {
 
-    @get:Internal("covered by mpsVersion, initialModelcheckBackendClasspath()")
+    @get:Internal("covered by mpsVersion, classpath")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Input
@@ -69,8 +65,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
     val parallel: Property<Boolean> = objectFactory.property<Boolean>().convention(false)
 
     @get:Internal("covered by classpath")
-    val additionalModelcheckBackendClasspath: ConfigurableFileCollection =
-        objectFactory.fileCollection().from(initialModelcheckBackendClasspath())
+    val additionalModelcheckBackendClasspath: ConfigurableFileCollection = objectFactory.fileCollection()
 
     @Suppress("unused")
     @get:InputFiles
@@ -142,6 +137,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
 
         group = TaskGroups.VERIFICATION
 
+        classpath(mpsAndPluginJars())
         classpath(project.configurations.named(BackendConfigurations.MODELCHECK_BACKEND_CONFIGURATION_NAME))
         classpath(additionalModelcheckBackendClasspath)
 
@@ -153,7 +149,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         super.exec()
     }
 
-    private fun initialModelcheckBackendClasspath() = mpsHome.asFileTree.matching {
+    private fun mpsAndPluginJars() = mpsHome.asFileTree.matching {
         include("lib/**/*.jar")
 
         // add only minimal number of plugins jars that are required by the modelcheck code

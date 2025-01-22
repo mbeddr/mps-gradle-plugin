@@ -1,15 +1,12 @@
 package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.BackendConfigurations
-import de.itemis.mps.gradle.ErrorMessages
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import org.gradle.api.GradleException
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -51,8 +48,7 @@ abstract class MpsExecute : JavaExec() {
     abstract val methodArguments: ListProperty<String>
 
     @get:Internal
-    val additionalExecuteBackendClasspath: ConfigurableFileCollection =
-        objectFactory.fileCollection().from(initialExecuteBackendClasspath())
+    val additionalExecuteBackendClasspath: ConfigurableFileCollection = objectFactory.fileCollection()
 
     init {
         mpsVersion.convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
@@ -82,6 +78,7 @@ abstract class MpsExecute : JavaExec() {
         description = "Execute specified method from a generated class to modify the MPS project"
         group = "execute"
 
+        classpath(mpsJars())
         classpath(project.configurations.named(BackendConfigurations.EXECUTE_BACKEND_CONFIGURATION_NAME))
         classpath(additionalExecuteBackendClasspath)
 
@@ -95,7 +92,7 @@ abstract class MpsExecute : JavaExec() {
         super.exec()
     }
 
-    private fun initialExecuteBackendClasspath() = mpsHome.asFileTree.matching {
+    private fun mpsJars() = mpsHome.asFileTree.matching {
         include("lib/**/*.jar")
     }
 }

@@ -10,7 +10,6 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -25,7 +24,7 @@ import org.gradle.process.CommandLineArgumentProvider
 @Incubating
 abstract class MpsGenerate : JavaExec() {
 
-    @get:Internal("covered by mpsVersion, initialGenerateBackendClasspath()")
+    @get:Internal("covered by mpsVersion, classpath")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
 
     @get:Input
@@ -69,8 +68,7 @@ abstract class MpsGenerate : JavaExec() {
     val parallelGenerationThreads: Property<Int> = objectFactory.property<Int>().convention(0)
 
     @get:Internal("covered by classpath")
-    val additionalGenerateBackendClasspath: ConfigurableFileCollection =
-        objectFactory.fileCollection().from(initialGenerateBackendClasspath())
+    val additionalGenerateBackendClasspath: ConfigurableFileCollection = objectFactory.fileCollection()
 
     @Suppress("unused")
     @get:InputFiles
@@ -127,8 +125,9 @@ abstract class MpsGenerate : JavaExec() {
 
         group = TaskGroups.GENERATION
 
-        classpath(project.configurations.named(BackendConfigurations.GENERATE_BACKEND_CONFIGURATION_NAME))
+        classpath(mpsJars())
         classpath(additionalGenerateBackendClasspath)
+        classpath(project.configurations.named(BackendConfigurations.GENERATE_BACKEND_CONFIGURATION_NAME))
 
         mainClass.set("de.itemis.mps.gradle.generate.MainKt")
     }
@@ -139,7 +138,7 @@ abstract class MpsGenerate : JavaExec() {
         super.exec()
     }
 
-    private fun initialGenerateBackendClasspath() = mpsHome.asFileTree.matching {
+    private fun mpsJars() = mpsHome.asFileTree.matching {
         include("lib/**/*.jar")
     }
 }
