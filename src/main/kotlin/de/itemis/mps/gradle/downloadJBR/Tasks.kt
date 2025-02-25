@@ -14,9 +14,11 @@ import java.io.File
 import javax.inject.Inject
 
 open class DownloadJbrForPlatform @Inject constructor(
-    private val objects: ObjectFactory,
+    objects: ObjectFactory,
     private val javaToolchainService: JavaToolchainService
 ) : DefaultTask() {
+
+    private val toolchainSpecFactory = objects.newInstance(ToolchainSpecFactory::class.java)
 
     @get:Internal
     internal val jbrDirProperty: DirectoryProperty = objects.directoryProperty()
@@ -44,7 +46,7 @@ open class DownloadJbrForPlatform @Inject constructor(
      */
     @get:Internal
     val toolchainSpec: Provider<JavaToolchainSpec> =
-        javaExecutableProperty.map { SpecificInstallationToolchainSpec.fromJavaExecutable(objects, it.asFile.path) }
+        javaExecutableProperty.map { toolchainSpecFactory.fromJavaExecutable(it.asFile.path) }
 
     /**
      * A [JavaLauncher] for the downloaded JBR that can be used with [JavaExec] task.

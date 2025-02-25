@@ -61,6 +61,7 @@ class JBRDownloadTest {
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":downloadJbr")?.outcome)
         Assert.assertTrue(File(testProjectDir.root, "jbrdl").exists())
     }
+
     @Test
     fun `download without download dir`() {
         settingsFile.writeText("""
@@ -242,6 +243,46 @@ class JBRDownloadTest {
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("exec")
+            .withPluginClasspath()
+            .build()
+        Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
+        assertThat(result.output, containsString("OpenJDK Runtime Environment JBR"))
+    }
+
+    @Test
+    fun `use JavaLauncher with Gradle 8_13`() {
+        buildFile.writeText("""
+            import de.itemis.mps.gradle.downloadJBR.DownloadJbrForPlatform
+
+            plugins {
+                id("download-jbr")
+            }
+            
+            repositories {
+                mavenCentral()
+                maven("https://artifacts.itemis.cloud/repository/maven-mps")
+            }
+            
+            downloadJbr {
+                jbrVersion = "$JBR_VERSION"
+            }
+            
+            val downloadJbrTask = tasks.named("downloadJbr", DownloadJbrForPlatform::class)
+            
+            tasks.register<JavaExec>("exec") {
+                dependsOn(downloadJbrTask)
+                javaLauncher.set(downloadJbrTask.flatMap { it.javaLauncher })
+                jvmArgs("--version")
+
+                // Main class will be ignored due to --version but has to be provided
+                mainClass.set("ignored")
+            }
+        """.trimIndent())
+
+        val result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("exec")
+            .withGradleVersion("8.13")
             .withPluginClasspath()
             .build()
         Assert.assertEquals(TaskOutcome.SUCCESS, result.task(":exec")?.outcome)
