@@ -17,7 +17,7 @@ internal fun Task.addLogLevel(args: MutableCollection<String>) = addIfInfoLogLev
  * attributes.
  */
 internal fun <T> Task.addIfInfoLogLevel(result: MutableCollection<T>, value: T) {
-    val effectiveLogLevel = logging.level ?: project.gradle.startParameter.logLevel
+    val effectiveLogLevel = logging.level ?: LogLevel.LIFECYCLE
     if (effectiveLogLevel <= LogLevel.INFO) result.add(value)
 }
 
