@@ -3,7 +3,7 @@
 
 name: Java CI with Gradle
 
-on: [push]
+on: [ push ]
 
 jobs:
   build:
@@ -11,34 +11,38 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [11, 17]
+        java: [ 11, 17 ]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    # Java 11 is always needed to run the tests because they use MPS 2021.x
-    - name: Set up Java 11
-      uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: 11
+      # Java 11 is always needed to run the tests because they use MPS 2021.x
+      - name: Set up Java 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
 
-    - uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: ${{ matrix.java }}
-    - uses: gradle/gradle-build-action@v2
-    - name: Build with Gradle
-      run: ./gradlew build
-    - name: Upload JUnit XMLs
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: junit-xmls
-        path: '**/build/test-results/**/TEST-*.xml'
-        retention-days: 7
-    - uses: mikepenz/action-junit-report@v4
-      if: success() || failure()
-      with:
-        report_paths: '**/build/test-results/**/TEST-*.xml'
-        require_tests: true
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload JUnit XMLs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: junit-xmls
+          path: '**/build/test-results/**/TEST-*.xml'
+          retention-days: 7
+
+      - uses: mikepenz/action-junit-report@v5
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'
+          require_tests: true
