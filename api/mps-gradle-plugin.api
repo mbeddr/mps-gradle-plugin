@@ -345,7 +345,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsExecute : org/gradle/api/tas
 	public fun exec ()V
 	public final fun getAdditionalExecuteBackendClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getClassName ()Lorg/gradle/api/provider/Property;
-	public final fun getLogLevel ()Lorg/gradle/api/provider/Property;
+	public abstract fun getLogLevel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getMacros ()Lorg/gradle/api/provider/MapProperty;
 	public abstract fun getMethod ()Lorg/gradle/api/provider/Property;
 	public abstract fun getMethodArguments ()Lorg/gradle/api/provider/ListProperty;

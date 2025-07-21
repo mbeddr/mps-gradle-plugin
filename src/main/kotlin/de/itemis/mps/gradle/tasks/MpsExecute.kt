@@ -14,7 +14,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.newInstance
-import org.gradle.kotlin.dsl.property
 import org.gradle.work.DisableCachingByDefault
 
 
@@ -23,7 +22,7 @@ import org.gradle.work.DisableCachingByDefault
 abstract class MpsExecute : JavaExec() {
 
     @get:Input
-    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
+    abstract val logLevel: Property<LogLevel>
 
     @get:Internal
     abstract val mpsHome: DirectoryProperty
@@ -56,6 +55,7 @@ abstract class MpsExecute : JavaExec() {
     val additionalExecuteBackendClasspath: ConfigurableFileCollection = objectFactory.fileCollection()
 
     init {
+        logLevel.convention(project.gradle.startParameter.logLevel)
         mpsVersion.convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
         projectLocation.convention(project.layout.projectDirectory)
 
