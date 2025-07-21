@@ -145,7 +145,9 @@ abstract class MpsMigrate @Inject constructor(
 
                         if (mpsVersion.get() >= "2022.3") { add("jnaLibraryPath" to "lib/jna/${computeJnaArch()}") }
 
-                        addIfInfoLogLevel(this, logLevel.get(), "loglevel" to "info")
+                        if (logLevel.get() <= LogLevel.INFO) {
+                            add("loglevel" to "info")
+                        }
 
                         toTypedArray()
                     }
