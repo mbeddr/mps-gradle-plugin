@@ -11,17 +11,13 @@ buildscript {
     }
 }
 
-val kotlinApiVersion by extra { "1.7" }
-val kotlinVersion by extra { "$kotlinApiVersion.10" }
-
-
 plugins {
     groovy
     `java-gradle-plugin`
     `kotlin-dsl`
     `maven-publish`
-    kotlin("jvm") version "1.7.10"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.kotlin.compatibility.validator)
 }
 
 val baseVersion = "1.29.3"
@@ -58,11 +54,11 @@ dependencyLocking {
 }
 
 dependencies {
-    api("de.itemis.mps.gradle:git-based-versioning")
-    implementation(kotlin("stdlib", version = kotlinVersion))
-    implementation("net.swiftzer.semver:semver:1.1.2")
-    implementation("de.itemis.mps.build-backends:launcher:2.4.0.+")
-    testImplementation("junit:junit:4.13.2")
+    api(libs.itemis.gradle.git.based.versioning)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.swiftzer.semver)
+    implementation(libs.itemis.gradle.build.backends.launcher)
+    testImplementation(libs.junit)
 }
 
 tasks.test {
@@ -151,8 +147,8 @@ java {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.apiVersion = kotlinApiVersion
+    kotlinOptions.jvmTarget = libs.versions.kotlinJvmTarget.get()
+    kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
     kotlinOptions.allWarningsAsErrors = true
 }
 
