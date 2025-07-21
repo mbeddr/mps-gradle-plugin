@@ -15,6 +15,7 @@ on:
 
 jobs:
   build:
+    name: Builld (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
