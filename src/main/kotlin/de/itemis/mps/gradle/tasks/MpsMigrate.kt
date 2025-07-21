@@ -2,7 +2,6 @@ package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import de.itemis.mps.gradle.runAnt
 import groovy.xml.MarkupBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
@@ -21,7 +20,6 @@ import org.gradle.kotlin.dsl.listProperty
 import org.gradle.kotlin.dsl.mapProperty
 import org.gradle.kotlin.dsl.property
 import org.gradle.kotlin.dsl.withGroovyBuilder
-import org.gradle.platform.Architecture
 import java.io.File
 import javax.inject.Inject
 
@@ -30,6 +28,9 @@ abstract class MpsMigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
 ) : DefaultTask() {
+
+    @get:Internal
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
@@ -144,7 +145,7 @@ abstract class MpsMigrate @Inject constructor(
 
                         if (mpsVersion.get() >= "2022.3") { add("jnaLibraryPath" to "lib/jna/${computeJnaArch()}") }
 
-                        addIfInfoLogLevel(this, "loglevel" to "info")
+                        addIfInfoLogLevel(this, logLevel.get(), "loglevel" to "info")
 
                         toTypedArray()
                     }

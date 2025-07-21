@@ -7,18 +7,26 @@ import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.newInstance
+import org.gradle.kotlin.dsl.property
 import org.gradle.work.DisableCachingByDefault
 
 
 @DisableCachingByDefault(because = "calls arbitrary user code")
 @Incubating
 abstract class MpsExecute : JavaExec() {
+
+    @get:Internal
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal
     abstract val mpsHome: DirectoryProperty
@@ -71,7 +79,7 @@ abstract class MpsExecute : JavaExec() {
                 add("--method=${method.get()}")
                 methodArguments.get().forEach { add("--arg=$it") }
 
-                addLogLevel(this)
+                addLogLevel(this, logLevel.get())
             }
         }
 
