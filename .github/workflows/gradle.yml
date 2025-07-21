@@ -3,7 +3,15 @@
 
 name: Java CI with Gradle
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - 'v1.x'
+      - 'master'
+  pull_request:
+    branches:
+      - 'v1.x'
+      - 'master'
 
 jobs:
   build:
