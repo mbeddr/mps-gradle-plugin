@@ -22,7 +22,7 @@ jobs:
       checks: write
     strategy:
       matrix:
-        java: [ 11, 17 ]
+        java: [ 11, 17, 21 ]
     steps:
       - uses: actions/checkout@v4
       # Java 11 is always needed to run the tests because they use MPS 2021.x
