@@ -13,9 +13,13 @@ on:
       - 'v1.x'
       - 'master'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
-    name: Builld (JDK ${{ matrix.java }})
+    name: Build (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
