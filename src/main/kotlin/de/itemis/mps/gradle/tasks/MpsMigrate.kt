@@ -29,7 +29,7 @@ abstract class MpsMigrate @Inject constructor(
     providerFactory: ProviderFactory
 ) : DefaultTask() {
 
-    @get:Internal
+    @get:Input
     val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal

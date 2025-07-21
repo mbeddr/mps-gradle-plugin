@@ -19,7 +19,7 @@ import org.gradle.process.CommandLineArgumentProvider
 @Incubating
 abstract class MpsCheck : JavaExec(), VerificationTask {
 
-    @get:Internal
+    @get:Input
     val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal("covered by mpsVersion, classpath")

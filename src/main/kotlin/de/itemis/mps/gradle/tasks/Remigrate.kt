@@ -29,7 +29,7 @@ open class Remigrate @Inject constructor(
     providerFactory: ProviderFactory
 ) : JavaExec() {
 
-    @get:Internal
+    @get:Input
     val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal
