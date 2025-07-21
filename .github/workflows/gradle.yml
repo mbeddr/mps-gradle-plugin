@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      checks: write
     strategy:
       matrix:
         java: [ 11, 17, 21 ]
@@ -54,3 +53,5 @@ jobs:
         with:
           report_paths: '**/build/test-results/**/TEST-*.xml'
           require_tests: true
+          summary: true
+          annotate_only: true
