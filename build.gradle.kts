@@ -1,5 +1,6 @@
 import de.itemis.mps.gradle.GitBasedVersioning
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 buildscript {
     configurations.classpath {
@@ -146,10 +147,12 @@ java {
     withSourcesJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = libs.versions.kotlinJvmTarget.get()
-    kotlinOptions.apiVersion = libs.versions.kotlinApi.get()
-    kotlinOptions.allWarningsAsErrors = true
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.kotlinJvmTarget.get())
+        apiVersion = KotlinVersion.fromVersion(libs.versions.kotlinApi.get())
+        allWarningsAsErrors = true
+    }
 }
 
 apiValidation {
