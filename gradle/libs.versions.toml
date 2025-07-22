@@ -5,7 +5,7 @@ kotlin = "1.7.10"
 kotlinJvmTarget = "1.8"
 
 # plugins
-kotlinCompatibilityValidator = "0.13.2"
+kotlinCompatibilityValidator = "0.18.1"
 
 # libraries
 semver = "1.1.2"
