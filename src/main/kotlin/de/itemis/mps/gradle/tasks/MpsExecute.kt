@@ -7,6 +7,7 @@ import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -19,6 +20,9 @@ import org.gradle.work.DisableCachingByDefault
 @DisableCachingByDefault(because = "calls arbitrary user code")
 @Incubating
 abstract class MpsExecute : JavaExec() {
+
+    @get:Input
+    abstract val logLevel: Property<LogLevel>
 
     @get:Internal
     abstract val mpsHome: DirectoryProperty
@@ -51,6 +55,7 @@ abstract class MpsExecute : JavaExec() {
     val additionalExecuteBackendClasspath: ConfigurableFileCollection = objectFactory.fileCollection()
 
     init {
+        logLevel.convention(project.gradle.startParameter.logLevel)
         mpsVersion.convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
         projectLocation.convention(project.layout.projectDirectory)
 
@@ -71,7 +76,9 @@ abstract class MpsExecute : JavaExec() {
                 add("--method=${method.get()}")
                 methodArguments.get().forEach { add("--arg=$it") }
 
-                addLogLevel(this)
+                if (logLevel.get() <= LogLevel.INFO) {
+                    add("--log-level=${logLevel.get()}")
+                }
             }
         }
 

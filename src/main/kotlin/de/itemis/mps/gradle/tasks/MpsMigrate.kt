@@ -8,6 +8,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
@@ -28,6 +29,9 @@ abstract class MpsMigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
 ) : DefaultTask() {
+
+    @get:Input
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
@@ -145,7 +149,9 @@ abstract class MpsMigrate @Inject constructor(
 
                         if (mpsVersion.get() >= "2022.3") { add("jnaLibraryPath" to "lib/jna/${computeJnaArch()}") }
 
-                        addIfInfoLogLevel(this, "loglevel" to "info")
+                        if (logLevel.get() <= LogLevel.INFO) {
+                            add("loglevel" to "info")
+                        }
 
                         toTypedArray()
                     }

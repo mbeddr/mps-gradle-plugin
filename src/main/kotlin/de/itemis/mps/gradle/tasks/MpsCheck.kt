@@ -6,6 +6,7 @@ import de.itemis.mps.gradle.launcher.MpsBackendBuilder
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import org.gradle.api.Incubating
 import org.gradle.api.file.*
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -17,6 +18,9 @@ import org.gradle.process.CommandLineArgumentProvider
 @CacheableTask
 @Incubating
 abstract class MpsCheck : JavaExec(), VerificationTask {
+
+    @get:Input
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal("covered by mpsVersion, classpath")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
@@ -130,7 +134,9 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
                 result.add("--parallel")
             }
 
-            addLogLevel(result)
+            if (logLevel.get() <= LogLevel.INFO) {
+                result.add("--log-level=${logLevel.get()}")
+            }
 
             result
         })

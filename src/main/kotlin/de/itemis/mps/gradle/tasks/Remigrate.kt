@@ -8,6 +8,7 @@ import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -27,6 +28,9 @@ open class Remigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
 ) : JavaExec() {
+
+    @get:Input
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
@@ -76,7 +80,11 @@ open class Remigrate @Inject constructor(
             }
 
             addPluginRoots(result, pluginRoots)
-            addLogLevel(result)
+
+            if (logLevel.get() <= LogLevel.INFO) {
+                result.add("--log-level=${logLevel.get()}")
+            }
+
             addFolderMacros(result, folderMacros)
 
             val pluginFile = backendConfig.get().resolvedConfiguration.firstLevelModuleDependencies

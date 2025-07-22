@@ -10,6 +10,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
@@ -23,6 +24,9 @@ import org.gradle.process.CommandLineArgumentProvider
 @CacheableTask
 @Incubating
 abstract class MpsGenerate : JavaExec() {
+
+    @get:Input
+    val logLevel: Property<LogLevel> = objectFactory.property<LogLevel>().convention(project.gradle.startParameter.logLevel)
 
     @get:Internal("covered by mpsVersion, classpath")
     val mpsHome: DirectoryProperty = objectFactory.directoryProperty()
@@ -110,7 +114,9 @@ abstract class MpsGenerate : JavaExec() {
             result.addAll(excludeModels.get().map { "--exclude-model=$it" })
             result.addAll(excludeModules.get().map { "--exclude-module=$it" })
 
-            addLogLevel(result)
+            if (logLevel.get() <= LogLevel.INFO) {
+                result.add("--log-level=${logLevel.get()}")
+            }
 
             if (!strictMode.get()) {
                 result.add("--no-strict-mode")
