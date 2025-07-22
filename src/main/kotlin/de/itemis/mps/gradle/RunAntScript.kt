@@ -1,6 +1,5 @@
 package de.itemis.mps.gradle;
 
-import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
@@ -9,11 +8,11 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
-import org.gradle.process.JavaExecSpec
+import org.gradle.process.ExecOperations
 import java.io.File
-import java.util.*
+import javax.inject.Inject
 
-open class RunAntScript : DefaultTask() {
+abstract class RunAntScript : DefaultTask() {
     @Input
     lateinit var script: Any
     @Input
@@ -28,6 +27,8 @@ open class RunAntScript : DefaultTask() {
     var includeDefaultClasspath = true
     @Optional @Input
     var executable: Any? = null
+    @get:Inject
+    protected abstract val execOperations: ExecOperations
 
     /**
      * Whether to build incrementally.
@@ -70,30 +71,30 @@ open class RunAntScript : DefaultTask() {
 
         val targets = if (incremental) { targets - "clean" } else { targets }
 
-        project.runAnt(executable, project.rootDir, allArgs + "-buildfile" + project.file(script).toString() + targets,
+        project.runAnt(execOperations, executable, project.rootDir, allArgs + "-buildfile" + project.file(script).toString() + targets,
             includeDefaultClasspath, scriptClasspath)
     }
 }
 
-open class BuildLanguages : RunAntScript() {
+abstract class BuildLanguages : RunAntScript() {
     init {
         targets = listOf("clean", "generate", "assemble")
     }
 }
 
-open class TestLanguages : RunAntScript() {
+ abstract class TestLanguages : RunAntScript() {
     init {
         targets = listOf("clean", "generate", "assemble", "check")
     }
 }
 
-internal fun Project.runAnt(executable: Any?, workingDir: File, args: List<String>,
+internal fun Project.runAnt(execOperations: ExecOperations, executable: Any?, workingDir: File, args: List<String>,
                            includeDefaultClasspath: Boolean = true,
                            scriptClasspath: Any? = null
 ) {
     val effectiveExecutable = executable ?: project.findProperty("itemis.mps.gradle.ant.defaultJavaExecutable")
 
-    project.javaexec {
+    execOperations.javaexec {
         if (effectiveExecutable != null) {
             executable(effectiveExecutable)
         }

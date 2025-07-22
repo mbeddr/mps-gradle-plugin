@@ -9,10 +9,10 @@ import net.swiftzer.semver.SemVer
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.withGroovyBuilder
+import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
@@ -35,7 +35,11 @@ open class MigrationExecutorPluginExtensions @Inject constructor(of: ObjectFacto
 }
 
 @Suppress("unused")
-open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
+abstract class RunMigrationsMpsProjectPlugin : Plugin<Project> {
+
+    @get:Inject
+    protected abstract val execOperations: ExecOperations
+
     companion object {
         val MIN_VERSION_FOR_HALT_ON_PRECHECK_FAILURE = SemVer(2021, 1)
         val MIN_VERSION_FOR_HALT_ON_DEPENDENCY_ERROR = SemVer(2021, 3, 4)
@@ -71,13 +75,13 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                 }
 
                 val mpsLocation = extension.mpsLocation ?: layout.buildDirectory.dir("mps").get().asFile
-                val resolveMps: Task = if (extension.mpsConfig != null) {
-                    tasks.create("resolveMpsForMigrations", Copy::class.java) {
+                val resolveMps = if (extension.mpsConfig != null) {
+                    tasks.register("resolveMpsForMigrations", Copy::class.java) {
                         from({ extension.mpsConfig!!.resolve().map(::zipTree) })
                         into(mpsLocation)
                     }
                 } else if (extension.mpsLocation != null) {
-                    tasks.create("resolveMpsForMigrations")
+                    tasks.register("resolveMpsForMigrations")
                 } else {
                     throw GradleException(ErrorMessages.mustSetConfigOrLocation(extensionName))
                 }
@@ -205,7 +209,7 @@ open class RunMigrationsMpsProjectPlugin : Plugin<Project> {
                         }
 
                         runAnt(
-                            extension.javaExec, temporaryDir, args = listOf(),
+                            execOperations, extension.javaExec, temporaryDir, args = listOf(),
                             includeDefaultClasspath = false,
                             scriptClasspath = classpath
                         )

@@ -26,7 +26,7 @@ public class de/itemis/mps/gradle/BasePluginExtensions {
 	public final fun setProjectLocation (Ljava/io/File;)V
 }
 
-public class de/itemis/mps/gradle/BuildLanguages : de/itemis/mps/gradle/RunAntScript {
+public abstract class de/itemis/mps/gradle/BuildLanguages : de/itemis/mps/gradle/RunAntScript {
 	public fun <init> ()V
 }
 
@@ -169,11 +169,12 @@ public class de/itemis/mps/gradle/Pom : groovy/lang/GroovyObject {
 	public fun withProvidedDep (Lorg/gradle/api/publish/maven/MavenPom;Lorg/gradle/api/artifacts/Configuration;)Ljava/lang/Object;
 }
 
-public class de/itemis/mps/gradle/RunAntScript : org/gradle/api/DefaultTask {
+public abstract class de/itemis/mps/gradle/RunAntScript : org/gradle/api/DefaultTask {
 	public field script Ljava/lang/Object;
 	public fun <init> ()V
 	public final fun build ()V
 	public final fun executable (Ljava/lang/Object;)V
+	protected abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 	public final fun getExecutable ()Ljava/lang/Object;
 	public final fun getIncludeDefaultArgs ()Z
 	public final fun getIncludeDefaultClasspath ()Z
@@ -193,7 +194,7 @@ public class de/itemis/mps/gradle/RunAntScript : org/gradle/api/DefaultTask {
 	public final fun targets ([Ljava/lang/String;)V
 }
 
-public class de/itemis/mps/gradle/TestLanguages : de/itemis/mps/gradle/RunAntScript {
+public abstract class de/itemis/mps/gradle/TestLanguages : de/itemis/mps/gradle/RunAntScript {
 	public fun <init> ()V
 }
 
@@ -218,10 +219,11 @@ public class de/itemis/mps/gradle/downloadJBR/DownloadJbrForPlatform : org/gradl
 	public final fun setJbrDir (Ljava/io/File;)V
 }
 
-public class de/itemis/mps/gradle/downloadJBR/DownloadJbrProjectPlugin : org/gradle/api/Plugin {
+public abstract class de/itemis/mps/gradle/downloadJBR/DownloadJbrProjectPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+	protected abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 }
 
 public class de/itemis/mps/gradle/generate/FakeBuildNumberTask : org/gradle/api/DefaultTask {
@@ -291,11 +293,12 @@ public class de/itemis/mps/gradle/runmigrations/MigrationExecutorPluginExtension
 	public final fun setHaltOnPrecheckFailure (Ljava/lang/Boolean;)V
 }
 
-public class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin : org/gradle/api/Plugin {
+public abstract class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin : org/gradle/api/Plugin {
 	public static final field Companion Lde/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin$Companion;
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+	protected abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 }
 
 public final class de/itemis/mps/gradle/runmigrations/RunMigrationsMpsProjectPlugin$Companion {
@@ -380,6 +383,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsMigrate : org/gradle/api/Def
 	public final fun execute ()V
 	protected final fun getAllProjectFiles ()Lorg/gradle/api/provider/Provider;
 	public final fun getAntJvmArgs ()Lorg/gradle/api/provider/ListProperty;
+	protected abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 	public final fun getFolderMacros ()Lorg/gradle/api/provider/MapProperty;
 	public final fun getHaltOnDependencyError ()Lorg/gradle/api/provider/Property;
 	public final fun getHaltOnPrecheckFailure ()Lorg/gradle/api/provider/Property;

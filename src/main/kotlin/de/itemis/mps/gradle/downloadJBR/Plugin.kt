@@ -6,6 +6,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
+import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
@@ -21,7 +22,11 @@ open class DownloadJbrConfiguration @Inject constructor(objects: ObjectFactory) 
         }
 }
 
-open class DownloadJbrProjectPlugin : Plugin<Project> {
+abstract class DownloadJbrProjectPlugin : Plugin<Project> {
+
+    @get:Inject
+    protected abstract val execOperations: ExecOperations
+
     override fun apply(project: Project) {
         project.run {
 
@@ -41,19 +46,19 @@ open class DownloadJbrProjectPlugin : Plugin<Project> {
                         delete(extension.downloadDirProperty)
                         val downloadDir = mkdir(extension.downloadDirProperty)
 
-                        exec {
+                        execOperations.exec {
                             commandLine("tar", "-xzf", configuration.singleFile.absolutePath)
                             workingDir = downloadDir
                         }
 
                         if (downloadDir.listFiles { _, name -> name.startsWith("jbr_") || name.startsWith("jbr-") }!!.any()) {
-                            exec {
+                            execOperations.exec {
                                 commandLine("sh", "-c", "mv jbr* jbr")
                                 workingDir = downloadDir
                             }
                         }
 
-                        exec {
+                        execOperations.exec {
                             commandLine("chmod", "-R", "u+w", ".")
                             workingDir = downloadDir
                         }

@@ -2,14 +2,12 @@ package de.itemis.mps.gradle.tasks
 
 import de.itemis.mps.gradle.TaskGroups
 import de.itemis.mps.gradle.launcher.MpsVersionDetection
-import de.itemis.mps.gradle.runAnt
 import groovy.xml.MarkupBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
@@ -21,7 +19,7 @@ import org.gradle.kotlin.dsl.listProperty
 import org.gradle.kotlin.dsl.mapProperty
 import org.gradle.kotlin.dsl.property
 import org.gradle.kotlin.dsl.withGroovyBuilder
-import org.gradle.platform.Architecture
+import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
 
@@ -85,6 +83,9 @@ abstract class MpsMigrate @Inject constructor(
     @get:Classpath
     val pluginRoots: ConfigurableFileCollection = objectFactory.fileCollection()
 
+    @get:Inject
+    protected abstract val execOperations: ExecOperations
+
     init {
         group = TaskGroups.MIGRATION
     }
@@ -107,7 +108,7 @@ abstract class MpsMigrate @Inject constructor(
             checkProjectLocation(dir)
         }
 
-        project.javaexec {
+        execOperations.javaexec {
             mainClass.set("org.apache.tools.ant.launch.Launcher")
             workingDir = temporaryDir
             classpath = mpsAntClasspath
