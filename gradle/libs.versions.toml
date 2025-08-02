@@ -2,7 +2,7 @@
 #versions
 kotlinApi = "1.7"
 kotlin = "2.2.0"
-kotlinJvmTarget = "1.8"
+kotlinJvmTarget = "11"
 
 # plugins
 kotlinCompatibilityValidator = "0.18.1"
@@ -11,7 +11,7 @@ kotlinCompatibilityValidator = "0.18.1"
 semver = "2.1.0"
 junit = "4.13.2"
 gitBasedVersioning = "*"
-buildBackends = "2.4.0.+"
+buildBackends = "2.7.+"
 
 [plugins]
 kotlin-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinCompatibilityValidator" }

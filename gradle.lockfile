@@ -1,7 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-de.itemis.mps.build-backends:launcher:2.4.0.95.a261d1d=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+de.itemis.mps.build-backends:launcher:2.7.0.148.09f6bd9=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 io.github.java-diff-utils:java-diff-utils:4.12=kotlinInternalAbiValidation
 junit:junit:4.13.2=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 net.swiftzer.semver:semver-jvm:2.1.0=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
