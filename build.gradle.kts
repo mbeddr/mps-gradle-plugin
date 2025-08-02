@@ -21,7 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.compatibility.validator)
 }
 
-val baseVersion = "1.29.3"
+val baseVersion = "1.30.0"
 
 group = "de.itemis.mps"
 

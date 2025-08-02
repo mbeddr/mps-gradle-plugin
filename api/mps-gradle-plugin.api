@@ -32,6 +32,7 @@ public abstract class de/itemis/mps/gradle/BuildLanguages : de/itemis/mps/gradle
 
 public class de/itemis/mps/gradle/BundleMacosJdk : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public fun build ()Ljava/lang/Object;
@@ -50,6 +51,7 @@ public class de/itemis/mps/gradle/BundleMacosJdk : org/gradle/api/DefaultTask, g
 
 public class de/itemis/mps/gradle/BundledScripts : groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public static fun extractScriptsToDir (Ljava/io/File;[Ljava/lang/String;)V
@@ -74,6 +76,7 @@ public final class de/itemis/mps/gradle/CommonPlugin : org/gradle/api/Plugin {
 
 public class de/itemis/mps/gradle/CreateDmg : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public fun build ()Ljava/lang/Object;
@@ -99,12 +102,14 @@ public class de/itemis/mps/gradle/CreateDmg : org/gradle/api/DefaultTask, groovy
 public final class de/itemis/mps/gradle/EnvironmentKind : java/lang/Enum {
 	public static final field IDEA Lde/itemis/mps/gradle/EnvironmentKind;
 	public static final field MPS Lde/itemis/mps/gradle/EnvironmentKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lde/itemis/mps/gradle/EnvironmentKind;
 	public static fun values ()[Lde/itemis/mps/gradle/EnvironmentKind;
 }
 
 public class de/itemis/mps/gradle/GenerateLibrariesXml : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public fun generate ()Ljava/lang/Object;
@@ -120,6 +125,7 @@ public class de/itemis/mps/gradle/GenerateLibrariesXml : org/gradle/api/DefaultT
 
 public class de/itemis/mps/gradle/GetMpsInBrowser : org/gradle/api/DefaultTask, groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public fun build ()Ljava/lang/Object;
@@ -161,6 +167,7 @@ public final class de/itemis/mps/gradle/Plugin {
 
 public class de/itemis/mps/gradle/Pom : groovy/lang/GroovyObject {
 	public static synthetic field __$stMC Z
+	public static synthetic fun $getLookup ()Ljava/lang/invoke/MethodHandles$Lookup;
 	protected synthetic fun $getStaticMetaClass ()Lgroovy/lang/MetaClass;
 	public fun <init> ()V
 	public fun getMetaClass ()Lgroovy/lang/MetaClass;
@@ -401,7 +408,7 @@ public abstract class de/itemis/mps/gradle/tasks/MpsMigrate : org/gradle/api/Def
 	public final fun getProjectDirectories ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
-public class de/itemis/mps/gradle/tasks/Remigrate : org/gradle/api/tasks/JavaExec {
+public abstract class de/itemis/mps/gradle/tasks/Remigrate : org/gradle/api/tasks/JavaExec {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun excludeModuleMigration (Ljava/lang/String;I)V
 	public fun exec ()V

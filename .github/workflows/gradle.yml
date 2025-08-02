@@ -25,7 +25,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        java: [ 11, 17, 21 ]
+        java: [ 17, 21 ]
     steps:
       - uses: actions/checkout@v4
       # Java 11 is always needed to run the tests because they use MPS 2021.x
@@ -40,7 +40,7 @@ jobs:
           java-version: ${{ matrix.java }}
       - uses: gradle/actions/setup-gradle@v3
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --info
       - name: Upload JUnit XMLs
         uses: actions/upload-artifact@v4
         if: failure()

@@ -1,14 +1,14 @@
 [versions]
 #versions
 kotlinApi = "1.7"
-kotlin = "1.7.10"
+kotlin = "2.2.0"
 kotlinJvmTarget = "1.8"
 
 # plugins
 kotlinCompatibilityValidator = "0.18.1"
 
 # libraries
-semver = "1.1.2"
+semver = "2.1.0"
 junit = "4.13.2"
 gitBasedVersioning = "*"
 buildBackends = "2.4.0.+"

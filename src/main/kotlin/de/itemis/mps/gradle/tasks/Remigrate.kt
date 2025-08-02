@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @Incubating
 @UntrackedTask(because = "Operates 'in place'")
-open class Remigrate @Inject constructor(
+abstract class Remigrate @Inject constructor(
     objectFactory: ObjectFactory,
     providerFactory: ProviderFactory
 ) : JavaExec() {
