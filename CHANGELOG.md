@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.30.0
+
+### Changed
+
+- The plugin now requires at least Java 11.
+- Upgrade to the latest launcher to support the current MPS master (2025.3/2026.1 prerelease).
+
 ## 1.29.3
 
 ### Fixed

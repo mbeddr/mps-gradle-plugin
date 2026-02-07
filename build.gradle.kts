@@ -21,7 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.compatibility.validator)
 }
 
-val baseVersion = "1.29.3"
+val baseVersion = "1.30.0"
 
 group = "de.itemis.mps"
 
@@ -143,7 +143,7 @@ publishing {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
 }
 
