@@ -197,6 +197,7 @@ abstract class MpsMigrate @Inject constructor(
                             "arg"("value" to "--add-opens=java.base/java.util=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED")
+                            "arg"("value" to "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.base/jdk.internal.vm=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.base/sun.security.ssl=ALL-UNNAMED")
@@ -222,6 +223,7 @@ abstract class MpsMigrate @Inject constructor(
                             "arg"("value" to "--add-opens=java.desktop/com.apple.laf=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED")
                             "arg"("value" to "--add-opens=java.desktop/com.apple.eawt.event=ALL-UNNAMED")
+                            "arg"("value" to "--add-opens=java.management/sun.management=ALL-UNNAMED")
 
                             jvmArgs.get().forEach {
                                 "arg"("value" to it)
