@@ -1,0 +1,35 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+io.github.java-diff-utils:java-diff-utils:4.12=kotlinInternalAbiValidation
+org.jetbrains.kotlin:abi-tools-api:2.3.0=kotlinInternalAbiValidation
+org.jetbrains.kotlin:abi-tools:2.3.0=kotlinInternalAbiValidation
+org.jetbrains.kotlin:kotlin-assignment-compiler-plugin-embeddable:2.3.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-build-tools-api:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlin:kotlin-build-tools-compat:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlin:kotlin-build-tools-impl:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlin:kotlin-compiler-embeddable:2.3.0=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-compiler-runner:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlin:kotlin-daemon-client:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlin:kotlin-daemon-embeddable:2.3.0=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-klib-abi-reader:2.3.0=kotlinInternalAbiValidation
+org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:2.3.0=kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0=bcv-rt-jvm-cp-resolver,kotlinInternalAbiValidation
+org.jetbrains.kotlin:kotlin-native-prebuilt:2.0.21=kotlinNativeBundleConfiguration
+org.jetbrains.kotlin:kotlin-reflect:1.6.10=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-reflect:2.0.21=compileOnlyDependenciesMetadata
+org.jetbrains.kotlin:kotlin-reflect:2.3.0=embeddedKotlin
+org.jetbrains.kotlin:kotlin-sam-with-receiver-compiler-plugin-embeddable:2.3.0=kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-script-runtime:2.3.0=compilePluginsBlocksPluginClasspathElements,kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-scripting-common:2.3.0=compilePluginsBlocksPluginClasspathElements,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.3.0=compilePluginsBlocksPluginClasspathElements,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:2.3.0=compilePluginsBlocksPluginClasspathElements,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-scripting-jvm:2.3.0=compilePluginsBlocksPluginClasspathElements,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest
+org.jetbrains.kotlin:kotlin-stdlib:2.0.21=compileOnlyDependenciesMetadata
+org.jetbrains.kotlin:kotlin-stdlib:2.3.0=bcv-rt-jvm-cp-resolver,compilePluginsBlocksPluginClasspathElements,embeddedKotlin,kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,kotlinInternalAbiValidation,kotlinKlibCommonizerClasspath
+org.jetbrains.kotlin:kotlin-tooling-core:2.3.0=kotlinBuildToolsApiClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinKlibCommonizerClasspath
+org.jetbrains:annotations:13.0=bcv-rt-jvm-cp-resolver,compilePluginsBlocksPluginClasspathElements,embeddedKotlin,kotlinBuildToolsApiClasspath,kotlinCompilerClasspath,kotlinCompilerPluginClasspathMain,kotlinCompilerPluginClasspathTest,kotlinInternalAbiValidation,kotlinKlibCommonizerClasspath
+org.ow2.asm:asm-tree:9.6=bcv-rt-jvm-cp-resolver
+org.ow2.asm:asm:9.6=bcv-rt-jvm-cp-resolver
+empty=annotationProcessor,apiDependenciesMetadata,compileClasspath,implementationDependenciesMetadata,intransitiveDependenciesMetadata,kotlinCompilerPluginClasspath,kotlinNativeCompilerPluginClasspath,kotlinScriptDefExtensions,runtimeClasspath,testAnnotationProcessor,testApiDependenciesMetadata,testCompileClasspath,testCompileOnlyDependenciesMetadata,testImplementationDependenciesMetadata,testIntransitiveDependenciesMetadata,testKotlinScriptDefExtensions,testRuntimeClasspath

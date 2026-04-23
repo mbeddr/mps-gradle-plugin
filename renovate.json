@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "forkProcessing": "enabled",
+  "ignorePaths": [],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update the FOOJAY_RESOLVER_CONVENTION_VERSION constant used by tests.",
+      "managerFilePatterns": [
+        "/^mps-gradle-plugin/src/test/kotlin/support/TestVersions\\.kt$/"
+      ],
+      "matchStrings": [
+        "const val FOOJAY_RESOLVER_CONVENTION_VERSION\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "org.gradle.toolchains.foojay-resolver-convention",
+      "packageNameTemplate": "org.gradle.toolchains.foojay-resolver-convention:org.gradle.toolchains.foojay-resolver-convention.gradle.plugin",
+      "datasourceTemplate": "maven",
+      "registryUrlTemplate": "https://plugins.gradle.org/m2/"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the MPS_VERSION constant used by tests to spin up an MPS instance.",
+      "managerFilePatterns": [
+        "/^mps-gradle-plugin/src/test/kotlin/support/TestVersions\\.kt$/"
+      ],
+      "matchStrings": [
+        "const val MPS_VERSION\\s*=\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "com.jetbrains:mps",
+      "datasourceTemplate": "maven",
+      "registryUrlTemplate": "https://artifacts.itemis.cloud/repository/maven-mps"
+    }
+  ]
+}
