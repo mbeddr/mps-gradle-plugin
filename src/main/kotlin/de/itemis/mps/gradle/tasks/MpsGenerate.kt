@@ -114,9 +114,7 @@ abstract class MpsGenerate : JavaExec() {
             result.addAll(excludeModels.get().map { "--exclude-model=$it" })
             result.addAll(excludeModules.get().map { "--exclude-module=$it" })
 
-            if (logLevel.get() <= LogLevel.INFO) {
-                result.add("--log-level=${logLevel.get()}")
-            }
+            addLogLevel(result, logLevel)
 
             if (!strictMode.get()) {
                 result.add("--no-strict-mode")

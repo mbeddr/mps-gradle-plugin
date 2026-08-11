@@ -80,11 +80,7 @@ open class Remigrate @Inject constructor(
             }
 
             addPluginRoots(result, pluginRoots)
-
-            if (logLevel.get() <= LogLevel.INFO) {
-                result.add("--log-level=${logLevel.get()}")
-            }
-
+            addLogLevel(result, logLevel)
             addFolderMacros(result, folderMacros)
 
             val pluginFile = backendConfig.get().resolvedConfiguration.firstLevelModuleDependencies

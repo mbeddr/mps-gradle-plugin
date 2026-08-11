@@ -76,9 +76,7 @@ abstract class MpsExecute : JavaExec() {
                 add("--method=${method.get()}")
                 methodArguments.get().forEach { add("--arg=$it") }
 
-                if (logLevel.get() <= LogLevel.INFO) {
-                    add("--log-level=${logLevel.get()}")
-                }
+                addLogLevel(this, logLevel)
             }
         }
 
