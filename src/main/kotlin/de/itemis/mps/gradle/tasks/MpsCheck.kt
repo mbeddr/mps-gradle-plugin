@@ -134,9 +134,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
                 result.add("--parallel")
             }
 
-            if (logLevel.get() <= LogLevel.INFO) {
-                result.add("--log-level=${logLevel.get()}")
-            }
+            addLogLevel(result, logLevel)
 
             result
         })

@@ -5,6 +5,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.FileSystemLocation
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.Provider
 import java.io.File
 
@@ -31,4 +32,12 @@ internal fun addFolderMacros(result: MutableCollection<String>, folderMacros: Pr
 
 internal fun addVarMacros(result: MutableCollection<String>, varMacros: Provider<Map<String, String>>) {
     varMacros.get().mapTo(result) { "--macro=${it.key}::${it.value}" }
+}
+
+internal fun addLogLevel(result: MutableCollection<String>, logLevel: Provider<LogLevel>) {
+    when (logLevel.get()) {
+        LogLevel.INFO -> result.add("--log-level=INFO")
+        LogLevel.DEBUG -> result.add("--log-level=ALL")
+        else -> {}
+    }
 }
