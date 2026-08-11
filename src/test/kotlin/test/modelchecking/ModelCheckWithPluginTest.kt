@@ -137,7 +137,7 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2025.1.3") +
             """
                 modelcheck {
                     projectLocation = file("${mpsTestPrjLocation.toPath()}")
