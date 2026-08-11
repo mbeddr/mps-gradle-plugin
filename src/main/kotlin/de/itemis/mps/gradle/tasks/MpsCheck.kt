@@ -141,7 +141,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
 
         group = TaskGroups.VERIFICATION
 
-        classpath(mpsAndPluginJars())
+        classpath(mpsJars())
         classpath(project.configurations.named(BackendConfigurations.MODELCHECK_BACKEND_CONFIGURATION_NAME))
         classpath(additionalModelcheckBackendClasspath)
 
@@ -153,16 +153,7 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         super.exec()
     }
 
-    private fun mpsAndPluginJars() = mpsHome.asFileTree.matching {
+    private fun mpsJars() = mpsHome.asFileTree.matching {
         include("lib/**/*.jar")
-
-        // add only minimal number of plugins jars that are required by the modelcheck code
-        // (to avoid conflicts with plugin classloader if custom configured plugins are loaded)
-        // mps-httpsupport: we need it to print the node url to the console.
-        // mps-modelchecker: contains used UnresolvedReferencesChecker
-        // git4idea: has to be on classpath as bundled plugin to be loaded (since 2019.3)
-        include("plugins/mps-modelchecker/**/*.jar")
-        include("plugins/mps-httpsupport/**/*.jar")
-        include("plugins/git4idea/**/*.jar")
     }
 }

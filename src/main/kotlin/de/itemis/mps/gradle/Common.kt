@@ -15,7 +15,7 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 const val MPS_SUPPORT_MSG = ErrorMessages.MPS_VERSION_NOT_SUPPORTED
 
-const val MPS_BUILD_BACKENDS_VERSION = "[1.15,2.0)" // 1.15 required for --plugin-root support.
+const val MPS_BUILD_BACKENDS_VERSION = "[1.26,2.0)" // 1.26 required to run modelcheck without plugins on its classpath
 
 data class Plugin(
         var id: String,
