@@ -1,9 +1,4 @@
 [versions]
-#versions
-kotlinApi = "1.7"
-kotlin = "1.7.10"
-kotlinJvmTarget = "11"
-
 # plugins
 kotlinCompatibilityValidator = "0.18.1"
 
@@ -17,7 +12,6 @@ launcher = "2.8.0.+"
 kotlin-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlinCompatibilityValidator" }
 
 [libraries]
-kotlin-stdlib = {group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin"}
 swiftzer-semver = {group = "net.swiftzer.semver", name="semver", version.ref="semver"}
 junit = {group = "junit", name="junit", version.ref="junit"}
 itemis-gradle-git-based-versioning = {group= "de.itemis.mps.gradle", name = "git-based-versioning", version.ref="gitBasedVersioning"}
