@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum supported MPS version raised to 2023.2. The `generate-models` and `modelcheck` plugins fail for older MPS
   versions.
 
+### Fixed
+
+- `MpsMigrate`, `Remigrate`, `MpsGenerate`, `MpsCheck`, `MpsExecute`: exclude `lib/intellij.libraries.kotlin.metadata.jar`
+  from the classpath. With MPS 2026.3 this jar conflicts with MPS's own copy of kotlin-metadata and loading Kotlin stub
+  models fails with `NoSuchMethodError`.
+
 ## 1.31.0
 
 ### Changed

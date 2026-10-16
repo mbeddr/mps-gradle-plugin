@@ -103,10 +103,9 @@ abstract class MpsMigrate @Inject constructor(
         val buildFile = temporaryDir.resolve("build.xml")
         writeBuildFile(buildFile)
 
-        val mpsAntClasspath = mpsHome.asFileTree.matching {
-            include("lib/ant/lib/*.jar")
-            include("lib/*.jar")
-        }
+        // Ant's launcher puts these jars into `java.class.path`, and MPS's Ant tasks pass `java.class.path` on to the
+        // forked MPS process, ahead of the classpath that MPS computes itself.
+        val mpsAntClasspath = mpsClasspathJars(mpsHome, "lib/ant/lib/*.jar", "lib/*.jar")
 
         for(dir in projectDirectories) {
             checkProjectLocation(dir)
