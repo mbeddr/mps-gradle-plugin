@@ -55,7 +55,7 @@ class MpsGenerateTaskTest {
         extractTestProject("test-project", mpsTestPrjLocation)
 
         settingsFile.writeText(settingsScriptBoilerplate())
-        buildFile.writeText(buildScriptBoilerplate("2021.3.3") + """
+        buildFile.writeText(buildScriptBoilerplate("2023.2.2") + """
             val generateProject by tasks.registering(MpsGenerate::class) {
                 mpsHome.set(layout.dir(resolveMps.map { it.destinationDir }))
             }
@@ -76,7 +76,7 @@ class MpsGenerateTaskTest {
         extractTestProject("test-project", mpsTestPrjLocation)
 
         settingsFile.writeText(settingsScriptBoilerplate())
-        buildFile.writeText(buildScriptBoilerplate("2021.3.3") + """
+        buildFile.writeText(buildScriptBoilerplate("2023.2.2") + """
             val generateProject by tasks.registering(MpsGenerate::class) {
                 mpsHome.set(layout.dir(resolveMps.map { it.destinationDir }))
                 projectLocation.set(file("mps-prj"))

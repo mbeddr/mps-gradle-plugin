@@ -55,7 +55,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2021.3.1")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             generate {
@@ -99,7 +99,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2019.3.7")
+                mps("com.jetbrains:mps:2022.3.3")
             }
             
             generate {
@@ -145,7 +145,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             val resolveMps by tasks.registering(Sync::class) {
@@ -159,7 +159,7 @@ class GenerateModelsTest {
 
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
+                mpsVersion = "2023.2.2"
                 mpsLocation = file("$mpsFolder")
             }
         """.trimIndent()
@@ -200,12 +200,12 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2019.2.2"
+                mpsVersion = "2022.3.3"
                 mpsLocation = file(".")
             }
         """.trimIndent()
@@ -246,12 +246,12 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             generate {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
+                mpsVersion = "2023.2.2"
             }
         """.trimIndent()
         )
@@ -289,7 +289,7 @@ class GenerateModelsTest {
             val mps = configurations.create("mps")
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.3")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             generate {
@@ -330,7 +330,7 @@ class GenerateModelsTest {
                 generate {
                     projectLocation = projectDir
                     mpsLocation = file("build/mps")
-                    mpsVersion = "2022.2.2"
+                    mpsVersion = "2023.2.2"
                     javaExec = tasks.getByName<DownloadJbrForPlatform>("downloadJbr").javaExecutable
                 }
                 

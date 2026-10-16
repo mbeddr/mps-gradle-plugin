@@ -3,6 +3,8 @@
 Miscellaneous tasks that were found useful when building MPS-based
 projects with Gradle.
 
+Supports MPS 2023.2 and later.
+
 # Configuring the plugin repository
 
 This plugin is not published to the Gradle plugin portal but to a public repository of itemis. To configure this

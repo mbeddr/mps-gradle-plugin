@@ -83,7 +83,7 @@ class MpsExecuteTaskTest {
 
     @Test
     fun `execute with Project`() {
-        buildFile.writeText(buildScriptBoilerplate("2021.3.4") + """
+        buildFile.writeText(buildScriptBoilerplate("2023.2.2") + """
             execute {
                 module.set("NewSolution")
                 className.set("NewSolution.myModel.MyClass")
@@ -98,7 +98,7 @@ class MpsExecuteTaskTest {
 
     @Test
     fun `execute with Project and args`() {
-        buildFile.writeText(buildScriptBoilerplate("2021.3.4") + """
+        buildFile.writeText(buildScriptBoilerplate("2023.2.2") + """
             execute {
                 module.set("NewSolution")
                 className.set("NewSolution.myModel.MyClass")

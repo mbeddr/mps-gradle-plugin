@@ -51,7 +51,7 @@ class RemigrateTest {
 
                 val mps = configurations.create("mps")
                 dependencies {
-                    mps("com.jetbrains:mps:2021.3.2")
+                    mps("com.jetbrains:mps:2023.2.2")
                 }
 
                 val resolveMps by tasks.registering(Sync::class) {

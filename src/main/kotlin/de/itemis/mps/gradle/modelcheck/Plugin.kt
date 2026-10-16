@@ -39,7 +39,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
 
                 val genConfig = extension.backendConfig ?: createDetachedBackendConfig(project)
 
-                if(mpsVersion.substring(0..3).toInt() < 2020) {
+                if (!isMpsVersionSupported(mpsVersion)) {
                     throw GradleException(MPS_SUPPORT_MSG)
                 }
 
