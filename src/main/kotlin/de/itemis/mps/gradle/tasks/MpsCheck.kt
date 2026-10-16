@@ -153,7 +153,5 @@ abstract class MpsCheck : JavaExec(), VerificationTask {
         super.exec()
     }
 
-    private fun mpsJars() = mpsHome.asFileTree.matching {
-        include("lib/**/*.jar")
-    }
+    private fun mpsJars() = mpsClasspathJars(mpsHome, "lib/**/*.jar")
 }

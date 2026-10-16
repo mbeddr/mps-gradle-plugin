@@ -97,7 +97,5 @@ abstract class MpsExecute : JavaExec() {
         super.exec()
     }
 
-    private fun mpsJars() = mpsHome.asFileTree.matching {
-        include("lib/**/*.jar")
-    }
+    private fun mpsJars() = mpsClasspathJars(mpsHome, "lib/**/*.jar")
 }

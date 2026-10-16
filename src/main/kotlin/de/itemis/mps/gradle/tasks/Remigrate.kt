@@ -113,7 +113,5 @@ open class Remigrate @Inject constructor(
         super.exec()
     }
 
-    private fun initialBackendClasspath() = mpsHome.asFileTree.matching {
-        include("lib/**/*.jar")
-    }
+    private fun initialBackendClasspath() = mpsClasspathJars(mpsHome, "lib/**/*.jar")
 }
