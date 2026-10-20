@@ -31,7 +31,7 @@ plugins {
 }
 ```
 
-Use a more precisely specified version such as `1.26.0.+` or Gradle dependency locking for better build
+Use a precisely specified version such as `1.31.0` or Gradle dependency locking for better build
 reproducibility.
 
 ## Reference
