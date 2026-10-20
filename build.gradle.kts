@@ -1,14 +1,9 @@
-import de.itemis.mps.gradle.GitBasedVersioning
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 buildscript {
     configurations.classpath {
         resolutionStrategy.activateDependencyLocking()
-    }
-
-    dependencies {
-        classpath("de.itemis.mps.gradle:git-based-versioning")
     }
 }
 
@@ -21,25 +16,18 @@ plugins {
     alias(libs.plugins.kotlin.compatibility.validator)
 }
 
-val baseVersion = "1.32.0"
-
 group = "de.itemis.mps"
 
-val currentBranch : String? = GitBasedVersioning.getGitBranch()
-
-version = if (!project.hasProperty("useSnapshot") &&
-    (project.hasProperty("forceCI") || project.hasProperty("teamcity"))
-) {
-    val prefix = when (currentBranch) {
-        null, "", "v1.x", "HEAD", "master", "main" -> ""
-        else -> "$currentBranch."
+tasks.register("checkReleaseVersion") {
+    val releaseTag = providers.gradleProperty("releaseTag")
+    doLast {
+        require(version.toString().matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+"))) {
+            "Release version must be MAJOR.MINOR.PATCH, got $version"
+        }
+        require(releaseTag.get() == "${project.name}-$version") {
+            "Release tag ${releaseTag.get()} does not match ${project.name}-$version"
+        }
     }
-
-    val suffix = ".${GitBasedVersioning.getGitCommitCount()}.${GitBasedVersioning.getGitShortCommitHash()}"
-
-    prefix + baseVersion + suffix
-} else {
-    "$baseVersion-SNAPSHOT"
 }
 
 val mpsConfiguration = configurations.create("mps")
@@ -87,33 +75,31 @@ gradlePlugin {
     }
 }
 
-tasks.register("setTeamCityBuildNumber") {
-    doLast {
-        println("##teamcity[buildNumber '$version']")
-    }
-}
-
 publishing {
     repositories {
         maven {
             name = "itemisCloud"
-            url = uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
-            if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
-                credentials {
-                    username = project.findProperty("artifacts.itemis.cloud.user") as String?
-                    password = project.findProperty("artifacts.itemis.cloud.pw") as String?
-                }
+            url = uri(if (version.toString().endsWith("-SNAPSHOT")) {
+                "https://artifacts.itemis.cloud/repository/maven-mps-snapshots/"
+            } else {
+                "https://artifacts.itemis.cloud/repository/maven-mps-releases/"
+            })
+            credentials {
+                username = providers.gradleProperty("artifacts.itemis.cloud.user")
+                    .orElse(providers.environmentVariable("ARTIFACTS_ITEMIS_CLOUD_USER")).orNull
+                password = providers.gradleProperty("artifacts.itemis.cloud.pw")
+                    .orElse(providers.environmentVariable("ARTIFACTS_ITEMIS_CLOUD_PW")).orNull
             }
         }
-        if (currentBranch == "master" || currentBranch == "v1.x") {
+        if (!version.toString().endsWith("-SNAPSHOT")) {
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/mbeddr/mps-gradle-plugin")
-                if(project.hasProperty("gpr.token")) {
-                    credentials {
-                        username = project.findProperty("gpr.user") as String?
-                        password = project.findProperty("gpr.token") as String?
-                    }
+                credentials {
+                    username = providers.gradleProperty("gpr.user")
+                        .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+                    password = providers.gradleProperty("gpr.token")
+                        .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
                 }
             }
         }
