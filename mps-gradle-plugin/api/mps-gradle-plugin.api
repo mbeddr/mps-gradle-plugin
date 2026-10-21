@@ -52,6 +52,8 @@ public abstract class de/itemis/mps/gradle/RunAntScript : org/gradle/api/Default
 	public final fun build ()V
 	protected abstract fun getExecOperations ()Lorg/gradle/process/ExecOperations;
 	public abstract fun getJavaLauncher ()Lorg/gradle/api/provider/Property;
+	public abstract fun getMpsVersion ()Lorg/gradle/api/provider/Property;
+	protected abstract fun getProviderFactory ()Lorg/gradle/api/provider/ProviderFactory;
 	public abstract fun getScript ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getScriptArgs ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getScriptClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;

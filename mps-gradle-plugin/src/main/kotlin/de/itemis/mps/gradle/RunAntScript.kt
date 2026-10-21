@@ -1,5 +1,6 @@
 package de.itemis.mps.gradle;
 
+import de.itemis.mps.gradle.launcher.MpsVersionDetection
 import de.itemis.mps.gradle.tasks.MpsTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
@@ -8,6 +9,7 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.*
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.ExecOperations
@@ -35,11 +37,19 @@ abstract class RunAntScript : DefaultTask(), MpsTask {
     @get:Inject
     protected abstract val execOperations: ExecOperations
 
+    @get:Inject
+    protected abstract val providerFactory: ProviderFactory
+
+    @Input
+    @Optional
+    abstract override fun getMpsVersion(): Property<String>
+
     @Nested
     @Optional
     abstract override fun getJavaLauncher(): Property<JavaLauncher>
 
     init {
+        mpsVersion.convention(MpsVersionDetection.fromMpsHome(project.layout, providerFactory, mpsHome.asFile))
         scriptClasspath.convention(mpsHome.asFileTree.matching {
             include("lib/ant/lib/*.jar")
             include("lib/*.jar")
@@ -51,9 +61,9 @@ abstract class RunAntScript : DefaultTask(), MpsTask {
     fun build() {
         val allArgs = scriptArgs.get().toMutableList()
 
-        val level = logLevel.get()
-        if (level != LogLevel.LIFECYCLE && !allArgs.any { it.startsWith("-Dmps.ant.log=") }) {
-            allArgs += "-Dmps.ant.log=${level.toString().lowercase()}"
+        val mpsAntLogLevel = toMpsAntLogLevel(logLevel.get())
+        if (mpsAntLogLevel != null && !allArgs.any { it.startsWith("-Dmps.ant.log=") }) {
+            allArgs += "-Dmps.ant.log=$mpsAntLogLevel"
         }
 
         val mpsHomePath = mpsHome.get().asFile.absolutePath
@@ -80,6 +90,20 @@ abstract class RunAntScript : DefaultTask(), MpsTask {
 
             args(allArgs)
         }
+    }
+
+    /**
+     * Maps a Gradle log level to a value of the `mps.ant.log` property, which MPS build scripts pass to the `logLevel`
+     * attribute of MPS Ant tasks. That attribute only accepts `off`, `error`, `warn`, `warning`, `info`, `debug` and
+     * `all`. Returns `null` for [LogLevel.LIFECYCLE], the default Gradle level, so that the script's own default
+     * stays in effect.
+     */
+    private fun toMpsAntLogLevel(level: LogLevel): String? = when (level) {
+        LogLevel.DEBUG -> "debug"
+        LogLevel.INFO -> "info"
+        LogLevel.LIFECYCLE -> null
+        LogLevel.WARN -> "warn"
+        LogLevel.QUIET, LogLevel.ERROR -> "error"
     }
 }
 
