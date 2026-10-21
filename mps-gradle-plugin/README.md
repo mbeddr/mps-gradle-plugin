@@ -25,11 +25,11 @@ To make use of custom task types, add the following `plugins` block to your buil
 
 ```
 plugins {
-    id 'de.itemis.mps.gradle.common' version '1.+'
+    id 'de.itemis.mps.gradle.common' version '3.+'
 }
 ```
 
-Use a more precisely specified version such as `1.26.0.+` or Gradle dependency locking for better build
+Use a more precisely specified version such as `3.0.+` or Gradle dependency locking for better build
 reproducibility.
 
 ## Reference
@@ -43,5 +43,12 @@ Tasks:
   MPS instance with an open project.
 * [MpsGenerate](docs/tasks/MpsGenerate.md) -- generate (a subset of) models in a project without the need for a MPS
   build model.
-* [MpsMigrate](docs/tasks/MpsMigrate.md) -- Run pending migrations on one or several MPS projects. 
+* [MpsMigrate](docs/tasks/MpsMigrate.md) -- Run pending migrations on one or several MPS projects.
+* [Remigrate](docs/tasks/Remigrate.md) -- Run re-runnable migrations and project migrations on one or several MPS
+  projects.
+
+Notes:
+
+* [Custom MPS distribution](docs/notes/custom-mps-distribution.md) -- using the tasks with an MPS RCP.
+* [MPS vs IDEA environment](docs/notes/mps-vs-idea-environment.md) -- choosing the environment for `MpsGenerate`.
 

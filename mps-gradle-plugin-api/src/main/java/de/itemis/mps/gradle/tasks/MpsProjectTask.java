@@ -15,6 +15,11 @@ import org.gradle.api.tasks.Internal;
  *     task.getProjectLocation().set(layout.getProjectDirectory().dir("my-mps-project"));
  * });
  * }</pre>
+ *
+ * <p>Tasks that can operate on several projects at once (such as {@code MpsMigrate} and {@code Remigrate}) accept
+ * either {@link #getProjectLocation()} or their own {@code projectLocations} collection, but not both. Setting
+ * {@code projectLocation} on all tasks in bulk therefore fails for such a task if {@code projectLocations} is also set
+ * on it.
  */
 @Incubating
 public interface MpsProjectTask extends MpsTask {

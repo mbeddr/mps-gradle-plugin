@@ -49,3 +49,7 @@ tasks.withType<MpsProjectTask>().configureEach {
     projectLocation = layout.projectDirectory.dir("my-mps-project")
 }
 ```
+
+Tasks that can operate on several projects at once (`MpsMigrate`, `Remigrate`) accept either `projectLocation` or
+their own `projectLocations` collection, but not both. Setting `projectLocation` in bulk fails for such a task if
+`projectLocations` is also set on it.

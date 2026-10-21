@@ -19,7 +19,13 @@ Properties:
   is often used to provide property valued via `-Dprop=value`.
 - `mpsHome`: the MPS installation directory. Required. `mps.home` and `mps_home` are passed as Ant properties
   automatically, and the Ant classpath is derived from the MPS installation if `scriptClasspath` is not set.
+- `mpsVersion`: the MPS version, such as "2025.1". Autodetected by reading `$mpsHome/build.properties` by default. Not
+  used by the task itself.
 - `javaLauncher`: the Java launcher used to run the Ant script. Optional.
+- `logLevel`: the Gradle log level that is passed to the Ant script as the `mps.ant.log` property. Defaults to the log
+  level of the Gradle invocation. `DEBUG` and `INFO` are passed as `debug` and `info`, `WARN` as `warn`, `QUIET` and
+  `ERROR` as `error`. At the default `LIFECYCLE` level the property is not passed, so the script's own default applies.
+  An explicit `-Dmps.ant.log=...` in `scriptArgs` takes precedence.
 - `targets`: the targets to execute of the Ant files.
 
 ### Project-Wide Defaults

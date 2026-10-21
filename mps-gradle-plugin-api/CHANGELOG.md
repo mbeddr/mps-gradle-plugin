@@ -8,7 +8,6 @@ Initial release, extracted from `mps-gradle-plugin`.
 
 ### Added
 
-- `MpsTask` interface for any task that operates on an MPS installation. Provides `mpsHome`, `mpsVersion`, and
-  `javaLauncher` properties.
-- `MpsProjectTask` interface (extends `MpsTask`) for tasks that operate on MPS projects. Provides `projectLocation`,
-  `pluginRoots`, `folderMacros`, and `logLevel` properties.
+- `MpsTask` interface for any task that operates on an MPS installation. Provides `mpsHome`, `mpsVersion`,
+  `javaLauncher`, `pluginRoots`, `folderMacros`, and `logLevel` properties.
+- `MpsProjectTask` interface (extends `MpsTask`) for tasks that operate on MPS projects. Adds `projectLocation`.

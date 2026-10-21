@@ -4,18 +4,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.0 (Unreleased)
 
-### Removed
-
-- Old plugins `generate-models`, `modelcheck`, and `run-migrations` have been removed. Use the task types
-  (`MpsGenerate`, `MpsCheck`, `MpsMigrate`, `Remigrate`) directly instead.
-- `download-jbr` plugin, `DownloadJbrForPlatform` task, and the `downloadJBR` package have been removed. Use the
-  [`com.specificlanguages.jbr-toolchain`](https://plugins.gradle.org/plugin/com.specificlanguages.jbr-toolchain)
-  plugin to download the JetBrains Runtime.
-- `CreateDmg` and `BundleMacosJdk` tasks have been removed. Building macOS installers is no longer in scope for this
-  plugin.
-- `GetMpsInBrowser` task has been removed. It only opened the JetBrains download page in a browser and did not pull its
-  weight.
-
 ### Added
 
 - `MpsTask` interface for any task that operates on an MPS installation. Provides `mpsHome`, `mpsVersion`,
@@ -29,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The plugin now requires Gradle 9 and Java 17 (previously Gradle 8 and Java 11).
 - `MpsCheck`, `MpsExecute`: `pluginRoots` changed from `SetProperty<Directory>` to `ConfigurableFileCollection`.
-- `MpsCheck`, `MpsExecute`: `macros`/`varMacros` replaced with `folderMacros: MapProperty<String, Directory>`.
+- `MpsCheck`, `MpsGenerate`: `varMacros` removed. `MpsExecute`: `macros` removed, `folderMacros` added. Only folder
+  macros (`folderMacros: MapProperty<String, Directory>`) are supported now; macros with string values are not.
 - `MpsMigrate`, `Remigrate`: `projectDirectories` renamed to `projectLocations`.
 - `MpsMigrate`: `javaExecutable` removed in favor of `javaLauncher` from `MpsTask`.
 - `RunAntScript`: now requires `mpsHome`. Derives the Ant classpath from `mpsHome` when `scriptClasspath` is not set,
@@ -41,7 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RunAntScript`: added `workingDirectory: DirectoryProperty` (defaults to the root project directory) so the task
   no longer reaches through `project` at execution time.
 - `RunAntScript`: uses the inherited `javaLauncher` and `logLevel` properties. The `executable` property has been
-  removed (use `javaLauncher` instead); `-Dmps.ant.log` is derived from `logLevel` rather than from `task.logging.level`.
+  removed (use `javaLauncher` instead). `-Dmps.ant.log` is derived from `logLevel` rather than from
+  `task.logging.level` and is mapped to the values accepted by MPS Ant tasks: `DEBUG` and `INFO` become `debug` and
+  `info`, `WARN` becomes `warn`, `QUIET` and `ERROR` become `error`. At the default `LIFECYCLE` level the property is
+  not passed.
 - `RunAntScript`: removed the `includeDefaultArgs`, `includeDefaultClasspath`, `itemis.mps.gradle.ant.defaultScriptArgs`,
   `itemis.mps.gradle.ant.defaultScriptClasspath`, and `itemis.mps.gradle.ant.defaultJavaExecutable` escape hatches.
   Use `tasks.withType<RunAntScript>().configureEach { ... }` to share configuration across tasks.
@@ -49,6 +41,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and adjust `targets` directly if you need the previous behavior.
 - The `de.itemis.mps.gradle.common` plugin sets the convention for `MpsTask.logLevel` to Gradle's
   `gradle.startParameter.logLevel`, so MPS subprocesses log at the same level as Gradle by default.
+
+### Removed
+
+- Old plugins `generate-models`, `modelcheck`, and `run-migrations` have been removed. Use the task types
+  (`MpsGenerate`, `MpsCheck`, `MpsMigrate`, `Remigrate`) directly instead.
+- `download-jbr` plugin, `DownloadJbrForPlatform` task, and the `downloadJBR` package have been removed. Use the
+  [`com.specificlanguages.jbr-toolchain`](https://plugins.gradle.org/plugin/com.specificlanguages.jbr-toolchain)
+  plugin to download the JetBrains Runtime.
+- `CreateDmg` and `BundleMacosJdk` tasks have been removed. Building macOS installers is no longer in scope for this
+  plugin.
+- `GetMpsInBrowser` task has been removed. It only opened the JetBrains download page in a browser and did not pull its
+  weight.
 
 ## 1.30.1
 
