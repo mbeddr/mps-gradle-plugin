@@ -15,6 +15,16 @@ private val logger = Logger.getLogger("de.itemis.mps.gradle.common")
 
 const val MPS_SUPPORT_MSG = ErrorMessages.MPS_VERSION_NOT_SUPPORTED
 
+/**
+ * Whether [mpsVersion] (such as "2023.2" or "2023.2.2") is MPS 2023.2 or later.
+ */
+internal fun isMpsVersionSupported(mpsVersion: String): Boolean {
+    val parts = mpsVersion.split('.')
+    val year = parts[0].toInt()
+    val release = parts.getOrNull(1)?.takeWhile(Char::isDigit)?.toIntOrNull() ?: 0
+    return year > 2023 || (year == 2023 && release >= 2)
+}
+
 const val MPS_BUILD_BACKENDS_VERSION = "[1.26,2.0)" // 1.26 required to run modelcheck without plugins on its classpath
 
 data class Plugin(

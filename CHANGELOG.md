@@ -2,6 +2,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Changed
+
+- Minimum supported MPS version raised to 2023.2. The `generate-models` and `modelcheck` plugins fail for older MPS
+  versions.
+
 ## 1.31.0
 
 ### Changed

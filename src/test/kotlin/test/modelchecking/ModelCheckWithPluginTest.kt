@@ -54,13 +54,13 @@ class ModelCheckWithPluginTest {
     """.trimIndent() + "\n"
 
     @Test
-    fun `check model works with MPS 2022_2_2`() {
+    fun `check model works with MPS 2023_2_2`() {
         extractProject("test-project")
 
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") + """
+            buildScriptBoilerplate("2023.2.2") + """
                 modelcheck {
                     projectLocation = file("${mpsTestPrjLocation.toPath()}")
                     mpsConfig = mps
@@ -101,7 +101,7 @@ class ModelCheckWithPluginTest {
                 modelcheck {
                     projectLocation = projectDir
                     mpsLocation = file("build/mps")
-                    mpsVersion = "2022.2.2"
+                    mpsVersion = "2023.2.2"
                     javaExec = tasks.getByName<DownloadJbrForPlatform>("downloadJbr").javaExecutable
                 }
                 
@@ -163,7 +163,7 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2023.2.2") +
             """
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
@@ -190,7 +190,7 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2019.3.7") +
+            buildScriptBoilerplate("2022.3.3") +
                     """            
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
@@ -216,11 +216,11 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2023.2.2") +
             """
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2020.2.2"
+                mpsVersion = "2023.2.2"
                 mpsLocation = file(".")
                 junitFile = file("${junitFile.absolutePath}")
             }
@@ -241,11 +241,11 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2023.2.2") +
             """
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2019.2.2"
+                mpsVersion = "2022.3.3"
                 mpsLocation = file(".")
                 junitFile = file("${junitFile.absolutePath}")
             }
@@ -266,11 +266,11 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2023.2.2") +
             """
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsVersion = "2022.2.2"
+                mpsVersion = "2023.2.2"
                 junitFile = file("${junitFile.absolutePath}")
             }
         """.trimIndent()
@@ -290,7 +290,7 @@ class ModelCheckWithPluginTest {
         settingsFile.writeText(settingsBoilerplate())
 
         buildFile.writeText(
-            buildScriptBoilerplate("2022.2.2") +
+            buildScriptBoilerplate("2023.2.2") +
             """
             modelcheck {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")

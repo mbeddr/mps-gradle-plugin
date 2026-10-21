@@ -56,13 +56,13 @@ class RunMigrationsTest {
     private fun extractProject(name: String) = extractTestProject(name, mpsTestPrjLocation)
 
     @Test
-    fun `check run migrations works with MPS 2020_3`() {
+    fun `check run migrations works with MPS 2023_2`() {
         buildFile.writeText(
             """
             ${commonGradleScriptPart()}
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.4")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             runMigrations {
@@ -79,39 +79,13 @@ class RunMigrationsTest {
     }
 
     @Test
-    fun `check run migrations fails with MPS 2020_3 with force set to true`() {
+    fun `check run migrations works with MPS 2023_2 with force flag`() {
         buildFile.writeText(
             """
             ${commonGradleScriptPart()}
             
             dependencies {
-                mps("com.jetbrains:mps:2020.3.4")
-            }
-            
-            runMigrations {
-                projectLocation = file("${mpsTestPrjLocation.toPath()}")
-                mpsConfig = mps
-                force = true
-            }
-        """.trimIndent()
-        )
-
-        val result = gradleRunner()
-            .withArguments("runMigrations")
-            .buildAndFail()
-
-        assertThat(result.output, containsString("The force migration flag is only supported for MPS version 2021.3.0 and higher."))
-    }
-
-
-    @Test
-    fun `check run migrations works with MPS 2021_3 with force flag`() {
-        buildFile.writeText(
-            """
-            ${commonGradleScriptPart()}
-            
-            dependencies {
-                mps("com.jetbrains:mps:2021.3.2")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             runMigrations {
@@ -136,7 +110,7 @@ class RunMigrationsTest {
             ${commonGradleScriptPart()}
             
             dependencies {
-                mps("com.jetbrains:mps:2021.3.2")
+                mps("com.jetbrains:mps:2023.2.2")
             }
             
             runMigrations {
@@ -162,7 +136,7 @@ class RunMigrationsTest {
             runMigrations {
                 projectLocation = file("${mpsTestPrjLocation.toPath()}")
                 mpsLocation = file("not_existing")
-                mpsVersion = "2021.3.2"
+                mpsVersion = "2023.2.2"
             }
         """.trimIndent()
         )
@@ -191,7 +165,7 @@ class RunMigrationsTest {
 
                 val mps = configurations.create("mps")
                 dependencies {
-                    mps("com.jetbrains:mps:2021.3.2")
+                    mps("com.jetbrains:mps:2023.2.2")
                 }
 
                 val resolveMps by tasks.registering(Sync::class) {

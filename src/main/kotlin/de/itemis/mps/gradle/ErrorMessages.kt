@@ -4,7 +4,7 @@ import org.gradle.api.artifacts.Configuration
 import java.io.File
 
 internal object ErrorMessages {
-    const val MPS_VERSION_NOT_SUPPORTED = "This version of mps-gradle-plugin only supports MPS 2020.1 and above. Please use version 1.4 with an older version of MPS."
+    const val MPS_VERSION_NOT_SUPPORTED = "This version of mps-gradle-plugin only supports MPS 2023.2 and above."
 
     internal fun noMpsProjectIn(dir: File): String = "Directory does not contain an MPS project: $dir"
 

@@ -123,8 +123,13 @@
       <node concept="3clFbS" id="6SsfRvSJQ_S" role="3clF47">
         <node concept="RRSsy" id="6SsfRvSJSNm" role="3cqZAp">
           <property role="RRSoG" value="h1akgim/info" />
-          <node concept="37vLTw" id="6SsfRvSJSUN" role="RRSoy">
-            <ref role="3cqZAo" node="6SsfRvSJSI8" resolve="project" />
+          <node concept="2OqwBi" id="7GzQd1Hm1A" role="RRSoy">
+            <node concept="37vLTw" id="6SsfRvSJSUN" role="2Oq$k0">
+              <ref role="3cqZAo" node="6SsfRvSJSI8" resolve="project" />
+            </node>
+            <node concept="liA8E" id="7GzQd1Hm1B" role="2OqNvi">
+              <ref role="37wK5l" to="z1c3:~Project.toString()" resolve="toString" />
+            </node>
           </node>
         </node>
       </node>
@@ -143,8 +148,13 @@
       <node concept="3clFbS" id="nRJS0RMQyK" role="3clF47">
         <node concept="RRSsy" id="5Csmp2j9mXf" role="3cqZAp">
           <property role="RRSoG" value="h1akgim/info" />
-          <node concept="37vLTw" id="5Csmp2j9nnN" role="RRSoy">
-            <ref role="3cqZAo" node="nRJS0RMQz1" resolve="project" />
+          <node concept="2OqwBi" id="7GzQd1Hm2A" role="RRSoy">
+            <node concept="37vLTw" id="5Csmp2j9nnN" role="2Oq$k0">
+              <ref role="3cqZAo" node="nRJS0RMQz1" resolve="project" />
+            </node>
+            <node concept="liA8E" id="7GzQd1Hm2B" role="2OqNvi">
+              <ref role="37wK5l" to="z1c3:~Project.toString()" resolve="toString" />
+            </node>
           </node>
         </node>
         <node concept="2Gpval" id="nRJS0RMQyQ" role="3cqZAp">
