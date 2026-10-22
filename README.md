@@ -55,3 +55,26 @@ Plugins:
   build model.
 * [modelcheck/checkmodels](docs/plugins/modelcheck.md) -- Deprecated. Check (a subset of) models in a project.
 * [download-jbr/downloadJbr](docs/plugins/download-jbr.md) -- Download JetBrains Runtime.
+
+# Build backends
+
+The `MpsCheck`, `MpsGenerate`, `MpsExecute`, and `Remigrate` tasks run code from
+[mps-build-backends](https://github.com/mbeddr/mps-build-backends). By default, the plugin adds a dependency on the
+latest 1.x release of the corresponding backend to the `modelcheckBackend`, `generateBackend`, `executeBackend`, and
+`remigrateBackend` configurations (with an explicit rejection for old versions known to be incompatible). The backends 
+are resolved from the repositories of your project.
+
+To keep the backend versions fixed between builds, use
+[dependency locking](https://docs.gradle.org/current/userguide/dependency_locking.html) on these configurations.
+
+The `https://artifacts.itemis.cloud/repository/maven-mps` repository also serves snapshot versions. The plugin ignores
+them, but if your own dependencies use version ranges, they may resolve to snapshots too. To use only releases from
+this repository, declare it like this:
+
+```kotlin
+repositories {
+    maven("https://artifacts.itemis.cloud/repository/maven-mps") {
+        mavenContent { releasesOnly() }
+    }
+}
+```

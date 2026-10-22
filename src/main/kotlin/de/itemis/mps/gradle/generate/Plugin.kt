@@ -1,15 +1,14 @@
 package de.itemis.mps.gradle.generate
 
 import de.itemis.mps.gradle.*
+import de.itemis.mps.gradle.BuildBackend
+import de.itemis.mps.gradle.backendDependency
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
-import de.itemis.mps.gradle.launcher.MpsBackendLauncher
-import org.apache.tools.ant.taskdefs.Java
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.JavaExec
 import org.gradle.jvm.toolchain.JavaLauncher
@@ -115,9 +114,7 @@ open class GenerateMpsProjectPlugin : Plugin<Project> {
         }
     }
 
-    private fun createDetachedBackendConfig(project: Project): Configuration {
-        val dep = project.dependencies.create("de.itemis.mps.build-backends:execute-generators:${MPS_BUILD_BACKENDS_VERSION}")
-        val genConfig = project.configurations.detachedConfiguration(dep)
-        return genConfig
-    }
+    private fun createDetachedBackendConfig(project: Project): Configuration =
+        project.configurations.detachedConfiguration(
+            project.dependencies.backendDependency(BuildBackend.EXECUTE_GENERATORS))
 }
