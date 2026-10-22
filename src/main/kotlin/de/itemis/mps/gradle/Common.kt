@@ -25,8 +25,6 @@ internal fun isMpsVersionSupported(mpsVersion: String): Boolean {
     return year > 2023 || (year == 2023 && release >= 2)
 }
 
-const val MPS_BUILD_BACKENDS_VERSION = "[1.26,2.0)" // 1.26 required to run modelcheck without plugins on its classpath
-
 data class Plugin(
         var id: String,
         var path: String

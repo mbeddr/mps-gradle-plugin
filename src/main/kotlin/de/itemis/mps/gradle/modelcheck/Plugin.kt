@@ -1,8 +1,9 @@
 package de.itemis.mps.gradle.modelcheck
 
 import de.itemis.mps.gradle.*
+import de.itemis.mps.gradle.BuildBackend
+import de.itemis.mps.gradle.backendDependency
 import de.itemis.mps.gradle.launcher.MpsBackendBuilder
-import de.itemis.mps.gradle.launcher.MpsBackendLauncher
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -13,7 +14,6 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.newInstance
 import org.gradle.process.CommandLineArgumentProvider
 import java.io.File
-import javax.inject.Inject
 
 open class ModelCheckPluginExtensions(objectFactory: ObjectFactory) : BasePluginExtensions(objectFactory) {
     var models: List<String> = emptyList()
@@ -113,10 +113,7 @@ open class ModelcheckMpsProjectPlugin : Plugin<Project> {
         }
     }
 
-    private fun createDetachedBackendConfig(project: Project): Configuration {
-        val dep = project.dependencies.create("de.itemis.mps.build-backends:modelcheck:${MPS_BUILD_BACKENDS_VERSION}")
-        val genConfig = project.configurations.detachedConfiguration(dep)
-        return genConfig
-    }
-
+    private fun createDetachedBackendConfig(project: Project): Configuration =
+        project.configurations.detachedConfiguration(
+            project.dependencies.backendDependency(BuildBackend.MODELCHECK))
 }

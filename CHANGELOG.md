@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minimum supported MPS version raised to 2023.2. The `generate-models` and `modelcheck` plugins fail for older MPS
   versions.
+- All backend configurations are now marked non-consumable. 
 
 ### Fixed
 
@@ -16,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `MpsCheck`, `MpsGenerate`, `MpsExecute`, `MpsMigrate`, `Remigrate`: exclude `lib/intellij.libraries.kotlin.metadata.jar`
   from the classpath. With MPS 2026.3 this jar conflicts with MPS's own copy of kotlin-metadata and loading Kotlin stub
   models fails with `NoSuchMethodError`.
+- The default dependencies of the `modelcheckBackend`, `generateBackend`, `executeBackend`, and `remigrateBackend`
+  configurations and the backends of the `generate-models` and `modelcheck` plugins no longer resolve to snapshot
+  versions of mps-build-backends. They now use the latest 1.x release (at least 1.26 for all backends except
+  remigrate).
+
+### Removed
+
+- `MPS_BUILD_BACKENDS_VERSION` constant. It was not meant to be public API.
 
 ## 1.31.0
 

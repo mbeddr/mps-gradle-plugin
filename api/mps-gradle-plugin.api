@@ -58,7 +58,6 @@ public class de/itemis/mps/gradle/BundledScripts : groovy/lang/GroovyObject {
 }
 
 public final class de/itemis/mps/gradle/CommonKt {
-	public static final field MPS_BUILD_BACKENDS_VERSION Ljava/lang/String;
 	public static final field MPS_SUPPORT_MSG Ljava/lang/String;
 	public static final fun argsFromBaseExtension (Lde/itemis/mps/gradle/BasePluginExtensions;)Lorg/gradle/process/CommandLineArgumentProvider;
 	public static final fun getMPSVersion (Lde/itemis/mps/gradle/BasePluginExtensions;)Ljava/lang/String;
