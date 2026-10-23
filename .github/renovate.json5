@@ -1,0 +1,35 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:best-practices',
+    'schedule:monthly',
+    // The Gradle lock files pin the versions that dynamic versions (such as the launcher's '2.8.0.+') and transitive
+    // dependencies resolve to. Lock file maintenance refreshes them, on the same monthly schedule as the other updates
+    // instead of the weekly schedule from config:best-practices.
+    ':maintainLockFilesMonthly',
+  ],
+
+  packageRules: [
+    {
+      matchManagers: ['gradle', 'gradle-wrapper'],
+      matchUpdateTypes: ['minor', 'patch'],
+      groupName: 'non-major dependencies',
+    },
+    {
+      matchDepNames: ['gradle', 'org.gradle.toolchains.foojay-resolver-convention'],
+      matchUpdateTypes: ['major'],
+      groupName: 'Gradle',
+    },
+    {
+      // The Kotlin Gradle plugin and kotlin-stdlib share one version in gradle/libs.versions.toml.
+      matchDepNames: ['org.jetbrains.kotlin.jvm', 'org.jetbrains.kotlin:kotlin-stdlib'],
+      matchUpdateTypes: ['major'],
+      groupName: 'Kotlin',
+    },
+    {
+      matchManagers: ['github-actions'],
+      groupName: 'GitHub Actions',
+      separateMajorMinor: false,
+    },
+  ],
+}
