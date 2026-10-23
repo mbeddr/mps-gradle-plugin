@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `MpsMigrate`, `Remigrate`, `MpsGenerate`, `MpsCheck`, `MpsExecute`: exclude `lib/intellij.libraries.kotlin.metadata.jar`
+- `MpsCheck`, `MpsGenerate`, `MpsExecute`, `MpsMigrate`, `Remigrate`: treat `logLevel` as a console setting rather than
+  a task input, so changing logging verbosity no longer invalidates up-to-date checks or build cache entries.
+- `MpsCheck`, `MpsGenerate`, `MpsExecute`, `MpsMigrate`, `Remigrate`: exclude `lib/intellij.libraries.kotlin.metadata.jar`
   from the classpath. With MPS 2026.3 this jar conflicts with MPS's own copy of kotlin-metadata and loading Kotlin stub
   models fails with `NoSuchMethodError`.
 

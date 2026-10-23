@@ -21,7 +21,7 @@ import org.gradle.work.DisableCachingByDefault
 @Incubating
 abstract class MpsExecute : JavaExec() {
 
-    @get:Input
+    @get:Console
     abstract val logLevel: Property<LogLevel>
 
     @get:Internal
